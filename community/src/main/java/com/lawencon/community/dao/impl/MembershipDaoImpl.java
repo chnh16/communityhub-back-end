@@ -9,13 +9,13 @@ import com.lawencon.community.model.Membership;
 public class MembershipDaoImpl extends BaseDaoImpl implements MembershipDao{
 
 	@Override
-	public Optional<Membership> getById(Long id) {
+	public Optional<Membership> getById(final Long id) {
 		final Membership res = getById(Membership.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	public Optional<Membership> getRefById(Long id) {
+	public Optional<Membership> getRefById(final Long id) {
 		final Membership res = getByIdRef(Membership.class, id);
 		return Optional.ofNullable(res);
 	}
@@ -30,14 +30,20 @@ public class MembershipDaoImpl extends BaseDaoImpl implements MembershipDao{
 	}
 
 	@Override
-	public Membership update(Membership data) {
-		Membership res = em().merge(data);
+	public Membership update(final Membership data) {
+		final Membership res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	public boolean delete(Long id) {
+	public boolean delete(final Long id) {
 		return deleteById(Membership.class, id);
+	}
+
+	@Override
+	public Membership insert(final Membership data) {
+		final Membership res = saveAndFlush(data);
+		return res;
 	}
 	
 

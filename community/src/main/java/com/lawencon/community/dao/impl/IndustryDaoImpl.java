@@ -31,13 +31,19 @@ public class IndustryDaoImpl extends BaseDaoImpl implements MasterDao<Industry>{
 
 	@Override
 	public Industry update(final Industry data) {
-		Industry res = em().merge(data);
+		final Industry res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
 	public boolean delete(final Long id) {
 		return deleteById(Industry.class, id);
+	}
+
+	@Override
+	public Industry insert(final Industry data) {
+		final Industry res = saveAndFlush(data);
+		return res;
 	}
 
 }
