@@ -3,17 +3,27 @@ package com.lawencon.community.dao;
 import java.util.List;
 import java.util.Optional;
 
-public interface MasterDao<T> {
+import javax.persistence.EntityManager;
+
+import com.lawencon.base.AbstractJpaDao;
+import com.lawencon.base.ConnHandler;
+
+public abstract class MasterDao<T> extends AbstractJpaDao{
+
+	protected EntityManager em() {
+		return ConnHandler.getManager();
+	}
 	
-	Optional<T> getById(Long id);
+	abstract Optional<T> getById(Long id);
 	
-	Optional<T> getRefById(Long id);
+	abstract Optional<T> getRefById(Long id);
 	
-	List<T> getAll();
+	abstract List<T> getAll();
 	
-	T update(T data);
+	abstract T update(T data);
 	
-	T insert(T data);
+	abstract T insert(T data);
 	
-	boolean delete(Long id);
+	abstract boolean delete(Long id);
+
 }
