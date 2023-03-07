@@ -2,6 +2,8 @@ package com.lawencon.community.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.lawencon.base.BaseEntity;
@@ -16,10 +18,12 @@ public class User extends BaseEntity{
 	@Column(nullable = false)
 	private String passwordUser;
 	
-	@Column(name = "role_id", nullable = false)
+	@OneToOne
+	@JoinColumn(name = "role_id", nullable = false)
 	private Role role;
 	
-	@Column(name = "profile_id", nullable = false)
+	@OneToOne
+	@JoinColumn(name = "profile_id", nullable = false)
 	private Profile profile;
 	
 	public String getEmail() {
