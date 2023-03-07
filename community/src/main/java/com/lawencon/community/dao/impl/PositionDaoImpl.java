@@ -3,17 +3,10 @@ package com.lawencon.community.dao.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-
-import com.lawencon.base.AbstractJpaDao;
-import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.PositionDao;
 import com.lawencon.community.model.Position;
 
-public class PositionDaoImpl extends AbstractJpaDao implements PositionDao{
-	private EntityManager em() {
-		return ConnHandler.getManager();
-	}
+public class PositionDaoImpl extends BaseDaoImpl implements PositionDao{
 	
 	@Override
 	public Optional<Position> getById(final Long id) {

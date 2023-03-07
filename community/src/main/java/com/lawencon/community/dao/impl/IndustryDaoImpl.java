@@ -3,17 +3,10 @@ package com.lawencon.community.dao.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-
-import com.lawencon.base.AbstractJpaDao;
-import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.MasterDao;
 import com.lawencon.community.model.Industry;
 
-public class IndustryDaoImpl extends AbstractJpaDao implements MasterDao<Industry>{
-	private EntityManager em() {
-		return ConnHandler.getManager();
-	}
+public class IndustryDaoImpl extends BaseDaoImpl implements MasterDao<Industry>{
 	
 	@Override
 	public Optional<Industry> getById(final Long id) {

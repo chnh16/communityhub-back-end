@@ -3,20 +3,13 @@ package com.lawencon.community.dao.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.base.AbstractJpaDao;
-import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.User;
 
 @Repository
-public class UserDaoImpl extends AbstractJpaDao implements UserDao{
-	private EntityManager em() {
-		return ConnHandler.getManager();
-	}
+public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
 	@Override
 	public Optional<User> getById(final Long id) {
@@ -33,8 +26,7 @@ public class UserDaoImpl extends AbstractJpaDao implements UserDao{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getAll() {
-		final String sql = "SELECT * FROM user" 
-				+ " WHERE is_active = true";
+		final String sql = "SELECT * FROM user" + " WHERE is_active = true";
 		final List<User> res = em().createNativeQuery(sql, User.class).getResultList();
 		return res;
 	}

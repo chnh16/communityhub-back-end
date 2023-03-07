@@ -10,10 +10,8 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.PostTypeDao;
 import com.lawencon.community.model.PostType;
 
-public class PostTypeDaoImpl extends AbstractJpaDao implements PostTypeDao{
-	private EntityManager em() {
-		return ConnHandler.getManager();
-	}
+public class PostTypeDaoImpl extends BaseDaoImpl implements PostTypeDao{
+	
 	
 	@Override
 	public Optional<PostType> getById(final Long id) {

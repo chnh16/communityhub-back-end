@@ -3,18 +3,11 @@ package com.lawencon.community.dao.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-
-import com.lawencon.base.AbstractJpaDao;
-import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.model.Profile;
 
-public class ProfileDaoImpl extends AbstractJpaDao implements ProfileDao {
-	private EntityManager em() {
-		return ConnHandler.getManager();
-	}
-	
+public class ProfileDaoImpl extends BaseDaoImpl implements ProfileDao {
+
 	@Override
 	public Optional<Profile> getById(final Long id) {
 		final Profile res = getById(Profile.class, id);
@@ -30,8 +23,7 @@ public class ProfileDaoImpl extends AbstractJpaDao implements ProfileDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Profile> getAll() {
-		final String sql = "SELECT * FROM position" 
-				+ " WHERE is_active = true";
+		final String sql = "SELECT * FROM position" + " WHERE is_active = true";
 		final List<Profile> res = em().createNativeQuery(sql, Profile.class).getResultList();
 		return res;
 	}
