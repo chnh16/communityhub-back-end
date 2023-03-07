@@ -3,17 +3,10 @@ package com.lawencon.community.dao.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-
-import com.lawencon.base.AbstractJpaDao;
-import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.model.Category;
 
-public class CategoryDaoImpl extends AbstractJpaDao implements CategoryDao{
-	private EntityManager em() {
-		return ConnHandler.getManager();
-	}
+public class CategoryDaoImpl extends BaseDaoImpl implements CategoryDao{
 	
 	@Override
 	public Optional<Category> getById(final Long id) {

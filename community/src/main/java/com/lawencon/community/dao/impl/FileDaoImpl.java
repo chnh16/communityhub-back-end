@@ -10,10 +10,7 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.model.File;
 
-public class FileDaoImpl extends AbstractJpaDao implements FileDao{
-	private EntityManager em() {
-		return ConnHandler.getManager();
-	}
+public class FileDaoImpl extends BaseDaoImpl implements FileDao{
 	
 	@Override
 	public Optional<File> getById(final Long id) {

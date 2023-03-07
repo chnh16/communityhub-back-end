@@ -17,10 +17,11 @@ public class Membership extends BaseEntity{
 	private String membershipName;
 
 	@Column (nullable = false)
-	private Integer duration;
+	private Long duration;
 	
 	@Column (nullable = false)
 	private Integer amount;
+	
 
 	public String getMembershipCode() {
 		return membershipCode;
@@ -38,11 +39,11 @@ public class Membership extends BaseEntity{
 		this.membershipName = membershipName;
 	}
 
-	public Integer getDuration() {
+	public Long getDuration() {
 		return duration;
 	}
 
-	public void setDuration(Integer duration) {
+	public void setDuration(Long duration) {
 		this.duration = duration;
 	}
 
