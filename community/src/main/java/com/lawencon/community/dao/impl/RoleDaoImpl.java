@@ -30,13 +30,19 @@ public class RoleDaoImpl extends BaseDaoImpl implements RoleDao {
 
 	@Override
 	public Role update(final Role data) {
-		Role res = em().merge(data);
+		final Role res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
 	public boolean delete(final Long id) {
 		return deleteById(Role.class, id);
+	}
+
+	@Override
+	public Role insert(final Role data) {
+		final Role res = saveAndFlush(data);
+		return res;
 	}
 
 }

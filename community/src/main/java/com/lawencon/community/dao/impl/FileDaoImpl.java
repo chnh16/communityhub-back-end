@@ -3,10 +3,6 @@ package com.lawencon.community.dao.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-
-import com.lawencon.base.AbstractJpaDao;
-import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.model.File;
 
@@ -35,13 +31,19 @@ public class FileDaoImpl extends BaseDaoImpl implements FileDao{
 
 	@Override
 	public File update(final File data) {
-		File res = em().merge(data);
+		final File res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
 	public boolean delete(final Long id) {
 		return deleteById(File.class, id);
+	}
+
+	@Override
+	public File insert(final File data) {
+		final File res = saveAndFlush(data);
+		return res;
 	}
 
 }

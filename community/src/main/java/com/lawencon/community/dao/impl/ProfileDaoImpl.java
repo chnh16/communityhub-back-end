@@ -30,13 +30,19 @@ public class ProfileDaoImpl extends BaseDaoImpl implements ProfileDao {
 
 	@Override
 	public Profile update(final Profile data) {
-		Profile res = em().merge(data);
+		final Profile res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
 	public boolean delete(final Long id) {
 		return deleteById(Profile.class, id);
+	}
+
+	@Override
+	public Profile insert(final Profile data) {
+		final Profile res = saveAndFlush(data);
+		return res;
 	}
 
 }

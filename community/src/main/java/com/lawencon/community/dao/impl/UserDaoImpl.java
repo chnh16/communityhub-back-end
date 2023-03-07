@@ -13,13 +13,13 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
 	@Override
 	public Optional<User> getById(final Long id) {
-		User res = getById(User.class, id);
+		final User res = getById(User.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
 	public Optional<User> getRefById(final Long id) {
-		User res = getByIdRef(User.class, id);
+		final User res = getByIdRef(User.class, id);
 		return Optional.ofNullable(res);
 	}
 
@@ -33,13 +33,19 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
 	@Override
 	public User update(final User data) {
-		User res = em().merge(data);
+		final User res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
 	public boolean delete(final Long id) {
 		return deleteById(User.class, id);
+	}
+
+	@Override
+	public User insert(final User data) {
+		final User res = saveAndFlush(data);
+		return res;
 	}
 
 }

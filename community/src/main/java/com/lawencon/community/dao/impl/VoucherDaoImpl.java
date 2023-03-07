@@ -30,13 +30,19 @@ public class VoucherDaoImpl extends BaseDaoImpl implements VoucherDao {
 
 	@Override
 	public Voucher update(final Voucher data) {
-		final Voucher res = em().merge(data);
+		final Voucher res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
 	public boolean delete(final Long id) {
 		return deleteById(Voucher.class, id);
+	}
+
+	@Override
+	public Voucher insert(final Voucher data) {
+		final Voucher res = saveAndFlush(data);
+		return res;
 	}
 
 }

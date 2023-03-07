@@ -3,15 +3,10 @@ package com.lawencon.community.dao.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-
-import com.lawencon.base.AbstractJpaDao;
-import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.PostTypeDao;
 import com.lawencon.community.model.PostType;
 
 public class PostTypeDaoImpl extends BaseDaoImpl implements PostTypeDao{
-	
 	
 	@Override
 	public Optional<PostType> getById(final Long id) {
@@ -36,13 +31,19 @@ public class PostTypeDaoImpl extends BaseDaoImpl implements PostTypeDao{
 
 	@Override
 	public PostType update(final PostType data) {
-		PostType res = em().merge(data);
+		final PostType res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
 	public boolean delete(final Long id) {
 		return deleteById(PostType.class, id);
+	}
+
+	@Override
+	public PostType insert(final PostType data) {
+		final PostType res = saveAndFlush(data);
+		return res;
 	}
 
 }

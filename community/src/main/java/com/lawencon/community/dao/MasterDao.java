@@ -13,5 +13,7 @@ public interface MasterDao<T> {
 	
 	T update(T data);
 	
+	T insert(T data);
+	
 	boolean delete(Long id);
 }

@@ -31,13 +31,19 @@ public class PositionDaoImpl extends BaseDaoImpl implements PositionDao{
 
 	@Override
 	public Position update(final Position data) {
-		Position res = em().merge(data);
+		final Position res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
 	public boolean delete(final Long id) {
 		return deleteById(Position.class, id);
+	}
+
+	@Override
+	public Position insert(final Position data) {
+		final Position res = saveAndFlush(data);
+		return res;
 	}
 
 }

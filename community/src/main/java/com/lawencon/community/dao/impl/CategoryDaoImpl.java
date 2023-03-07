@@ -10,13 +10,13 @@ public class CategoryDaoImpl extends BaseDaoImpl implements CategoryDao{
 	
 	@Override
 	public Optional<Category> getById(final Long id) {
-		Category res = getById(Category.class, id);
+		final Category res = getById(Category.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
 	public Optional<Category> getRefById(final Long id) {
-		Category res = getByIdRef(Category.class, id);
+		final Category res = getByIdRef(Category.class, id);
 		return Optional.ofNullable(res);
 	}
 
@@ -31,13 +31,19 @@ public class CategoryDaoImpl extends BaseDaoImpl implements CategoryDao{
 
 	@Override
 	public Category update(final Category data) {
-		Category res = em().merge(data);
+		final Category res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
 	public boolean delete(final Long id) {
 		return deleteById(Category.class, id);
+	}
+
+	@Override
+	public Category insert(final Category data) {
+		final Category res = saveAndFlush(data);
+		return res;
 	}
 
 }
