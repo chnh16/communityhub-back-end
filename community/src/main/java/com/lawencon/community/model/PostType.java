@@ -4,9 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.lawencon.base.BaseEntity;
+
 @Entity
 @Table(name = "post_type")
-public class PostType extends BaseModel {
+public class PostType extends BaseEntity {
 
 	@Column(length = 5, unique = true, nullable = false)
 	private String typeCode;
