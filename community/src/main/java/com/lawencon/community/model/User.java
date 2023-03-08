@@ -5,11 +5,17 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name = "t_user")
+@Table(name = "t_user", 
+uniqueConstraints = {
+		@UniqueConstraint(name = "user_ck", columnNames = {"user_id", "profile_id"}
+)})
+
+
 public class User extends BaseEntity{
 	
 	@Column(length = 30, nullable = false)

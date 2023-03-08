@@ -8,11 +8,16 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name = "t_event")
+@Table(name = "t_event",
+uniqueConstraints = {
+		@UniqueConstraint(name = "event_ck", columnNames = {"category_id", "file_id"}
+)})
+
 public class Event extends BaseEntity {
 
 	@Column(length = 100, nullable = false)
