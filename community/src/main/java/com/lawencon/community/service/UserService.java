@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -17,30 +18,26 @@ import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.User;
 import com.lawencon.security.principal.PrincipalService;
 
-
 @Service
-public class UserService {
-	
+public class UserService implements UserDetailsService {
+
 	private final UserDao userDao;
 	private final FileDao fileDao;
 	private final ProfileDao profileDao;
 	private final RoleDao roleDao;
 	private final PrincipalService principalService;
-	
 
-	public UserService(UserDao userDao, FileDao fileDao, RoleDao roleDao, ProfileDao profileDao, PrincipalService principalService
-			) {
+	public UserService(UserDao userDao, FileDao fileDao, RoleDao roleDao, ProfileDao profileDao,
+			PrincipalService principalService) {
 		this.userDao = userDao;
 		this.fileDao = fileDao;
 		this.profileDao = profileDao;
 		this.principalService = principalService;
 //		this.encoder = encoder;
 		this.roleDao = roleDao;
-		
+
 	}
 
-	
-	
 	public User insert(final User data) {
 		User userInsert = null;
 		try {
@@ -52,10 +49,9 @@ public class UserService {
 			ConnHandler.rollback();
 		}
 		return userInsert;
-		
+
 	}
 
-	
 	public User update(final User data) {
 		User userUpdate = null;
 
@@ -68,17 +64,14 @@ public class UserService {
 		return userUpdate;
 	}
 
-	
 	public Optional<User> getById(final Long id) {
 		return userDao.getById(id);
 	}
 
-	
 	public List<User> getAll() {
 		return userDao.getAll();
 	}
 
-	
 	public boolean deleteById(final Long id) {
 		boolean userDelete = false;
 
@@ -86,7 +79,7 @@ public class UserService {
 			ConnHandler.begin();
 			userDelete = userDao.deleteById(User.class, id);
 			ConnHandler.commit();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			ConnHandler.rollback();
@@ -94,15 +87,21 @@ public class UserService {
 
 		return userDelete;
 	}
-	
-	public UserDetails loadByUsername(String email) throws UsernameNotFoundException{
-		final Optional<User> user = userDao.getByEmail(email);
-		if(user.isPresent()) {
-			return new org.springframework.security.core.userdetails.User(email, user.get().getPasswordUser(), new ArrayList<>());
-		}
-		
-		throw new UsernameNotFoundException("Email dna Password tidak ditemukan");
+
+	public Optional<User> getByEmail(final String email) {
+
+		return userDao.getByEmail(email);
 	}
-	
+
+	@Override
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		final Optional<User> user = userDao.getByEmail(email);
+		if (user.isPresent()) {
+			return new org.springframework.security.core.userdetails.User(email, user.get().getPasswordUser(),
+					new ArrayList<>());
+		}
+
+		throw new UsernameNotFoundException("Email dan Password tidak ditemukan");
+	}
 
 }
