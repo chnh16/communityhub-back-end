@@ -22,8 +22,9 @@ public class VoucherDao extends MasterDao<Voucher>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Voucher> getAll() {
-		final String sql = "SELECT * FROM voucher" + " WHERE is_active = true";
-		final List<Voucher> res = em().createNativeQuery(sql, Voucher.class).getResultList();
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM voucher ").append(" WHERE is_active = true");
+		final List<Voucher> res = em().createNativeQuery(toStr(str), Voucher.class).getResultList();
 		return res;
 	}
 

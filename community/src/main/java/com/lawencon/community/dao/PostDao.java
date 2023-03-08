@@ -25,9 +25,10 @@ public class PostDao extends MasterDao<Post> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Post> getAll() {
-		final String sql = "SELECT * FROM post "
-				+ " WHERE is_active = true ";
-		final List<Post> res = em().createNativeQuery(sql, Post.class).getResultList();
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM post ")
+			.append(" WHERE is_active = true ");
+		final List<Post> res = em().createNativeQuery(toStr(str), Post.class).getResultList();
 		return res;
 	}
 

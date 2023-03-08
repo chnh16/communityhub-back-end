@@ -3,8 +3,11 @@ package com.lawencon.community.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.community.model.Profile;
 
+@Repository
 public class ProfileDao extends MasterDao<Profile>{
 
 	@Override
@@ -22,8 +25,9 @@ public class ProfileDao extends MasterDao<Profile>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Profile> getAll() {
-		final String sql = "SELECT * FROM position" + " WHERE is_active = true";
-		final List<Profile> res = em().createNativeQuery(sql, Profile.class).getResultList();
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM position ").append(" WHERE is_active = true");
+		final List<Profile> res = em().createNativeQuery(toStr(str), Profile.class).getResultList();
 		return res;
 	}
 
