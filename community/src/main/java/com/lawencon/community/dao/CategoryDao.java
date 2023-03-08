@@ -25,9 +25,10 @@ public class CategoryDao extends MasterDao<Category>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Category> getAll() {
-		final String sql = "SELECT * FROM category" 
-				+ " WHERE is_active = true";
-		final List<Category> res = em().createNativeQuery(sql, Category.class).getResultList();
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM category")
+			.append(" WHERE is_active = true");
+		final List<Category> res = em().createNativeQuery(toStr(str), Category.class).getResultList();
 		return res;
 	}
 
