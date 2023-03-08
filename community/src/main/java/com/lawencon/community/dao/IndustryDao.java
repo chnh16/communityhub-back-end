@@ -3,8 +3,11 @@ package com.lawencon.community.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.community.model.Industry;
 
+@Repository
 public class IndustryDao extends MasterDao<Industry>{
 	
 	@Override
