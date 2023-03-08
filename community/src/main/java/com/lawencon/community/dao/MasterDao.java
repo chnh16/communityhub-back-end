@@ -14,7 +14,6 @@ public abstract class MasterDao<T> extends AbstractJpaDao{
 		return ConnHandler.getManager();
 	}
 	
-	StringBuilder str = new StringBuilder();
 	protected String toStr(final StringBuilder str) {
 		return str.toString();
 	}
