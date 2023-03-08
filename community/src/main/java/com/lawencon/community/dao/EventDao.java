@@ -11,20 +11,20 @@ import com.lawencon.community.model.Event;
 public class EventDao extends MasterDao<Event>{
 
 	@Override
-	Optional<Event> getById(Long id) {
+	public Optional<Event> getById(final Long id) {
 		final Event res = getById(Event.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	Optional<Event> getRefById(Long id) {
+	public Optional<Event> getRefById(final Long id) {
 		final Event res = getByIdRef(Event.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<Event> getAll() {
+	public List<Event> getAll() {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_event")
 		.append(" WHERE is_active = true");
@@ -33,24 +33,24 @@ public class EventDao extends MasterDao<Event>{
 	}
 
 	@Override
-	Event update(Event data) {
+	public Event update(final Event data) {
 		final Event res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	Event insert(Event data) {
+	public Event insert(final Event data) {
 		final Event res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	boolean delete(Long id) {
+	public boolean delete(final Long id) {
 		return deleteById(Event.class, id);
 	}
 	
 	@SuppressWarnings("unchecked")
-	List<Event> getByCategoryId (Long categoryId){
+	public List<Event> getByCategoryId (final Long categoryId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_event e ")
 		.append("WHERE e.category_id = :categoryId");

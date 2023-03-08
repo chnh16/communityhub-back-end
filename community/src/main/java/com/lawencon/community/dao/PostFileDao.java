@@ -8,13 +8,13 @@ import com.lawencon.community.model.PostFile;
 public class PostFileDao extends BasePostDao<PostFile>{
 
 	@Override
-	public PostFile insert(PostFile data) {
+	public PostFile insert(final PostFile data) {
 		final PostFile res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	public boolean delete(Long id) {
+	public boolean delete(final Long id) {
 		return deleteById(PostFile.class, id);
 	}
 	

@@ -45,7 +45,7 @@ public class PostDao extends MasterDao<Post> {
 	}
 
 	@Override
-	public boolean delete(Long id) {
+	public boolean delete(final Long id) {
 		return deleteById(Post.class, id);
 	}
 

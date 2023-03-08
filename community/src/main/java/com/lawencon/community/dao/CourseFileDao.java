@@ -5,24 +5,23 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.community.model.CourseFile;
-import com.lawencon.community.model.EventFile;
 
 @Repository
 public class CourseFileDao extends BasePostDao<CourseFile>{
 
 	@Override
-	CourseFile insert(CourseFile data) {
+	public CourseFile insert(final CourseFile data) {
 		final CourseFile res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	boolean delete(Long id) {
+	public boolean delete(final Long id) {
 		return deleteById(CourseFile.class, id);
 	}
 	
 	@SuppressWarnings("unchecked")
-	List<CourseFile> getByCourseId (Long courseId){
+	public List<CourseFile> getByCourseId (final Long courseId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM course_file cf ")
 		.append("WHERE cf.course_id = :courseId");
