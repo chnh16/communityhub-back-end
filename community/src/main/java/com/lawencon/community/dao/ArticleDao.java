@@ -11,20 +11,20 @@ import com.lawencon.community.model.Article;
 public class ArticleDao extends MasterDao<Article>{
 
 	@Override
-	Optional<Article> getById(Long id) {
+	public Optional<Article> getById(Long id) {
 		final Article res = getById(Article.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	Optional<Article> getRefById(Long id) {
+	public Optional<Article> getRefById(Long id) {
 		final Article res = getByIdRef(Article.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<Article> getAll() {
+	public List<Article> getAll() {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM article")
 			.append(" WHERE is_active = true");
@@ -33,19 +33,19 @@ public class ArticleDao extends MasterDao<Article>{
 	}
 
 	@Override
-	Article update(Article data) {
+	public Article update(final Article data) {
 		final Article res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	Article insert(Article data) {
+	public Article insert(final Article data) {
 		final Article res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	boolean delete(Long id) {
+	boolean delete(final Long id) {
 		return deleteById(Article.class, id);
 	}
 	

@@ -5,24 +5,23 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.community.model.PollingAnswer;
-import com.lawencon.community.model.Transaction;
 
 @Repository
 public class PollingAnswerDao extends BasePostDao<PollingAnswer>{
 
 	@Override
-	PollingAnswer insert(PollingAnswer data) {
+	public PollingAnswer insert(final PollingAnswer data) {
 		final PollingAnswer res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	boolean delete(Long id) {
+	public boolean delete(final Long id) {
 		return deleteById(PollingAnswer.class, id);
 	}
 	
 	@SuppressWarnings("unchecked")
-	List<PollingAnswer> getByMembershipId (Long userId){
+	public List<PollingAnswer> getByMembershipId (final Long userId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM polling_answer pa ")
 		.append("WHERE pa.user_id = :userId");
