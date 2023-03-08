@@ -3,10 +3,13 @@ package com.lawencon.community.service;
 import java.security.KeyPair;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
+@Service
 public class JwtService {
 private final KeyPair key = Keys.keyPairFor(SignatureAlgorithm.RS256);
 	
