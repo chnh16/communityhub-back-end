@@ -19,8 +19,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.lawencon.community.filter.AuthorizationFilter;
 
-
-
 public class SecurityConfig {
 	
 	@Bean
