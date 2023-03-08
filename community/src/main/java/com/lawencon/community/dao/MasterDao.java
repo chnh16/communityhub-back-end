@@ -14,6 +14,11 @@ public abstract class MasterDao<T> extends AbstractJpaDao{
 		return ConnHandler.getManager();
 	}
 	
+	StringBuilder str = new StringBuilder();
+	protected String toStr(final StringBuilder str) {
+		return str.toString();
+	}
+	
 	abstract Optional<T> getById(Long id);
 	
 	abstract Optional<T> getRefById(Long id);
