@@ -32,7 +32,5 @@ public class PollingChoice extends BaseEntity{
 	public void setPollingDetail(PollingDetail pollingDetail) {
 		this.pollingDetail = pollingDetail;
 	}
-	
-	
 
 }

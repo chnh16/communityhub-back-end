@@ -44,7 +44,7 @@ public class SecurityConfig {
 	@Bean
 	public List<RequestMatcher> matchers() {
 		final List<RequestMatcher> matchers = new ArrayList<>();
-		matchers.add(new AntPathRequestMatcher("/user/login", HttpMethod.POST.name()));
+		matchers.add(new AntPathRequestMatcher("/users/login", HttpMethod.POST.name()));
 		matchers.add(new AntPathRequestMatcher("/files/**", HttpMethod.GET.name()));
 		return matchers;
 	}

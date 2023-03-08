@@ -13,37 +13,37 @@ import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name = "t_transaction")
-public class Transaction extends BaseEntity{
-	
+public class Transaction extends BaseEntity {
+
 	@Column(nullable = false)
 	private LocalDateTime transactionDate;
-	
+
 	@Column(nullable = false)
 	private BigDecimal grandTotal;
-	
+
 	@Column(nullable = false)
 	private Boolean isApproved;
-	
+
 	@OneToOne
 	@JoinColumn(name = "file_id", nullable = false)
 	private File file;
-	
+
 	@OneToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
-	
+
 	@OneToOne
 	@JoinColumn(name = "event_id")
 	private Event event;
-	
+
 	@OneToOne
 	@JoinColumn(name = "course_id")
 	private Course course;
-	
+
 	@OneToOne
 	@JoinColumn(name = "membership_id")
 	private Membership membership;
-	
+
 	@OneToOne
 	@JoinColumn(name = "voucher_id")
 	private Voucher voucher;
@@ -119,7 +119,5 @@ public class Transaction extends BaseEntity{
 	public void setVoucher(Voucher voucher) {
 		this.voucher = voucher;
 	}
-	
-	
 
 }

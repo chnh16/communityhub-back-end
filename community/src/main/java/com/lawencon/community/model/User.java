@@ -14,14 +14,12 @@ import com.lawencon.base.BaseEntity;
 uniqueConstraints = {
 		@UniqueConstraint(name = "user_ck", columnNames = {"role_id", "profile_id"}
 )})
-
-
 public class User extends BaseEntity{
 	
 	@Column(length = 30, nullable = false)
 	private String email;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "text")
 	private String passwordUser;
 	
 	@OneToOne

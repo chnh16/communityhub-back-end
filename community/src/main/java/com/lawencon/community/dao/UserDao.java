@@ -56,8 +56,9 @@ public class UserDao extends MasterDao<User>{
 		User user = null;
 
 		try {
-			final String sql = " SELECT tu.id, tu.email, tu.password_user, tu.role_id, tr.role_code ,tu.profile_id, tu.created_by, tu.updated_by, tu.created_at, tu.updated_at, tu.ver, tu.is_active "
+			final String sql = " SELECT tu.id, tu.email, tu.password_user, tu.role_id, tr.role_code ,tu.profile_id, tu.created_by, tu.updated_by, tu.created_at, tu.updated_at, tu.ver, tu.is_active, p.full_name "
 					+ "FROM t_user tu INNER JOIN t_role tr ON tu.role_id = tr.id "
+					+ "INNER JOIN profile p ON tu.profile_id = p.id "
 					+ "WHERE tu.email = :email AND tu.is_active = TRUE ";
 
 			final Object result = em().createNativeQuery(sql).setParameter("email", email)
@@ -74,27 +75,29 @@ public class UserDao extends MasterDao<User>{
 				user.setId(objArr[0].toString());
 
 				user.setEmail(objArr[1].toString());
+				user.setPasswordUser(objArr[2].toString());
 
-				role.setId(objArr[2].toString());
-				role.setRoleCode(objArr[3].toString());
+				role.setId(objArr[3].toString());
+				role.setRoleCode(objArr[4].toString());
 				user.setRole(role);
 
-				profile.setId(objArr[4].toString());
+				profile.setId(objArr[5].toString());
+				profile.setFullName(objArr[12].toString());
 				user.setProfile(profile);
 
-				user.setCreatedBy(objArr[5].toString());
-				if (objArr[6] != null) {
-					user.setUpdatedBy(objArr[6].toString());
+				user.setCreatedBy(objArr[6].toString());
+				if (objArr[7] != null) {
+					user.setUpdatedBy(objArr[7].toString());
 				}
 				
-				user.setCreatedAt(Timestamp.valueOf(objArr[7].toString()).toLocalDateTime());
+				user.setCreatedAt(Timestamp.valueOf(objArr[8].toString()).toLocalDateTime());
 				
-				if (objArr[8] != null) {
-					user.setUpdatedAt(Timestamp.valueOf(objArr[8].toString()).toLocalDateTime());
+				if (objArr[9] != null) {
+					user.setUpdatedAt(Timestamp.valueOf(objArr[9].toString()).toLocalDateTime());
 				}
 
-				profile.setVersion(Integer.valueOf(objArr[9].toString()));
-				profile.setIsActive(Boolean.valueOf(objArr[10].toString()));
+				profile.setVersion(Integer.valueOf(objArr[10].toString()));
+				profile.setIsActive(Boolean.valueOf(objArr[11].toString()));
 
 			}
 
