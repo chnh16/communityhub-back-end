@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.community.model.UserCourse;
-import com.lawencon.community.model.UserEvent;
 
 @Repository
 public class UserCourseDao extends BasePostDao<UserCourse>{
@@ -21,6 +20,7 @@ public class UserCourseDao extends BasePostDao<UserCourse>{
 		return deleteById(UserCourse.class, id);
 	}
 	
+	@SuppressWarnings("unchecked")
 	List<UserCourse> getByCourseId (Long userId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM user_course uc ")

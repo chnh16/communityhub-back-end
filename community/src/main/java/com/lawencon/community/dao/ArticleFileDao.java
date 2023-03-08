@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.community.model.ArticleFile;
-import com.lawencon.community.model.Transaction;
 
 @Repository
 public class ArticleFileDao extends BasePostDao<ArticleFile>{

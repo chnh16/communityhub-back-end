@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.community.model.Course;
-import com.lawencon.community.model.Role;
 import com.lawencon.community.model.Transaction;
 
 @Repository

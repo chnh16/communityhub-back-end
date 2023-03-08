@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.community.model.CourseFile;
-import com.lawencon.community.model.EventFile;
 
 @Repository
 public class CourseFileDao extends BasePostDao<CourseFile>{

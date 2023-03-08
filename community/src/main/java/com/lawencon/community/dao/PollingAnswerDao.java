@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.community.model.PollingAnswer;
-import com.lawencon.community.model.Transaction;
 
 @Repository
 public class PollingAnswerDao extends BasePostDao<PollingAnswer>{
