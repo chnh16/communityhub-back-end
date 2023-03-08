@@ -2,6 +2,7 @@ package com.lawencon.community.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -18,11 +19,11 @@ public class Post extends BaseEntity {
 	private String postContent;
 	
 	@OneToOne
-	@Column(name="post_type_id", nullable = false)
+	@JoinColumn(name="post_type_id", nullable = false)
 	private PostType postType;
 	
 	@OneToOne
-	@Column(name = "category_id", nullable = false)
+	@JoinColumn(name = "category_id", nullable = false)
 	private Category category;
 
 	public String getPostTitle() {

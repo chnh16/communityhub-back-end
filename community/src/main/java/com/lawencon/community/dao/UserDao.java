@@ -25,8 +25,9 @@ public class UserDao extends MasterDao<User>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getAll() {
-		final String sql = "SELECT * FROM user" + " WHERE is_active = true";
-		final List<User> res = em().createNativeQuery(sql, User.class).getResultList();
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM user ").append(" WHERE is_active = true");
+		final List<User> res = em().createNativeQuery(toStr(str), User.class).getResultList();
 		return res;
 	}
 

@@ -22,9 +22,10 @@ public class UserBookmarkDao extends BasePostDao<UserBookmark> {
 	
 	@SuppressWarnings("unchecked")
 	public List<UserBookmark> getAllByUser(final Long userId){
-		final String sql = "SELECT * FROM user_bookmark "
-				+ "WHERE user_id = :id AND is_active = true ";
-		final List<UserBookmark> res = em().createNativeQuery(sql, UserBookmark.class)
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM user_bookmark ")
+			.append("WHERE user_id = :id AND is_active = true ");
+		final List<UserBookmark> res = em().createNativeQuery(toStr(str), UserBookmark.class)
 				.setParameter("user_id", userId)
 				.getResultList();
 		return res;

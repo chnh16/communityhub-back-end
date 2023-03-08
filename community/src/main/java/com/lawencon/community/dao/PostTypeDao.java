@@ -3,8 +3,11 @@ package com.lawencon.community.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.community.model.PostType;
 
+@Repository
 public class PostTypeDao extends MasterDao<PostType>{
 	
 	@Override
@@ -22,9 +25,9 @@ public class PostTypeDao extends MasterDao<PostType>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PostType> getAll() {
-		final String sql = "SELECT * FROM post_type" 
-				+ " WHERE is_active = true";
-		final List<PostType> res = em().createNativeQuery(sql, PostType.class).getResultList();
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM post_type ").append(" WHERE is_active = true");
+		final List<PostType> res = em().createNativeQuery(toStr(str), PostType.class).getResultList();
 		return res;
 	}
 

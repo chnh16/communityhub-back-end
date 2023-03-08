@@ -3,8 +3,11 @@ package com.lawencon.community.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.community.model.Role;
 
+@Repository
 public class RoleDao extends MasterDao<Role>{
 
 	@Override
@@ -22,8 +25,9 @@ public class RoleDao extends MasterDao<Role>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Role> getAll() {
-		final String sql = "SELECT * FROM role" + " WHERE is_active = true";
-		final List<Role> res = em().createNativeQuery(sql, Role.class).getResultList();
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM role ").append(" WHERE is_active = true");
+		final List<Role> res = em().createNativeQuery(toStr(str), Role.class).getResultList();
 		return res;
 	}
 

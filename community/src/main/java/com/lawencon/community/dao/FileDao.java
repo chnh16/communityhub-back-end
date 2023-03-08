@@ -25,9 +25,9 @@ public class FileDao extends MasterDao<File>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<File> getAll() {
-		final String sql = "SELECT * FROM file" 
-				+ " WHERE is_active = true";
-		final List<File> res = em().createNativeQuery(sql, File.class).getResultList();
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM file ").append(" WHERE is_active = true");
+		final List<File> res = em().createNativeQuery(toStr(str), File.class).getResultList();
 		return res;
 	}
 

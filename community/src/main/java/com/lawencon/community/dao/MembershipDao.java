@@ -25,9 +25,9 @@ public class MembershipDao extends MasterDao<Membership>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Membership> getAll() {
-		final String sql = "SELECT * FROM membership" 
-				+ " WHERE is_active = true";
-		final List<Membership> res = em().createNativeQuery(sql, Membership.class).getResultList();
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM membership ").append(" WHERE is_active = true");
+		final List<Membership> res = em().createNativeQuery(toStr(str), Membership.class).getResultList();
 		return res;
 	}
 
