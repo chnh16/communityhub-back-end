@@ -10,7 +10,7 @@ import com.lawencon.base.BaseEntity;
 @Table(name = "category")
 public class Category extends BaseEntity {
 
-	@Column(length = 5, unique = true, nullable = false)
+	@Column(length = 5, nullable = false)
 	private String categoryCode;
 	
 	@Column(length = 30, nullable = false)

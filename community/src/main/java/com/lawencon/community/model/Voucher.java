@@ -12,7 +12,7 @@ import com.lawencon.base.BaseEntity;
 @Table(name = "voucher")
 public class Voucher extends BaseEntity {
 	
-	@Column(length = 5, unique = true, nullable = false)
+	@Column(length = 5, nullable = false)
 	private String voucherCode;
 	
 	@Column (nullable = false)
