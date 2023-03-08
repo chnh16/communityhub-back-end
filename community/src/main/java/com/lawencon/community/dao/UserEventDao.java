@@ -10,18 +10,18 @@ import com.lawencon.community.model.UserEvent;
 public class UserEventDao extends BasePostDao<UserEvent>{
 
 	@Override
-	UserEvent insert(UserEvent data) {
+	public UserEvent insert(final UserEvent data) {
 		final UserEvent res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	boolean delete(Long id) {
+	public boolean delete(final Long id) {
 		return deleteById(UserEvent.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
-	List<UserEvent> getByUserId (Long userId){
+	public List<UserEvent> getByUserId (final Long userId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM user_event ue ")
 		.append("WHERE ue.user_id = :userId");

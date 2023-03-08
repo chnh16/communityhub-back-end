@@ -10,13 +10,13 @@ import com.lawencon.community.model.Transaction;
 public class TransactionDao extends BasePostDao<Transaction>{
 
 	@Override
-	Transaction insert(Transaction data) {
+	public Transaction insert(final Transaction data) {
 		final Transaction res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	boolean delete(Long id) {
+	public boolean delete(final Long id) {
 		return deleteById(Transaction.class, id);
 	}
 	
@@ -26,7 +26,7 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	List<Transaction> getByCourseId (Long courseId){
+	public List<Transaction> getByCourseId (final Long courseId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_transaction t ")
 		.append("WHERE t.course_id = :courseId");
@@ -35,7 +35,7 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	List<Transaction> getByEventId (Long eventId){
+	public List<Transaction> getByEventId (final Long eventId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_transaction t ")
 		.append("WHERE t.event_id = :eventId");
@@ -44,7 +44,7 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	List<Transaction> getByMembershipId (Long membershipId){
+	public List<Transaction> getByMembershipId (final Long membershipId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_transaction t ")
 		.append("WHERE t.membership_id = :membershipId");

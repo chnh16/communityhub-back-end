@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +14,7 @@ import com.lawencon.base.ConnHandler;
 @Repository
 public abstract class MasterDao<T> extends AbstractJpaDao{
 
+	@PersistenceContext
 	protected EntityManager em() {
 		return ConnHandler.getManager();
 	}

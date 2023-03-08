@@ -10,18 +10,18 @@ import com.lawencon.community.model.UserCourse;
 public class UserCourseDao extends BasePostDao<UserCourse>{
 
 	@Override
-	UserCourse insert(UserCourse data) {
+	public UserCourse insert(final UserCourse data) {
 		final UserCourse res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	boolean delete(Long id) {
+	public boolean delete(final Long id) {
 		return deleteById(UserCourse.class, id);
 	}
 	
 	@SuppressWarnings("unchecked")
-	List<UserCourse> getByCourseId (Long userId){
+	public List<UserCourse> getByCourseId (final Long userId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM user_course uc ")
 		.append("WHERE uc.user_id = :userId");

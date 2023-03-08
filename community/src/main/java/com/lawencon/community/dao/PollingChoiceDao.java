@@ -11,20 +11,20 @@ import com.lawencon.community.model.PollingChoice;
 public class PollingChoiceDao extends MasterDao<PollingChoice>{
 
 	@Override
-	Optional<PollingChoice> getById(Long id) {
+	public Optional<PollingChoice> getById(final Long id) {
 		final PollingChoice res = getById(PollingChoice.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	Optional<PollingChoice> getRefById(Long id) {
+	public Optional<PollingChoice> getRefById(final Long id) {
 		final PollingChoice res = getByIdRef(PollingChoice.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<PollingChoice> getAll() {
+	public List<PollingChoice> getAll() {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM polling_answer pa")
 			.append(" WHERE is_active = true");
@@ -33,19 +33,19 @@ public class PollingChoiceDao extends MasterDao<PollingChoice>{
 	}
 
 	@Override
-	PollingChoice update(PollingChoice data) {
+	public PollingChoice update(final PollingChoice data) {
 		final PollingChoice res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	PollingChoice insert(PollingChoice data) {
+	public PollingChoice insert(final PollingChoice data) {
 		final PollingChoice res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	boolean delete(Long id) {
+	public boolean delete(final Long id) {
 		return deleteById(PollingChoice.class, id);
 	}
 

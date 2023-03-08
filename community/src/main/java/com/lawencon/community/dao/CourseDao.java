@@ -11,20 +11,20 @@ import com.lawencon.community.model.Course;
 public class CourseDao extends MasterDao<Course>{
 
 	@Override
-	Optional<Course> getById(Long id) {
+	public Optional<Course> getById(final Long id) {
 		final Course res = getById(Course.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	Optional<Course> getRefById(Long id) {
+	public Optional<Course> getRefById(final Long id) {
 		final Course res = getByIdRef(Course.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	List<Course> getAll() {
+	public List<Course> getAll() {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM course")
 		.append(" WHERE is_active = true");
@@ -33,24 +33,24 @@ public class CourseDao extends MasterDao<Course>{
 	}
 
 	@Override
-	Course update(Course data) {
+	public Course update(final Course data) {
 		final Course res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	Course insert(Course data) {
+	public Course insert(final Course data) {
 		final Course res = saveAndFlush(data);
 		return res;
 	}
 
 	@Override
-	boolean delete(Long id) {
+	public boolean delete(final Long id) {
 		return deleteById(Course.class, id);
 	}
 	
 	@SuppressWarnings("unchecked")
-	List<Course> getByCategoryId (Long categoryId){
+	public List<Course> getByCategoryId (final Long categoryId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM course c ")
 		.append("WHERE c.category_id = :categoryId");
