@@ -1,5 +1,8 @@
 package com.lawencon.community.model;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -17,10 +20,10 @@ public class Membership extends BaseEntity{
 	private String membershipName;
 
 	@Column (nullable = false)
-	private Long duration;
+	private LocalDateTime duration;
 	
 	@Column (nullable = false)
-	private Integer amount;
+	private BigDecimal amount;
 	
 
 	public String getMembershipCode() {
@@ -39,20 +42,22 @@ public class Membership extends BaseEntity{
 		this.membershipName = membershipName;
 	}
 
-	public Long getDuration() {
+	public LocalDateTime getDuration() {
 		return duration;
 	}
 
-	public void setDuration(Long duration) {
+	public void setDuration(LocalDateTime duration) {
 		this.duration = duration;
 	}
 
-	public Integer getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Integer amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
+
+
 
 }
