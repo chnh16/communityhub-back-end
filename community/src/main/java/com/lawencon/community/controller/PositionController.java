@@ -50,7 +50,7 @@ private final PositionService positionService;
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<PojoDeleteRes> delete(@PathVariable final Long id){
+	public ResponseEntity<PojoDeleteRes> delete(@PathVariable final String id){
 		final PojoDeleteRes res = positionService.delete(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}

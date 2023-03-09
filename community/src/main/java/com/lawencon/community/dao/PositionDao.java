@@ -38,7 +38,7 @@ public class PositionDao extends MasterDao<Position>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(Position.class, id);
 	}
 
@@ -49,7 +49,7 @@ public class PositionDao extends MasterDao<Position>{
 	}
 
 	@Override
-	public Position getByIdAndDetach(final Long id) {
+	public Position getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Position.class, id);
 	}
 

@@ -16,7 +16,7 @@ public class ArticleFileDao extends BasePostDao<ArticleFile>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(ArticleFile.class, id);
 	}
 	

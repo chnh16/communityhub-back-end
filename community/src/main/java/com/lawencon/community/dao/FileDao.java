@@ -38,7 +38,7 @@ public class FileDao extends MasterDao<File>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(File.class, id);
 	}
 
@@ -49,7 +49,7 @@ public class FileDao extends MasterDao<File>{
 	}
 
 	@Override
-	public File getByIdAndDetach(final Long id) {
+	public File getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(File.class, id);
 	}
 

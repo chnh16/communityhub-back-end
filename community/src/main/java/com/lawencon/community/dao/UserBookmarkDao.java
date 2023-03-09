@@ -16,7 +16,7 @@ public class UserBookmarkDao extends BasePostDao<UserBookmark> {
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(UserBookmark.class, id);
 	}
 	

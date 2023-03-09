@@ -16,7 +16,7 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(PollingAnswer.class, id);
 	}
 	

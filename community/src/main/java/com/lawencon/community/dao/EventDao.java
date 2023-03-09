@@ -45,7 +45,7 @@ public class EventDao extends MasterDao<Event>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(Event.class, id);
 	}
 	
@@ -59,7 +59,7 @@ public class EventDao extends MasterDao<Event>{
 	}
 
 	@Override
-	public Event getByIdAndDetach(final Long id) {
+	public Event getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Event.class, id);
 	}
 

@@ -44,7 +44,7 @@ public class CourseDao extends MasterDao<Course>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(Course.class, id);
 	}
 	
@@ -58,7 +58,7 @@ public class CourseDao extends MasterDao<Course>{
 	}
 
 	@Override
-	public Course getByIdAndDetach(final Long id) {
+	public Course getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Course.class, id);
 	}
 

@@ -38,7 +38,7 @@ public class ProfileDao extends MasterDao<Profile>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(Profile.class, id);
 	}
 
@@ -49,7 +49,7 @@ public class ProfileDao extends MasterDao<Profile>{
 	}
 
 	@Override
-	public Profile getByIdAndDetach(final Long id) {
+	public Profile getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Profile.class, id);
 	}
 

@@ -19,5 +19,5 @@ public abstract class BasePostDao<T> extends AbstractJpaDao {
 	
 	abstract T insert(T data);
 
-	abstract boolean delete(Long id);
+	abstract boolean delete(String id);
 }

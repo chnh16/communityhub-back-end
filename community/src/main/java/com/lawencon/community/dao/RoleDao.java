@@ -38,7 +38,7 @@ public class RoleDao extends MasterDao<Role>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(Role.class, id);
 	}
 
@@ -49,7 +49,7 @@ public class RoleDao extends MasterDao<Role>{
 	}
 
 	@Override
-	public Role getByIdAndDetach(final Long id) {
+	public Role getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Role.class, id);
 	}
 

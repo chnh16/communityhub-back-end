@@ -16,7 +16,7 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(Transaction.class, id);
 	}
 	
