@@ -53,7 +53,7 @@ public class VoucherService {
 		return voucherDao.getAll();
 	}
 
-	private Voucher getByIdAndDetach(final Long id) {
+	private Voucher getByIdAndDetach(final String id) {
 		return voucherDao.getByIdAndDetach(Voucher.class, id);
 	}
 
@@ -77,7 +77,7 @@ public class VoucherService {
 		Voucher voucherUpdate = null;
 		valIdNotNull(data);
 
-		final Optional<Voucher> res = voucherDao.getById(Long.valueOf(data.getId()));
+		final Optional<Voucher> res = voucherDao.getById(data.getId());
 		if (res.isEmpty()) {
 			throw new RuntimeException("Voucher tidak ditemukan");
 		}
@@ -98,7 +98,7 @@ public class VoucherService {
 		return voucherUpdate;
 	}
 
-	private boolean deleteById(final Long id) {
+	private boolean deleteById(final String id) {
 		boolean voucherDelete = false;
 
 		try {
@@ -119,7 +119,7 @@ public class VoucherService {
 			final PojoVoucherGetAllRes pojo = new PojoVoucherGetAllRes();
 			final Voucher vcr = res.get(i);
 			ConnHandler.getManager().detach(vcr);
-			pojo.setId(Long.valueOf(vcr.getId()));
+			pojo.setId(vcr.getId());
 			pojo.setVoucherCode(vcr.getVoucherCode());
 			pojo.setAmount(vcr.getAmount());
 			pojo.setExpiredDate(vcr.getExpiredDate());
@@ -164,7 +164,7 @@ public class VoucherService {
 		return res;
 	}
 
-	public PojoDeleteRes deleteRes(final Long id) {
+	public PojoDeleteRes deleteRes(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteById(id);
 		res.setMessage("Berhasil menghapus");
