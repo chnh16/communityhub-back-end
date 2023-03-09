@@ -39,7 +39,7 @@ public class MembershipController {
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping
 	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoMembershipUpdateReq data){
 		final PojoUpdateRes res = membershipService.update(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);

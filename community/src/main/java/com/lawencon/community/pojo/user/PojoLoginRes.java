@@ -4,14 +4,14 @@ public class PojoLoginRes {
 	
 	private String token;
 	private String roleCode;
-	private Long idUser;
+	private String idUser;
 	private String fullName;
 	
-	public Long getIdUser() {
+	public String getIdUser() {
 		return idUser;
 	}
 
-	public void setIdUser(Long idUser) {
+	public void setIdUser(String idUser) {
 		this.idUser = idUser;
 	}
 

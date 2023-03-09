@@ -8,7 +8,7 @@ public class PojoMembershipGetAllRes {
 	private String id;
 	private String membershipCode;
 	private String membershipName;
-	private LocalDateTime duration;
+	private Long duration;
 	private BigDecimal amount;
 
 	public String getId() {
@@ -35,11 +35,11 @@ public class PojoMembershipGetAllRes {
 		this.membershipName = membershipName;
 	}
 
-	public LocalDateTime getDuration() {
+	public Long getDuration() {
 		return duration;
 	}
 
-	public void setDuration(LocalDateTime duration) {
+	public void setDuration(Long duration) {
 		this.duration = duration;
 	}
 

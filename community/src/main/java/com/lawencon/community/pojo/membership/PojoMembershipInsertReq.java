@@ -1,12 +1,11 @@
 package com.lawencon.community.pojo.membership;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public class PojoMembershipInsertReq {
 
 	private String membershipName;
-	private LocalDateTime duration;
+	private Long duration;
 	private BigDecimal amount;
 
 	public String getMembershipName() {
@@ -17,11 +16,11 @@ public class PojoMembershipInsertReq {
 		this.membershipName = membershipName;
 	}
 
-	public LocalDateTime getDuration() {
+	public Long getDuration() {
 		return duration;
 	}
 
-	public void setDuration(LocalDateTime duration) {
+	public void setDuration(Long duration) {
 		this.duration = duration;
 	}
 
