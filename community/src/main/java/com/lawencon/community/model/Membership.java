@@ -20,7 +20,7 @@ public class Membership extends BaseEntity{
 	private String membershipName;
 
 	@Column (nullable = false)
-	private LocalDateTime duration;
+	private Long duration;
 	
 	@Column (nullable = false)
 	private BigDecimal amount;
@@ -42,11 +42,11 @@ public class Membership extends BaseEntity{
 		this.membershipName = membershipName;
 	}
 
-	public LocalDateTime getDuration() {
+	public Long getDuration() {
 		return duration;
 	}
 
-	public void setDuration(LocalDateTime duration) {
+	public void setDuration(Long duration) {
 		this.duration = duration;
 	}
 
