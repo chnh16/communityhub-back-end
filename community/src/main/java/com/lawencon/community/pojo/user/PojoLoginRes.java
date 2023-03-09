@@ -1,4 +1,4 @@
-package com.lawencon.community.pojo;
+package com.lawencon.community.pojo.user;
 
 public class PojoLoginRes {
 	

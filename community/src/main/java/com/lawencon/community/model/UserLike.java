@@ -4,11 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name = "user_like")
+@Table(name = "user_like", uniqueConstraints = {
+		@UniqueConstraint(name = "user_like_ck", columnNames = {"post_id", "user_id"}
+)})
 public class UserLike extends BaseEntity {
 	
 	@OneToOne
