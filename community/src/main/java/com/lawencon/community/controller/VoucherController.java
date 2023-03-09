@@ -49,7 +49,7 @@ public class VoucherController {
 	}
 	
 	@DeleteMapping("/{id}")
-	private ResponseEntity<PojoDeleteRes> delete(@PathVariable final Long id){
+	private ResponseEntity<PojoDeleteRes> delete(@PathVariable final String id){
 		final PojoDeleteRes res = voucherService.deleteRes(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}

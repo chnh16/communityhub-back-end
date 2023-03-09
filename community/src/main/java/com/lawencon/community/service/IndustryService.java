@@ -19,7 +19,6 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.industry.PojoIndustryGetAllRes;
 import com.lawencon.community.pojo.industry.PojoIndustryInsertReq;
 import com.lawencon.community.pojo.industry.PojoIndustryUpdateReq;
-import com.lawencon.security.principal.PrincipalServiceImpl;
 
 @Service
 public class IndustryService{

@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
@@ -18,11 +17,12 @@ import com.lawencon.community.pojo.category.PojoCategoryGetAllRes;
 import com.lawencon.community.pojo.category.PojoCategoryInsertReq;
 import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
 
+
+@Service
 public class CategoryService {
 	
 	private final CategoryDao categoryDao;
-	@PersistenceContext
-	private EntityManager em;
+	
 	
 	public CategoryService(final CategoryDao categoryDao) {
 		this.categoryDao = categoryDao;
@@ -48,7 +48,8 @@ public class CategoryService {
 		
 		category.setIsActive(true);
 		
-		final Category categoryInsert = insertCategory(category);
+		Category categoryInsert = null;
+		categoryInsert = insertCategory(category);
 		
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
 		pojoInsertRes.setId(categoryInsert.getId());

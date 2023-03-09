@@ -11,13 +11,13 @@ import com.lawencon.community.model.Profile;
 public class ProfileDao extends MasterDao<Profile>{
 
 	@Override
-	public Optional<Profile> getById(final Long id) {
+	public Optional<Profile> getById(final String id) {
 		final Profile res = getById(Profile.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	public Optional<Profile> getRefById(final Long id) {
+	public Optional<Profile> getRefById(final String id) {
 		final Profile res = getByIdRef(Profile.class, id);
 		return Optional.ofNullable(res);
 	}

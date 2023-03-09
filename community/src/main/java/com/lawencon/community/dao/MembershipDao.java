@@ -11,13 +11,13 @@ import com.lawencon.community.model.Membership;
 public class MembershipDao extends MasterDao<Membership>{
 
 	@Override
-	public Optional<Membership> getById(final Long id) {
+	public Optional<Membership> getById(final String id) {
 		final Membership res = getById(Membership.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	public Optional<Membership> getRefById(final Long id) {
+	public Optional<Membership> getRefById(final String id) {
 		final Membership res = getByIdRef(Membership.class, id);
 		return Optional.ofNullable(res);
 	}

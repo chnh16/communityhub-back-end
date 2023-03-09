@@ -55,6 +55,7 @@ public class UserController {
         claims.put("id", userOptional.get().getId());
 
         final PojoLoginRes loginRes = new PojoLoginRes();
+        
         loginRes.setToken(jwtService.generateJwt(claims));
         loginRes.setIdUser(Long.valueOf(userOptional.get().getId()) );
         loginRes.setRoleCode(userOptional.get().getRole().getRoleCode());

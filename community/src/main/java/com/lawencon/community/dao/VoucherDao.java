@@ -3,18 +3,21 @@ package com.lawencon.community.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.lawencon.community.model.Voucher;
 
+@Repository
 public class VoucherDao extends MasterDao<Voucher> {
 
 	@Override
-	public Optional<Voucher> getById(final Long id) {
+	public Optional<Voucher> getById(final String id) {
 		final Voucher res = getById(Voucher.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	public Optional<Voucher> getRefById(final Long id) {
+	public Optional<Voucher> getRefById(final String id) {
 		final Voucher res = getByIdRef(Voucher.class, id);
 		return Optional.ofNullable(res);
 	}

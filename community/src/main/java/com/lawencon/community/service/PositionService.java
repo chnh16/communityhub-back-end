@@ -89,7 +89,7 @@ public class PositionService {
 		
 		final Position positionInsert = insert(position);
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
-		pojoInsertRes.setId(Long.valueOf(positionInsert.getId()));
+		pojoInsertRes.setId(positionInsert.getId());
 		pojoInsertRes.setMessage("Success");
 		return pojoInsertRes;
 	}
