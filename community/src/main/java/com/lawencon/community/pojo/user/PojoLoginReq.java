@@ -1,4 +1,4 @@
-package com.lawencon.community.pojo;
+package com.lawencon.community.pojo.user;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

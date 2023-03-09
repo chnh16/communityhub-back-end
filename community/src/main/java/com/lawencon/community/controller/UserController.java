@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.model.User;
-import com.lawencon.community.pojo.PojoLoginReq;
-import com.lawencon.community.pojo.PojoLoginRes;
+import com.lawencon.community.pojo.user.PojoLoginReq;
+import com.lawencon.community.pojo.user.PojoLoginRes;
 import com.lawencon.community.service.JwtService;
 import com.lawencon.community.service.UserService;
 

@@ -3,10 +3,15 @@ package com.lawencon.community.model;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
+@Table(uniqueConstraints = {
+		@UniqueConstraint(name = "event_file_ck", columnNames = {"file_id", "event_id"}
+)})
 public class EventFile extends BaseEntity{
 	
 	@OneToOne

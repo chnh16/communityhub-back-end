@@ -8,11 +8,15 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name = "profile")
+@Table(name = "profile", uniqueConstraints = {
+		@UniqueConstraint(name = "profile_ck", columnNames = {"file_id", "industry_id", "position_id"}
+)})
+
 public class Profile extends BaseEntity {
 	@Column(length = 30, nullable = false)
 	private String fullName;
@@ -39,6 +43,14 @@ public class Profile extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "file_id", nullable = false)
 	private File file;
+	
+	@OneToOne
+	@JoinColumn(name = "industry_id", nullable = false)
+	private Industry industry;
+	
+	@OneToOne
+	@JoinColumn(name = "position_id", nullable = false)
+	private Position position;
 
 	public String getFullName() {
 		return fullName;
