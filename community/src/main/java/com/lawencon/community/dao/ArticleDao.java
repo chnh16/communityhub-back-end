@@ -43,12 +43,12 @@ public class ArticleDao extends MasterDao<Article>{
 	}
 
 	@Override
-	boolean delete(final Long id) {
+	boolean delete(final String id) {
 		return deleteById(Article.class, id);
 	}
 
 	@Override
-	public Article getByIdAndDetach(final Long id) {
+	public Article getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Article.class, id);
 	}
 	

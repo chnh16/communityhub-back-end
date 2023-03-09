@@ -35,7 +35,8 @@ public class CategoryDao extends MasterDao<Category>{
 		return res;
 	}
 
-	public boolean delete(final Long id) {
+	@Override
+	public boolean delete(final String id) {
 		return deleteById(Category.class, id);
 	}
 
@@ -45,7 +46,7 @@ public class CategoryDao extends MasterDao<Category>{
 	}
 
 	@Override
-	public Category getByIdAndDetach(final Long id) {
+	public Category getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Category.class, id);
 	}
 

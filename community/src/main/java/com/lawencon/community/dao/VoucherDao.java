@@ -38,7 +38,7 @@ public class VoucherDao extends MasterDao<Voucher> {
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(Voucher.class, id);
 	}
 
@@ -49,7 +49,7 @@ public class VoucherDao extends MasterDao<Voucher> {
 	}
 
 	@Override
-	public Voucher getByIdAndDetach(final Long id) {
+	public Voucher getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Voucher.class, id);
 	}
 

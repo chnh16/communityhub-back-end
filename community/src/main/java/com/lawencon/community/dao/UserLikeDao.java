@@ -14,7 +14,7 @@ public class UserLikeDao extends BasePostDao<UserLike>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(UserLike.class, id);
 	}
 	

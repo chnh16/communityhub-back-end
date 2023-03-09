@@ -16,7 +16,7 @@ public class UserEventDao extends BasePostDao<UserEvent>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(UserEvent.class, id);
 	}
 

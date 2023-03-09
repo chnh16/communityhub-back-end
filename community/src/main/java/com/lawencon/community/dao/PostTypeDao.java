@@ -38,7 +38,7 @@ public class PostTypeDao extends MasterDao<PostType>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(PostType.class, id);
 	}
 
@@ -49,7 +49,7 @@ public class PostTypeDao extends MasterDao<PostType>{
 	}
 
 	@Override
-	public PostType getByIdAndDetach(final Long id) {
+	public PostType getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(PostType.class, id);
 	}
 

@@ -44,12 +44,12 @@ public class PostDetailDao extends MasterDao<PostDetail>{
 	}
 
 	@Override
-	boolean delete(final Long id) {
+	boolean delete(final String id) {
 		return deleteById(PostDetail.class, id);
 	}
 
 	@Override
-	public PostDetail getByIdAndDetach(final Long id) {
+	public PostDetail getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(PostDetail.class, id);
 	}
 

@@ -16,7 +16,7 @@ public class EventFileDao extends BasePostDao<EventFile>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(EventFile.class, id);
 	}
 	

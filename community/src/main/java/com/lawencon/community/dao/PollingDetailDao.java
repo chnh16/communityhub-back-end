@@ -45,12 +45,12 @@ public class PollingDetailDao extends MasterDao<PollingDetail>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(PollingDetail.class, id);
 	}
 
 	@Override
-	public PollingDetail getByIdAndDetach(final Long id) {
+	public PollingDetail getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(PollingDetail.class, id);
 	}
 

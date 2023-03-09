@@ -38,7 +38,7 @@ public class MembershipDao extends MasterDao<Membership>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(Membership.class, id);
 	}
 
@@ -49,7 +49,7 @@ public class MembershipDao extends MasterDao<Membership>{
 	}
 
 	@Override
-	public Membership getByIdAndDetach(final Long id) {
+	public Membership getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Membership.class, id);
 	}
 	

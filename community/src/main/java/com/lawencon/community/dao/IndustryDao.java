@@ -38,7 +38,7 @@ public class IndustryDao extends MasterDao<Industry>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(Industry.class, id);
 	}
 	
@@ -49,7 +49,7 @@ public class IndustryDao extends MasterDao<Industry>{
 	}
 
 	@Override
-	public Industry getByIdAndDetach(final Long id) {
+	public Industry getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Industry.class, id);
 	}
 

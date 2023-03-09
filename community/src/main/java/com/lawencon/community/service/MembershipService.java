@@ -48,7 +48,7 @@ public class MembershipService {
 	public Membership update(final Membership data) {
 		Membership membershipUpdate = null;
 
-		membershipUpdate = membershipDao.getById(Long.valueOf(data.getId())).get() ;
+		membershipUpdate = membershipDao.getById(data.getId()).get() ;
 		ConnHandler.getManager().detach(membershipUpdate);
 		membershipUpdate.setIsActive(data.getIsActive());
 		membershipUpdate.setUpdatedAt(LocalDateTime.now());
@@ -58,7 +58,7 @@ public class MembershipService {
 		return membershipUpdate;
 	}
 	
-	public Optional<Membership> getById(final Long id) {
+	public Optional<Membership> getById(final String id) {
 		return membershipDao.getById(id);
 	}
 
@@ -66,7 +66,7 @@ public class MembershipService {
 		return membershipDao.getAll();
 	}
 	
-	public boolean deleteById(final Long id) {
+	public boolean deleteById(final String id) {
 		boolean membershipDelete = false;
 
 		try {
@@ -82,7 +82,7 @@ public class MembershipService {
 		
 	}
 	
-	public Membership getByIdAndDetach(final Long id) {
+	public Membership getByIdAndDetach(final String id) {
 		return membershipDao.getByIdAndDetach(Membership.class, id);
 	}
 	
@@ -135,7 +135,7 @@ public class MembershipService {
 			final Membership membership = res.get(i);
 			
 			ConnHandler.getManager().detach(membership);
-			pojo.setId(Long.valueOf(membership.getId()));
+			pojo.setId(membership.getId());
 			pojo.setMembershipCode(membership.getMembershipCode());
 			pojo.setMembershipName(membership.getMembershipName());
 			pojo.setDuration(membership.getDuration());
@@ -145,7 +145,7 @@ public class MembershipService {
 		return pojos;
 	}
 	
-	public PojoDeleteRes delete(final Long id) {
+	public PojoDeleteRes delete(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteById(id);
 		res.setMessage("Berhasil Dihapus");

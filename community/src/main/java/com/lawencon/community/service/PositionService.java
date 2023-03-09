@@ -9,12 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.PositionDao;
-import com.lawencon.community.model.Membership;
 import com.lawencon.community.model.Position;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.membership.PojoMembershipGetAllRes;
 import com.lawencon.community.pojo.positiion.PojoPositionGetAllRes;
 import com.lawencon.community.pojo.positiion.PojoPositionInsertReq;
 import com.lawencon.community.pojo.positiion.PojoPositionUpdateReq;
@@ -46,7 +44,7 @@ public class PositionService {
 	public Position update(final Position data) {
 		Position positionUpdate = null;
 
-		positionUpdate = positionDao.getById(Long.valueOf(data.getId())).get();
+		positionUpdate = positionDao.getById(data.getId()).get();
 		ConnHandler.getManager().detach(positionUpdate);
 		positionUpdate.setIsActive(data.getIsActive());
 		positionUpdate.setUpdatedAt(LocalDateTime.now());
@@ -55,7 +53,7 @@ public class PositionService {
 		return positionUpdate;
 	}
 	
-	public Optional<Position> getById(final Long id) {
+	public Optional<Position> getById(final String id) {
 		return positionDao.getById(id);
 	}
 
@@ -63,7 +61,7 @@ public class PositionService {
 		return positionDao.getAll();
 	}
 	
-	public boolean deleteById(final Long id) {
+	public boolean deleteById(final String id) {
 		boolean positionDelete = false;
 
 		try {
@@ -78,7 +76,7 @@ public class PositionService {
 		return positionDelete;
 	}
 	
-	public Position getByIdAndDetach(final Long id) {
+	public Position getByIdAndDetach(final String id) {
 		return positionDao.getByIdAndDetach(Position.class, id);
 	}
 
@@ -117,14 +115,14 @@ public class PositionService {
 			final Position position = res.get(i);
 			
 			ConnHandler.getManager().detach(position);
-			pojo.setId(Long.valueOf(position.getId()));
+			pojo.setId(position.getId());
 			pojo.setPositionName(res.get(i).getPositionName());
 			pojos.add(pojo);
 		}
 		return pojos;
 	}
 	
-	public PojoDeleteRes delete(final Long id) {
+	public PojoDeleteRes delete(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteById(id);
 		res.setMessage("Berhasil Dihapus");

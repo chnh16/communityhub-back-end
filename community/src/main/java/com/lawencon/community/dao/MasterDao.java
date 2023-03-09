@@ -25,7 +25,7 @@ public abstract class MasterDao<T> extends AbstractJpaDao{
 	
 	abstract Optional<T> getRefById(String id);
 	
-	abstract T getByIdAndDetach(Long id);
+	abstract T getByIdAndDetach(String id);
 	
 	abstract List<T> getAll();
 	
@@ -33,6 +33,6 @@ public abstract class MasterDao<T> extends AbstractJpaDao{
 	
 	abstract T insert(T data);
 	
-	abstract boolean delete(Long id);
+	abstract boolean delete(String id);
 
 }

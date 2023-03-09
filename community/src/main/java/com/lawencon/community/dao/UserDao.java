@@ -40,7 +40,7 @@ public class UserDao extends MasterDao<User>{
 	}
 
 	@Override
-	public boolean delete(final Long id) {
+	public boolean delete(final String id) {
 		return deleteById(User.class, id);
 	}
 
@@ -107,7 +107,7 @@ public class UserDao extends MasterDao<User>{
 	}
 
 	@Override
-	public User getByIdAndDetach(final Long id) {
+	public User getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(User.class, id);
 	}
 
