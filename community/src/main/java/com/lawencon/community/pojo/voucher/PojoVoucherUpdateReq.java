@@ -3,15 +3,15 @@ package com.lawencon.community.pojo.voucher;
 import java.time.LocalDateTime;
 
 public class PojoVoucherUpdateReq {
-	private Long id;
+	private String id;
 	private String voucherCode;
 	private LocalDateTime expiredDate;
 	private Integer amount;
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getVoucherCode() {
