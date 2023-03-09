@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.lawencon.community.model.Voucher;
 
-public class VoucherDao extends MasterDao<Voucher>{
+public class VoucherDao extends MasterDao<Voucher> {
 
 	@Override
 	public Optional<Voucher> getById(final Long id) {
