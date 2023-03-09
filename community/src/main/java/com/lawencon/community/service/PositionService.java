@@ -126,7 +126,7 @@ public class PositionService {
 	
 	public PojoDeleteRes delete(final Long id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
-		delete(id);
+		deleteById(id);
 		res.setMessage("Berhasil Dihapus");
 		return res;
 	}
