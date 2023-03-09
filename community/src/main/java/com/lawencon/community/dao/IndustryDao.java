@@ -11,13 +11,13 @@ import com.lawencon.community.model.Industry;
 public class IndustryDao extends MasterDao<Industry>{
 	
 	@Override
-	public Optional<Industry> getById(final Long id) {
+	public Optional<Industry> getById(final String id) {
 		final Industry res = getById(Industry.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	public Optional<Industry> getRefById(final Long id) {
+	public Optional<Industry> getRefById(final String id) {
 		final Industry res = getByIdRef(Industry.class, id);
 		return Optional.ofNullable(res);
 	}

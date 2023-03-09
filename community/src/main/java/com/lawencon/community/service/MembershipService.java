@@ -96,7 +96,7 @@ public class MembershipService {
 		
 		final Membership membershipInsert = insert(membership);
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
-		pojoInsertRes.setId(Long.valueOf(membershipInsert.getId()));
+		pojoInsertRes.setId(membershipInsert.getId());
 		pojoInsertRes.setMessage("Success");
 		return pojoInsertRes;
 	}

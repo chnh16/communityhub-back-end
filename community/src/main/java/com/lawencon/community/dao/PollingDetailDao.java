@@ -11,13 +11,13 @@ import com.lawencon.community.model.PollingDetail;
 public class PollingDetailDao extends MasterDao<PollingDetail>{
 
 	@Override
-	public Optional<PollingDetail> getById(final Long id) {
+	public Optional<PollingDetail> getById(final String id) {
 		final PollingDetail res = getById(PollingDetail.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	public Optional<PollingDetail> getRefById(final Long id) {
+	public Optional<PollingDetail> getRefById(final String id) {
 		final PollingDetail res = getByIdRef(PollingDetail.class, id);
 		return Optional.ofNullable(res);
 	}

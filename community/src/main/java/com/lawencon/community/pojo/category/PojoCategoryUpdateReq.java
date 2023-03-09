@@ -1,11 +1,11 @@
 package com.lawencon.community.pojo.category;
 
 public class PojoCategoryUpdateReq {
-	private Long id;
+	private String id;
 	private String categoryCode;
 	private String categoryName;
 	private Integer ver;
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 	public String getCategoryCode() {
@@ -17,7 +17,7 @@ public class PojoCategoryUpdateReq {
 	public Integer getVer() {
 		return ver;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public void setCategoryCode(String categoryCode) {

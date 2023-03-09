@@ -15,12 +15,12 @@ import com.lawencon.community.model.User;
 public class UserDao extends MasterDao<User>{
 
 	@Override
-	public Optional<User> getById(final Long id) {
+	public Optional<User> getById(final String id) {
 		return Optional.ofNullable(super.getById(User.class, id));
 	}
 
 	@Override
-	public Optional<User> getRefById(final Long id) {
+	public Optional<User> getRefById(final String id) {
 		return Optional.ofNullable(super.getByIdRef(User.class, id));
 	}
 

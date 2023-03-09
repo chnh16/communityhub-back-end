@@ -138,7 +138,7 @@ public class VoucherService {
 			Voucher vcrInsert = null;
 			vcrInsert = insert(insert);
 			res.setMessage("Kode voucher : " + vcrInsert.getVoucherCode() + " berhasil dibuat");
-			res.setId(Long.valueOf(vcrInsert.getId()));
+			res.setId(vcrInsert.getId());
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

@@ -11,12 +11,12 @@ import com.lawencon.community.model.Category;
 public class CategoryDao extends MasterDao<Category>{
 	
 	@Override
-	public Optional<Category> getById(final Long id) {
+	public Optional<Category> getById(final String id) {
 		return Optional.ofNullable(super.getById(Category.class, id));
 	}
 
 	@Override
-	public Optional<Category> getRefById(final Long id) {
+	public Optional<Category> getRefById(final String id) {
 		return Optional.ofNullable(super.getByIdRef(Category.class, id));
 	}
 
