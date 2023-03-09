@@ -11,13 +11,13 @@ import com.lawencon.community.model.Position;
 public class PositionDao extends MasterDao<Position>{
 	
 	@Override
-	public Optional<Position> getById(final Long id) {
+	public Optional<Position> getById(final String id) {
 		final Position res = getById(Position.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	public Optional<Position> getRefById(final Long id) {
+	public Optional<Position> getRefById(final String id) {
 		final Position res = getByIdRef(Position.class, id);
 		return Optional.ofNullable(res);
 	}

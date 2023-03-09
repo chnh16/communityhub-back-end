@@ -11,13 +11,13 @@ import com.lawencon.community.model.Role;
 public class RoleDao extends MasterDao<Role>{
 
 	@Override
-	public Optional<Role> getById(final Long id) {
+	public Optional<Role> getById(final String id) {
 		final Role res = getById(Role.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	public Optional<Role> getRefById(final Long id) {
+	public Optional<Role> getRefById(final String id) {
 		final Role res = getById(Role.class, id);
 		return Optional.ofNullable(res);
 	}

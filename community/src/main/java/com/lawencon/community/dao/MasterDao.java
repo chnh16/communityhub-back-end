@@ -21,9 +21,9 @@ public abstract class MasterDao<T> extends AbstractJpaDao{
 		return str.toString();
 	}
 	
-	abstract Optional<T> getById(Long id);
+	abstract Optional<T> getById(String id);
 	
-	abstract Optional<T> getRefById(Long id);
+	abstract Optional<T> getRefById(String id);
 	
 	abstract T getByIdAndDetach(Long id);
 	

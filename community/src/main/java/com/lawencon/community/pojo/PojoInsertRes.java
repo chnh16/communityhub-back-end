@@ -2,14 +2,14 @@ package com.lawencon.community.pojo;
 
 public class PojoInsertRes {
 
-	private Long id;
+	private String id;
 	private String message;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(final Long id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 

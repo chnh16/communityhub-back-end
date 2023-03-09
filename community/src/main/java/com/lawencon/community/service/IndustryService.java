@@ -19,10 +19,9 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.industry.PojoIndustryGetAllRes;
 import com.lawencon.community.pojo.industry.PojoIndustryInsertReq;
 import com.lawencon.community.pojo.industry.PojoIndustryUpdateReq;
-import com.lawencon.security.principal.PrincipalServiceImpl;
 
 @Service
-public class IndustryService extends PrincipalServiceImpl{
+public class IndustryService{
 	
 	private final IndustryDao industryDao;
 	@PersistenceContext
@@ -51,13 +50,13 @@ public class IndustryService extends PrincipalServiceImpl{
 		industry.setIndustryCode(data.getIndustryCode());
 		industry.setIndustryName(data.getIndustryName());
 		
-		industry.setCreatedBy(getAuthPrincipal());
+
 		industry.setIsActive(true);
 		
 		final Industry industryInsert = insertIndustry(industry);
 		
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
-		pojoInsertRes.setId(Long.valueOf(industryInsert.getId()));
+		pojoInsertRes.setId(industryInsert.getId());
 		pojoInsertRes.setMessage("Berhasil Menambah Data");
 		return pojoInsertRes;
 	}

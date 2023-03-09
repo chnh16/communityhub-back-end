@@ -11,13 +11,13 @@ import com.lawencon.community.model.File;
 public class FileDao extends MasterDao<File>{
 	
 	@Override
-	public Optional<File> getById(final Long id) {
+	public Optional<File> getById(final String id) {
 		final File res = getById(File.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	public Optional<File> getRefById(final Long id) {
+	public Optional<File> getRefById(final String id) {
 		final File res = getByIdRef(File.class, id);
 		return Optional.ofNullable(res);
 	}

@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
@@ -17,13 +16,12 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.category.PojoCategoryGetAllRes;
 import com.lawencon.community.pojo.category.PojoCategoryInsertReq;
 import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
-import com.lawencon.security.principal.PrincipalServiceImpl;
 
-public class CategoryService extends PrincipalServiceImpl {
+@Service
+public class CategoryService {
 	
 	private final CategoryDao categoryDao;
-	@PersistenceContext
-	private EntityManager em;
+	
 	
 	public CategoryService(final CategoryDao categoryDao) {
 		this.categoryDao = categoryDao;
@@ -47,13 +45,14 @@ public class CategoryService extends PrincipalServiceImpl {
 		category.setCategoryCode(data.getCategoryCode());
 		category.setCategoryName(data.getCategoryName());
 		
-		category.setCreatedBy(getAuthPrincipal());
+	
 		category.setIsActive(true);
 		
-		final Category categoryInsert = insertCategory(category);
+		Category categoryInsert = null;
+		categoryInsert = insertCategory(category);
 		
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
-		pojoInsertRes.setId(Long.valueOf(categoryInsert.getId()));
+		pojoInsertRes.setId(categoryInsert.getId());
 		pojoInsertRes.setMessage("Berhasil Menambah Data");
 		return pojoInsertRes;
 	}
@@ -90,7 +89,7 @@ public class CategoryService extends PrincipalServiceImpl {
 		return pojoUpdateRes;
 	}
 	
-	public boolean deleteById(final Long id) {
+	public boolean deleteById(final String id) {
 		boolean categoryDelete = false;
 
 		try {
@@ -105,22 +104,22 @@ public class CategoryService extends PrincipalServiceImpl {
 		return categoryDelete;
 	}
 	
-	public PojoDeleteRes deleteRes(final Long id) {
+	public PojoDeleteRes deleteRes(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteById(id);
 		res.setMessage("Berhasil Menghapus Data");
 		return res;
 	}
 	
-	public Optional<Category> getById(final Long id){
+	public Optional<Category> getById(final String id){
 		return categoryDao.getById(id);
 	}
 	
-	public Category getByIdAndDetach(final Long id) {
+	public Category getByIdAndDetach(final String id) {
 		return categoryDao.getByIdAndDetach(Category.class, id);
 	}
 	
-	public Optional<Category> getRefById(final Long id){
+	public Optional<Category> getRefById(final String id){
 		return categoryDao.getRefById(id);
 	}
 	

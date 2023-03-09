@@ -11,13 +11,13 @@ import com.lawencon.community.model.Event;
 public class EventDao extends MasterDao<Event>{
 
 	@Override
-	public Optional<Event> getById(final Long id) {
+	public Optional<Event> getById(final String id) {
 		final Event res = getById(Event.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	public Optional<Event> getRefById(final Long id) {
+	public Optional<Event> getRefById(final String id) {
 		final Event res = getByIdRef(Event.class, id);
 		return Optional.ofNullable(res);
 	}

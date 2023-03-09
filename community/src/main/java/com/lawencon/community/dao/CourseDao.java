@@ -11,12 +11,12 @@ import com.lawencon.community.model.Course;
 public class CourseDao extends MasterDao<Course>{
 
 	@Override
-	public Optional<Course> getById(final Long id) {
+	public Optional<Course> getById(final String id) {
 		return Optional.ofNullable(super.getById(Course.class, id));
 	}
 
 	@Override
-	public Optional<Course> getRefById(final Long id) {
+	public Optional<Course> getRefById(final String id) {
 		final Course res = getByIdRef(Course.class, id);
 		return Optional.ofNullable(res);
 	}

@@ -11,13 +11,13 @@ import com.lawencon.community.model.PostType;
 public class PostTypeDao extends MasterDao<PostType>{
 	
 	@Override
-	public Optional<PostType> getById(final Long id) {
+	public Optional<PostType> getById(final String id) {
 		final PostType res = getById(PostType.class, id);
 		return Optional.ofNullable(res);
 	}
 
 	@Override
-	public Optional<PostType> getRefById(final Long id) {
+	public Optional<PostType> getRefById(final String id) {
 		final PostType res = getByIdRef(PostType.class, id);
 		return Optional.ofNullable(res);
 	}
