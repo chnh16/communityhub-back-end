@@ -47,6 +47,11 @@ public class MembershipDao extends MasterDao<Membership>{
 		final Membership res = saveAndFlush(data);
 		return res;
 	}
+
+	@Override
+	public Membership getByIdAndDetach(final Long id) {
+		return super.getByIdAndDetach(Membership.class, id);
+	}
 	
 
 }

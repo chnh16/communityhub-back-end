@@ -48,4 +48,9 @@ public class RoleDao extends MasterDao<Role>{
 		return res;
 	}
 
+	@Override
+	public Role getByIdAndDetach(final Long id) {
+		return super.getByIdAndDetach(Role.class, id);
+	}
+
 }

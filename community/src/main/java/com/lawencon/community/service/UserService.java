@@ -46,7 +46,6 @@ public class UserService implements UserDetailsService {
 			ConnHandler.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			ConnHandler.rollback();
 		}
 		return userInsert;
 
@@ -55,12 +54,19 @@ public class UserService implements UserDetailsService {
 	public User update(final User data) {
 		User userUpdate = null;
 
-		userUpdate = userDao.getById(Long.valueOf(data.getId())).get();
-		ConnHandler.getManager().detach(userUpdate);
-		userUpdate.setIsActive(data.getIsActive());
-		userUpdate.setUpdatedAt(LocalDateTime.now());
-		userUpdate.setUpdatedBy(principalService.getAuthPrincipal());
-		userUpdate = userDao.update(data);
+		final Optional<User> res = userDao.getById(Long.valueOf(data.getId()));
+		
+		final User user = res.get();
+		try {
+			ConnHandler.getManager().detach(userUpdate);
+			userUpdate.setIsActive(data.getIsActive());
+			userUpdate.setUpdatedAt(LocalDateTime.now());
+			userUpdate.setUpdatedBy(principalService.getAuthPrincipal());
+			userUpdate = userDao.update(data);
+		} catch(final Exception e) {
+			e.printStackTrace();
+		}
+		
 		return userUpdate;
 	}
 
@@ -82,7 +88,6 @@ public class UserService implements UserDetailsService {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			ConnHandler.rollback();
 		}
 
 		return userDelete;

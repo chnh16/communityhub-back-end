@@ -45,4 +45,9 @@ public class VoucherDao extends MasterDao<Voucher>{
 		return res;
 	}
 
+	@Override
+	public Voucher getByIdAndDetach(final Long id) {
+		return super.getByIdAndDetach(Voucher.class, id);
+	}
+
 }

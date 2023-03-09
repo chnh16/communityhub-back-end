@@ -48,4 +48,9 @@ public class PositionDao extends MasterDao<Position>{
 		return res;
 	}
 
+	@Override
+	public Position getByIdAndDetach(final Long id) {
+		return super.getByIdAndDetach(Position.class, id);
+	}
+
 }

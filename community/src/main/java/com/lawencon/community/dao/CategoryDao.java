@@ -12,14 +12,12 @@ public class CategoryDao extends MasterDao<Category>{
 	
 	@Override
 	public Optional<Category> getById(final Long id) {
-		final Category res = getById(Category.class, id);
-		return Optional.ofNullable(res);
+		return Optional.ofNullable(super.getById(Category.class, id));
 	}
 
 	@Override
 	public Optional<Category> getRefById(final Long id) {
-		final Category res = getByIdRef(Category.class, id);
-		return Optional.ofNullable(res);
+		return Optional.ofNullable(super.getByIdRef(Category.class, id));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -44,6 +42,11 @@ public class CategoryDao extends MasterDao<Category>{
 	public Category insert(final Category data) {
 		final Category res = saveAndFlush(data);
 		return res;
+	}
+
+	@Override
+	public Category getByIdAndDetach(final Long id) {
+		return super.getByIdAndDetach(Category.class, id);
 	}
 
 }
