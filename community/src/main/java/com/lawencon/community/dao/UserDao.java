@@ -16,14 +16,12 @@ public class UserDao extends MasterDao<User>{
 
 	@Override
 	public Optional<User> getById(final Long id) {
-		final User res = getById(User.class, id);
-		return Optional.ofNullable(res);
+		return Optional.ofNullable(super.getById(User.class, id));
 	}
 
 	@Override
 	public Optional<User> getRefById(final Long id) {
-		final User res = getByIdRef(User.class, id);
-		return Optional.ofNullable(res);
+		return Optional.ofNullable(super.getByIdRef(User.class, id));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -106,6 +104,11 @@ public class UserDao extends MasterDao<User>{
 		}
 
 		return Optional.ofNullable(user);
+	}
+
+	@Override
+	public User getByIdAndDetach(final Long id) {
+		return super.getByIdAndDetach(User.class, id);
 	}
 
 }

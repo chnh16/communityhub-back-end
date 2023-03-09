@@ -48,4 +48,9 @@ public class ProfileDao extends MasterDao<Profile>{
 		return res;
 	}
 
+	@Override
+	public Profile getByIdAndDetach(final Long id) {
+		return super.getByIdAndDetach(Profile.class, id);
+	}
+
 }

@@ -58,4 +58,9 @@ public class EventDao extends MasterDao<Event>{
 		return res;
 	}
 
+	@Override
+	public Event getByIdAndDetach(final Long id) {
+		return super.getByIdAndDetach(Event.class, id);
+	}
+
 }

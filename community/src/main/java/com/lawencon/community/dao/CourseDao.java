@@ -12,8 +12,7 @@ public class CourseDao extends MasterDao<Course>{
 
 	@Override
 	public Optional<Course> getById(final Long id) {
-		final Course res = getById(Course.class, id);
-		return Optional.ofNullable(res);
+		return Optional.ofNullable(super.getById(Course.class, id));
 	}
 
 	@Override
@@ -56,6 +55,11 @@ public class CourseDao extends MasterDao<Course>{
 		.append("WHERE c.category_id = :categoryId");
 		final List<Course> res = em().createNativeQuery(toStr(str), Course.class).setParameter("categoryId", categoryId).getResultList();
 		return res;
+	}
+
+	@Override
+	public Course getByIdAndDetach(final Long id) {
+		return super.getByIdAndDetach(Course.class, id);
 	}
 
 }

@@ -49,4 +49,9 @@ public class PostDao extends MasterDao<Post> {
 		return deleteById(Post.class, id);
 	}
 
+	@Override
+	public Post getByIdAndDetach(final Long id) {
+		return super.getByIdAndDetach(Post.class, id);
+	}
+
 }

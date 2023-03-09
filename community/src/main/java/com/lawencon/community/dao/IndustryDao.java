@@ -48,4 +48,9 @@ public class IndustryDao extends MasterDao<Industry>{
 		return res;
 	}
 
+	@Override
+	public Industry getByIdAndDetach(final Long id) {
+		return super.getByIdAndDetach(Industry.class, id);
+	}
+
 }

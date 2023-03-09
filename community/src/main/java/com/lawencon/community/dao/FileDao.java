@@ -48,4 +48,9 @@ public class FileDao extends MasterDao<File>{
 		return res;
 	}
 
+	@Override
+	public File getByIdAndDetach(final Long id) {
+		return super.getByIdAndDetach(File.class, id);
+	}
+
 }

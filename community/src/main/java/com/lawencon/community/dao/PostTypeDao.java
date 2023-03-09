@@ -48,4 +48,9 @@ public class PostTypeDao extends MasterDao<PostType>{
 		return res;
 	}
 
+	@Override
+	public PostType getByIdAndDetach(final Long id) {
+		return super.getByIdAndDetach(PostType.class, id);
+	}
+
 }
