@@ -22,7 +22,7 @@ import com.lawencon.community.pojo.industry.PojoIndustryUpdateReq;
 import com.lawencon.security.principal.PrincipalServiceImpl;
 
 @Service
-public class IndustryService extends PrincipalServiceImpl{
+public class IndustryService{
 	
 	private final IndustryDao industryDao;
 	@PersistenceContext
@@ -51,13 +51,12 @@ public class IndustryService extends PrincipalServiceImpl{
 		industry.setIndustryCode(data.getIndustryCode());
 		industry.setIndustryName(data.getIndustryName());
 		
-		industry.setCreatedBy(getAuthPrincipal());
 		industry.setIsActive(true);
 		
 		final Industry industryInsert = insertIndustry(industry);
 		
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
-		pojoInsertRes.setId(Long.valueOf(industryInsert.getId()));
+		pojoInsertRes.setId(industryInsert.getId());
 		pojoInsertRes.setMessage("Berhasil Menambah Data");
 		return pojoInsertRes;
 	}
@@ -94,15 +93,15 @@ public class IndustryService extends PrincipalServiceImpl{
 		return pojoUpdateRes;
 	}
 	
-	public Optional<Industry> getById(final Long id){
+	public Optional<Industry> getById(final String id){
 		return industryDao.getById(id);
 	}
 	
-	public Industry getByIdAndDetach(final Long id) {
+	public Industry getByIdAndDetach(final String id) {
 		return industryDao.getByIdAndDetach(Industry.class, id);
 	}
 	
-	public Optional<Industry> getRefById(final Long id){
+	public Optional<Industry> getRefById(final String id){
 		return industryDao.getRefById(id);
 	}
 	
@@ -110,7 +109,7 @@ public class IndustryService extends PrincipalServiceImpl{
 		return industryDao.getAll();
 	}
 	
-	public boolean deleteById(final Long id) {
+	public boolean deleteById(final String id) {
 		boolean industryDelete = false;
 
 		try {
@@ -125,7 +124,7 @@ public class IndustryService extends PrincipalServiceImpl{
 		return industryDelete;
 	}
 	
-	public PojoDeleteRes deleteRes(final Long id) {
+	public PojoDeleteRes deleteRes(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteById(id);
 		res.setMessage("Berhasil Menghapus Data");
@@ -138,7 +137,7 @@ public class IndustryService extends PrincipalServiceImpl{
 		final List<Industry> listIndustry = getAll();
 		for(int i = 0; i < listIndustry.size(); i++) {
 			final PojoIndustryGetAllRes pojoIndustry =  new PojoIndustryGetAllRes();
-			pojoIndustry.setId(Long.valueOf(listIndustry.get(i).getId()));
+			pojoIndustry.setId(listIndustry.get(i).getId());
 			pojoIndustry.setIndustryCode(listIndustry.get(i).getIndustryCode());
 			pojoIndustry.setIndustryName(listIndustry.get(i).getIndustryName());
 			

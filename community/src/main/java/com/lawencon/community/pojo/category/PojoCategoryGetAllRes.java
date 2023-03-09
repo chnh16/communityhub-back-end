@@ -1,10 +1,10 @@
 package com.lawencon.community.pojo.category;
 
 public class PojoCategoryGetAllRes {
-	private Long id;
+	private String id;
 	private String categoryCode;
 	private String categoryName;
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 	public String getCategoryCode() {
@@ -13,7 +13,7 @@ public class PojoCategoryGetAllRes {
 	public String getCategoryName() {
 		return categoryName;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public void setCategoryCode(String categoryCode) {

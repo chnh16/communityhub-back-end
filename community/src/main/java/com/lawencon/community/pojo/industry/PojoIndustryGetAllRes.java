@@ -1,10 +1,10 @@
 package com.lawencon.community.pojo.industry;
 
 public class PojoIndustryGetAllRes {
-	private Long id;
+	private String id;
 	private String industryCode;
 	private String industryName;
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 	public String getIndustryCode() {
@@ -13,7 +13,7 @@ public class PojoIndustryGetAllRes {
 	public String getIndustryName() {
 		return industryName;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public void setIndustryCode(String industryCode) {
