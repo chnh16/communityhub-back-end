@@ -17,6 +17,7 @@ import com.lawencon.community.pojo.category.PojoCategoryGetAllRes;
 import com.lawencon.community.pojo.category.PojoCategoryInsertReq;
 import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
 
+
 @Service
 public class CategoryService {
 	
@@ -45,7 +46,6 @@ public class CategoryService {
 		category.setCategoryCode(data.getCategoryCode());
 		category.setCategoryName(data.getCategoryName());
 		
-	
 		category.setIsActive(true);
 		
 		Category categoryInsert = null;
@@ -133,7 +133,7 @@ public class CategoryService {
 		final List<Category> listCategory = getAll();
 		for(int i = 0; i < listCategory.size(); i++) {
 			final PojoCategoryGetAllRes pojoCategoryGetAll = new PojoCategoryGetAllRes();
-			pojoCategoryGetAll.setId(Long.valueOf(listCategory.get(i).getId()));
+			pojoCategoryGetAll.setId(listCategory.get(i).getId());
 			pojoCategoryGetAll.setCategoryCode(listCategory.get(i).getCategoryCode());
 			pojoCategoryGetAll.setCategoryName(listCategory.get(i).getCategoryName());
 			

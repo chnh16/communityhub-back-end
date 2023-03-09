@@ -50,7 +50,6 @@ public class IndustryService{
 		industry.setIndustryCode(data.getIndustryCode());
 		industry.setIndustryName(data.getIndustryName());
 		
-
 		industry.setIsActive(true);
 		
 		final Industry industryInsert = insertIndustry(industry);
@@ -93,15 +92,15 @@ public class IndustryService{
 		return pojoUpdateRes;
 	}
 	
-	public Optional<Industry> getById(final Long id){
+	public Optional<Industry> getById(final String id){
 		return industryDao.getById(id);
 	}
 	
-	public Industry getByIdAndDetach(final Long id) {
+	public Industry getByIdAndDetach(final String id) {
 		return industryDao.getByIdAndDetach(Industry.class, id);
 	}
 	
-	public Optional<Industry> getRefById(final Long id){
+	public Optional<Industry> getRefById(final String id){
 		return industryDao.getRefById(id);
 	}
 	
@@ -109,7 +108,7 @@ public class IndustryService{
 		return industryDao.getAll();
 	}
 	
-	public boolean deleteById(final Long id) {
+	public boolean deleteById(final String id) {
 		boolean industryDelete = false;
 
 		try {
@@ -124,7 +123,7 @@ public class IndustryService{
 		return industryDelete;
 	}
 	
-	public PojoDeleteRes deleteRes(final Long id) {
+	public PojoDeleteRes deleteRes(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteById(id);
 		res.setMessage("Berhasil Menghapus Data");
@@ -137,7 +136,7 @@ public class IndustryService{
 		final List<Industry> listIndustry = getAll();
 		for(int i = 0; i < listIndustry.size(); i++) {
 			final PojoIndustryGetAllRes pojoIndustry =  new PojoIndustryGetAllRes();
-			pojoIndustry.setId(Long.valueOf(listIndustry.get(i).getId()));
+			pojoIndustry.setId(listIndustry.get(i).getId());
 			pojoIndustry.setIndustryCode(listIndustry.get(i).getIndustryCode());
 			pojoIndustry.setIndustryName(listIndustry.get(i).getIndustryName());
 			
