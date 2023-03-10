@@ -24,33 +24,33 @@ import com.lawencon.community.service.PositionService;
 @RestController
 @RequestMapping("positions")
 public class PositionController {
-	
-private final PositionService positionService;
-	
+
+	private final PositionService positionService;
+
 	public PositionController(PositionService positionService) {
 		this.positionService = positionService;
 	}
-	
+
 	@PostMapping("/add")
-	public ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoPositionInsertReq data){
+	public ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoPositionInsertReq data) {
 		final PojoInsertRes res = positionService.insert(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
-	
+
 	@PutMapping
-	public ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoPositionUpdateReq data){
+	public ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoPositionUpdateReq data) {
 		final PojoUpdateRes res = positionService.update(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
+
 	@GetMapping
-	public ResponseEntity<List<PojoPositionGetAllRes>> getAllRes(){
+	public ResponseEntity<List<PojoPositionGetAllRes>> getAllRes() {
 		final List<PojoPositionGetAllRes> res = positionService.getAllRes();
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<PojoDeleteRes> delete(@PathVariable final String id){
+	public ResponseEntity<PojoDeleteRes> delete(@PathVariable final String id) {
 		final PojoDeleteRes res = positionService.delete(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
