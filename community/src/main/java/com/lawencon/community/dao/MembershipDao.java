@@ -17,9 +17,9 @@ public class MembershipDao extends MasterDao<Membership>{
 	}
 
 	@Override
-	public Optional<Membership> getRefById(final String id) {
+	public Membership getRefById(final String id) {
 		final Membership res = getByIdRef(Membership.class, id);
-		return Optional.ofNullable(res);
+		return res;
 	}
 
 	@SuppressWarnings("unchecked")

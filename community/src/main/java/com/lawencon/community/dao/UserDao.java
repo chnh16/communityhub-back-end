@@ -20,8 +20,8 @@ public class UserDao extends MasterDao<User>{
 	}
 
 	@Override
-	public Optional<User> getRefById(final String id) {
-		return Optional.ofNullable(super.getByIdRef(User.class, id));
+	public User getRefById(final String id) {
+		return super.getByIdRef(User.class, id);
 	}
 
 	@SuppressWarnings("unchecked")

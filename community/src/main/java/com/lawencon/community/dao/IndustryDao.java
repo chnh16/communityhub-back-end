@@ -17,9 +17,9 @@ public class IndustryDao extends MasterDao<Industry>{
 	}
 
 	@Override
-	public Optional<Industry> getRefById(final String id) {
+	public Industry getRefById(final String id) {
 		final Industry res = getByIdRef(Industry.class, id);
-		return Optional.ofNullable(res);
+		return res;
 	}
 
 	@SuppressWarnings("unchecked")

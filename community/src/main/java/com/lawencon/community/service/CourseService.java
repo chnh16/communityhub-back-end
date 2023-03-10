@@ -21,17 +21,19 @@ import com.lawencon.security.principal.PrincipalService;
 public class CourseService {
 	private final CourseDao courseDao;
 	private final CategoryDao categoryDao;
+	private final CategoryService categoryService;
 	private final FileDao fileDao;
 	private final UserService userService;
 	
 	@Inject
 	private PrincipalService principalService;
 	
-	public CourseService(final CourseDao courseDao, final CategoryDao categoryDao, final FileDao fileDao, final UserService userService) {
+	public CourseService(final CourseDao courseDao, final CategoryDao categoryDao, final FileDao fileDao, final UserService userService, final CategoryService categoryService) {
 		this.courseDao = courseDao;
 		this.categoryDao = categoryDao;
 		this.fileDao = fileDao;
 		this.userService = userService;
+		this.categoryService = categoryService;
 	}
 	
 	public Course insert(final Course data) {
@@ -68,8 +70,8 @@ public class CourseService {
 		final Course course = new Course();
 		File fileInsert = null;
 		final File file = new File();
-		final User user = userService.getById(principalService.getAuthPrincipal()).get();
-		final Category category = categoryDao.getById(data.getCategoryId()).get();
+		final User user = userService.getByRefId(principalService.getAuthPrincipal());
+		final Category category = categoryDao.getByIdRef(Category.class, data.getCategoryId());
 		file.setFileName(data.getFile().getFileName());
 		file.setFileContent(data.getFile().getFileContent());
 		file.setFileExtension(data.getFile().getFileExtension());

@@ -122,7 +122,7 @@ public class CategoryService {
 		return categoryDao.getByIdAndDetach(Category.class, id);
 	}
 	
-	public Optional<Category> getRefById(final String id){
+	public Category getRefById(final String id){
 		return categoryDao.getRefById(id);
 	}
 	

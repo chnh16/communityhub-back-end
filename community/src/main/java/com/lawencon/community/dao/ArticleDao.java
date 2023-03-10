@@ -16,8 +16,8 @@ public class ArticleDao extends MasterDao<Article>{
 	}
 
 	@Override
-	public Optional<Article> getRefById(final String id) {
-		return Optional.ofNullable(super.getByIdRef(Article.class, id));
+	public Article getRefById(final String id) {
+		return super.getByIdRef(Article.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
