@@ -28,6 +28,9 @@ public class Event extends BaseEntity {
 
 	@Column(length = 50, nullable = false)
 	private String provider;
+	
+	@Column(name = "user_id", nullable = false)
+	private User user;
 
 	@Column(length = 50, nullable = false)
 	private String locationName;
@@ -119,6 +122,14 @@ public class Event extends BaseEntity {
 
 	public void setFile(File file) {
 		this.file = file;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

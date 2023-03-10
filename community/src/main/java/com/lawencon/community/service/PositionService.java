@@ -12,9 +12,9 @@ import com.lawencon.community.model.Position;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.positiion.PojoPositionGetAllRes;
-import com.lawencon.community.pojo.positiion.PojoPositionInsertReq;
-import com.lawencon.community.pojo.positiion.PojoPositionUpdateReq;
+import com.lawencon.community.pojo.position.PojoPositionGetAllRes;
+import com.lawencon.community.pojo.position.PojoPositionInsertReq;
+import com.lawencon.community.pojo.position.PojoPositionUpdateReq;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
