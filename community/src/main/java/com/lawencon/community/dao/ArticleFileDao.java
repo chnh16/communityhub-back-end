@@ -21,7 +21,7 @@ public class ArticleFileDao extends BasePostDao<ArticleFile>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ArticleFile> getByArticleId (final Long articleId){
+	public List<ArticleFile> getByArticleId (final String articleId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM article_file af ")
 		.append("WHERE af.article_id = :articleId");

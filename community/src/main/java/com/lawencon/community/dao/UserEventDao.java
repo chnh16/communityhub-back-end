@@ -21,7 +21,7 @@ public class UserEventDao extends BasePostDao<UserEvent>{
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<UserEvent> getByUserId (final Long userId){
+	public List<UserEvent> getByUserId (final String userId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM user_event ue ")
 		.append("WHERE ue.user_id = :userId");

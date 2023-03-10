@@ -21,7 +21,7 @@ public class EventFileDao extends BasePostDao<EventFile>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<EventFile> getByEventId (final Long eventId){
+	public List<EventFile> getByEventId (final String eventId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM event_file ef ")
 		.append("WHERE ef.event_id = :eventId");

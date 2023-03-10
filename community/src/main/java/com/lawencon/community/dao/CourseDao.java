@@ -49,7 +49,7 @@ public class CourseDao extends MasterDao<Course>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Course> getByCategoryId (final Long categoryId){
+	public List<Course> getByCategoryId (final String categoryId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM course c ")
 		.append("WHERE c.category_id = :categoryId");

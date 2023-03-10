@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -46,11 +48,13 @@ public class MembershipService {
 	public Membership update(final Membership data) {
 		Membership membershipUpdate = null;
 
-		membershipUpdate = membershipDao.getById(data.getId()).get();
-		ConnHandler.getManager().detach(membershipUpdate);
-		membershipUpdate.setIsActive(data.getIsActive());
-		membershipUpdate.setUpdatedAt(LocalDateTime.now());
-		membershipUpdate = membershipDao.update(data);
+		try {
+			ConnHandler.begin();
+			membershipUpdate = membershipDao.update(data);
+			ConnHandler.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return membershipUpdate;
 	}
@@ -102,7 +106,11 @@ public class MembershipService {
 	}
 
 	public PojoUpdateRes update(final PojoMembershipUpdateReq data) {
-		final Membership membership = getByIdAndDetach(data.getId());
+		Membership membershipIpdate = null;
+	
+		membershipIpdate = getByIdAndDetach(data.getId());
+		
+		final Membership membership = membershipIpdate;
 
 		membership.setMembershipName(data.getMembershipName());
 
@@ -111,10 +119,11 @@ public class MembershipService {
 		membership.setAmount(data.getAmount());
 
 		membership.setVersion(data.getVer());
+		
+		membershipIpdate = update(membership);
 
-		final Membership membershipUpdate = update(membership);
 		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
-		pojoUpdate.setVer(membershipUpdate.getVersion());
+		pojoUpdate.setVer(data.getVer());
 		pojoUpdate.setMessage("Updated");
 		return pojoUpdate;
 

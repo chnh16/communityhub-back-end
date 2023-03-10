@@ -21,7 +21,7 @@ public class CourseFileDao extends BasePostDao<CourseFile>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<CourseFile> getByCourseId (final Long courseId){
+	public List<CourseFile> getByCourseId (final String courseId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM course_file cf ")
 		.append("WHERE cf.course_id = :courseId");

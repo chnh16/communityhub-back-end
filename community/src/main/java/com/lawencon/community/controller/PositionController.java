@@ -37,7 +37,7 @@ private final PositionService positionService;
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping
 	public ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoPositionUpdateReq data){
 		final PojoUpdateRes res = positionService.update(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);

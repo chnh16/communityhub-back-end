@@ -26,7 +26,7 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Transaction> getByCourseId (final Long courseId){
+	public List<Transaction> getByCourseId (final String courseId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_transaction t ")
 		.append("WHERE t.course_id = :courseId");
@@ -35,7 +35,7 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Transaction> getByEventId (final Long eventId){
+	public List<Transaction> getByEventId (final String eventId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_transaction t ")
 		.append("WHERE t.event_id = :eventId");
@@ -44,7 +44,7 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Transaction> getByMembershipId (final Long membershipId){
+	public List<Transaction> getByMembershipId (final String membershipId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_transaction t ")
 		.append("WHERE t.membership_id = :membershipId");
