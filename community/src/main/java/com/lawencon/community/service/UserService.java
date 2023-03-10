@@ -94,6 +94,10 @@ public class UserService implements UserDetailsService {
 	public User getByIdAndDetach(final String id) {
 		return userDao.getByIdAndDetach(id);
 	}
+	
+	public User getByRefId(final String id) {
+		return userDao.getByIdRef(User.class, id);
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

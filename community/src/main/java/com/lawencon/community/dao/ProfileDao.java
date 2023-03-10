@@ -17,9 +17,9 @@ public class ProfileDao extends MasterDao<Profile>{
 	}
 
 	@Override
-	public Optional<Profile> getRefById(final String id) {
+	public Profile getRefById(final String id) {
 		final Profile res = getByIdRef(Profile.class, id);
-		return Optional.ofNullable(res);
+		return res;
 	}
 
 	@SuppressWarnings("unchecked")

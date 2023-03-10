@@ -17,9 +17,9 @@ public class PostDetailDao extends MasterDao<PostDetail>{
 	}
 
 	@Override
-	public Optional<PostDetail> getRefById(final String id) {
+	public PostDetail getRefById(final String id) {
 		final PostDetail res = getByIdRef(PostDetail.class, id);
-		return Optional.ofNullable(res);
+		return res;
 	}
 
 	@SuppressWarnings("unchecked")

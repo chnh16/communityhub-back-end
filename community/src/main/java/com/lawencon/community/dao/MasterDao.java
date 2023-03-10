@@ -23,7 +23,7 @@ public abstract class MasterDao<T> extends AbstractJpaDao{
 	
 	abstract Optional<T> getById(String id);
 	
-	abstract Optional<T> getRefById(String id);
+	abstract T getRefById(String id);
 	
 	abstract T getByIdAndDetach(String id);
 	

@@ -50,16 +50,16 @@ public class PostService extends PrincipalServiceImpl {
 	public PojoInsertRes insertPost(final PojoPostInsertReq data) {
 		final Post post = new Post();
 		
-		final User user = userDao.getRefById(getAuthPrincipal()).get();
+		final User user = userDao.getRefById(getAuthPrincipal());
 		post.setUser(user);
 		
 		post.setPostTitle(data.getPostTitle());
 		post.setPostContent(data.getPostContent());
 		
-		final PostType postType = postTypeDao.getRefById(data.getPostTypeId()).get();
+		final PostType postType = postTypeDao.getRefById(data.getPostTypeId());
 		post.setPostType(postType);
 		
-		final Category category = categoryDao.getRefById(data.getCategoryId()).get();
+		final Category category = categoryDao.getRefById(data.getCategoryId());
 		post.setCategory(category);
 		
 		post.setIsActive(true);
@@ -100,12 +100,12 @@ public class PostService extends PrincipalServiceImpl {
 		}
 		
 		if(data.getPostTypeId() != null) {
-			final PostType postType = postTypeDao.getRefById(data.getPostTypeId()).get();
+			final PostType postType = postTypeDao.getRefById(data.getPostTypeId());
 			post.setPostType(postType);			
 		}
 				
 		if(data.getCategoryId() != null) {
-			final Category category = categoryDao.getRefById(data.getCategoryId()).get();
+			final Category category = categoryDao.getRefById(data.getCategoryId());
 			post.setCategory(category); 			
 		}
 		
@@ -148,7 +148,7 @@ public class PostService extends PrincipalServiceImpl {
 		return postDao.getByIdAndDetach(Post.class, id);
 	}
 	
-	public Optional<Post> getRefById(final String id){
+	public Post getRefById(final String id){
 		return postDao.getRefById(id);
 	}
 	

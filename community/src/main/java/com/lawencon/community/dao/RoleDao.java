@@ -17,9 +17,9 @@ public class RoleDao extends MasterDao<Role>{
 	}
 
 	@Override
-	public Optional<Role> getRefById(final String id) {
+	public Role getRefById(final String id) {
 		final Role res = getById(Role.class, id);
-		return Optional.ofNullable(res);
+		return res;
 	}
 
 	@SuppressWarnings("unchecked")

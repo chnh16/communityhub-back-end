@@ -17,9 +17,9 @@ public class FileDao extends MasterDao<File>{
 	}
 
 	@Override
-	public Optional<File> getRefById(final String id) {
+	public File getRefById(final String id) {
 		final File res = getByIdRef(File.class, id);
-		return Optional.ofNullable(res);
+		return res;
 	}
 
 	@SuppressWarnings("unchecked")

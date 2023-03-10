@@ -17,9 +17,9 @@ public class VoucherDao extends MasterDao<Voucher> {
 	}
 
 	@Override
-	public Optional<Voucher> getRefById(final String id) {
+	public Voucher getRefById(final String id) {
 		final Voucher res = getByIdRef(Voucher.class, id);
-		return Optional.ofNullable(res);
+		return res;
 	}
 
 	@SuppressWarnings("unchecked")
