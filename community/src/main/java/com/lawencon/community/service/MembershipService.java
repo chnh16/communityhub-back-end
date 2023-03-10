@@ -58,6 +58,10 @@ public class MembershipService {
 	public Optional<Membership> getById(final String id) {
 		return membershipDao.getById(id);
 	}
+	
+	public Membership getRefById(final String id) {
+		return membershipDao.getRefById(id);
+	}
 
 	public List<Membership> getAll() {
 		return membershipDao.getAll();

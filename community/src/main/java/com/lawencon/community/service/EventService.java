@@ -101,6 +101,11 @@ public class EventService {
 		return eventDao.getByIdAndDetach(Event.class, id);
 	}
 
+	
+	public Event getRefById(final String id) {
+		return eventDao.getRefById(id);
+	}
+
 	public PojoInsertRes insert(final PojoEventReqInsert data) {
 		final Event event = new Event();
 		final String generateId = Generate.generateCode(5);
