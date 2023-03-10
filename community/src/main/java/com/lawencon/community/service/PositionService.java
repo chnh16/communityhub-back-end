@@ -1,6 +1,5 @@
 package com.lawencon.community.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,12 +43,15 @@ public class PositionService {
 	public Position update(final Position data) {
 		Position positionUpdate = null;
 
-		positionUpdate = positionDao.getById(data.getId()).get();
-		ConnHandler.getManager().detach(positionUpdate);
-		positionUpdate.setIsActive(data.getIsActive());
-		positionUpdate.setUpdatedAt(LocalDateTime.now());
-		positionUpdate.setUpdatedBy(principalService.getAuthPrincipal());
-		positionUpdate = positionDao.update(data);
+		try {
+			ConnHandler.begin();
+			positionUpdate = positionDao.update(data);
+			ConnHandler.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		
 		return positionUpdate;
 	}
 	

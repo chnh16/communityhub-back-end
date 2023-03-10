@@ -1,7 +1,6 @@
 package com.lawencon.community.pojo.membership;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public class PojoMembershipGetAllRes {
 

@@ -21,7 +21,7 @@ public class UserBookmarkDao extends BasePostDao<UserBookmark> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<UserBookmark> getAllByUser(final Long userId){
+	public List<UserBookmark> getAllByUser(final String userId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM user_bookmark ")
 			.append("WHERE user_id = :id AND is_active = true ");

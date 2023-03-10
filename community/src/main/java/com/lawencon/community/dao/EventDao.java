@@ -50,7 +50,7 @@ public class EventDao extends MasterDao<Event>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Event> getByCategoryId (final Long categoryId){
+	public List<Event> getByCategoryId (final String categoryId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_event e ")
 		.append("WHERE e.category_id = :categoryId");

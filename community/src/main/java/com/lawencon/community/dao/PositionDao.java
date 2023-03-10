@@ -26,7 +26,7 @@ public class PositionDao extends MasterDao<Position>{
 	@Override
 	public List<Position> getAll() {
 		final StringBuilder str = new StringBuilder();
-		str.append("SELECT * FROM position ").append(" WHERE is_active = true");
+		str.append("SELECT * FROM t_position ").append(" WHERE is_active = true");
 		final List<Position> res = em().createNativeQuery(toStr(str), Position.class).getResultList();
 		return res;
 	}

@@ -11,20 +11,23 @@ import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name = "post", uniqueConstraints = {
-		@UniqueConstraint(name = "post_ck", columnNames = {"post_type_id", "category_id"}
-)})
+		@UniqueConstraint(name = "post_ck", columnNames = { "post_type_id", "category_id" }) })
 public class Post extends BaseEntity {
-	
+
 	@Column(length = 100, nullable = false)
 	private String postTitle;
-	
+
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String postContent;
-	
+
 	@OneToOne
-	@JoinColumn(name="post_type_id", nullable = false)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
+
+	@OneToOne
+	@JoinColumn(name = "post_type_id", nullable = false)
 	private PostType postType;
-	
+
 	@OneToOne
 	@JoinColumn(name = "category_id", nullable = false)
 	private Category category;
@@ -60,7 +63,13 @@ public class Post extends BaseEntity {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
-	
-	
-	
-}	
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+}
