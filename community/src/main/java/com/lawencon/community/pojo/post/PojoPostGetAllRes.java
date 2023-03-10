@@ -3,6 +3,7 @@ package com.lawencon.community.pojo.post;
 public class PojoPostGetAllRes {
 	private String id;
 	private String userId;
+	private String fullName;
 	private String postTitle;
 	private String postContent;
 	private String postTypeId;
@@ -56,6 +57,12 @@ public class PojoPostGetAllRes {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 	
 	

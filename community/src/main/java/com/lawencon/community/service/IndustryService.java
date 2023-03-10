@@ -85,7 +85,6 @@ public class IndustryService{
 		if(data.getIndustryName() != null) {
 			industry.setIndustryName(data.getIndustryName());			
 		}
-//		industry.setUpdatedAt(LocalDateTime.now());
 		
 		industryUpdate = updateIndustry(industry);
 		

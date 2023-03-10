@@ -2,7 +2,6 @@ package com.lawencon.community.pojo.post;
 
 public class PojoPostUpdateReq {
 	private String id;
-	private String userId;
 	private String postTitle;
 	private String postContent;
 	private String postTypeId;
@@ -45,12 +44,5 @@ public class PojoPostUpdateReq {
 	public void setVer(Integer ver) {
 		this.ver = ver;
 	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	
 	
 }

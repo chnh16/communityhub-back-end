@@ -31,6 +31,7 @@ public class PostDao extends MasterDao<Post> {
 			.append(" INNER JOIN post_type pt ON pt.id = p.post_type_id ")
 			.append(" INNER JOIN post_user ON pu.post_id = p.id ")
 			.append(" INNER JOIN t_user ON tu.id = pu.user_id ")
+			.append(" INNER JOIN profile ON pr.id = tu.profile_id ")
 			.append(" WHERE is_active = true ");
 		final List<Post> res = em().createNativeQuery(toStr(str), Post.class).getResultList();
 		return res;
