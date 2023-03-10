@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
@@ -37,23 +39,25 @@ import com.lawencon.community.pojo.postfile.PojoPostFileInsertReq;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkGetAllRes;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkInsertReq;
 import com.lawencon.community.pojo.userlike.PojoUserLikeInsertReq;
-import com.lawencon.security.principal.PrincipalServiceImpl;
+import com.lawencon.security.principal.PrincipalService;
 
-public class PostService extends PrincipalServiceImpl {
+
+@Service
+public class PostService  {
 	
 	private final PostDao postDao;
 	private final UserDao userDao;
 	private final PostTypeDao postTypeDao;
 	private final CategoryDao categoryDao;
-
 	private final PostFileDao postFileDao;
 	private final UserLikeDao userLikeDao;
-	
 	private final UserBookmarkDao userBookmarkDao;
 	private final PostDetailDao postDetailDao;
 	private final FileDao fileDao;
+	private final PrincipalService principalService;
 	
-	public PostService(final PostDao postDao, final UserDao userDao, final PostTypeDao postTypeDao, final CategoryDao categoryDao, UserBookmarkDao userBookmarkDao,  PostDetailDao postDetailDao,final FileDao fileDao, final PostFileDao postFileDao, final UserLikeDao userLikeDao) {
+	public PostService(final PostDao postDao, final PostFileDao postFileDao, final UserLikeDao userLikeDao,final UserDao userDao, final PostTypeDao postTypeDao, final CategoryDao categoryDao, UserBookmarkDao userBookmarkDao,  PostDetailDao postDetailDao, FileDao fileDao, PrincipalService principalService) {
+
 
 		this.postDao = postDao;
 		this.userDao = userDao;
@@ -64,6 +68,7 @@ public class PostService extends PrincipalServiceImpl {
 		this.fileDao = fileDao;
 		this.userLikeDao = userLikeDao;
 
+		this.principalService = principalService;
 		this.userBookmarkDao = userBookmarkDao;
 		this.postDetailDao = postDetailDao;
 	}
@@ -83,7 +88,7 @@ public class PostService extends PrincipalServiceImpl {
 	public PojoInsertRes insertPost(final PojoPostInsertReq data) {
 		final Post post = new Post();
 		
-		final User user = userDao.getRefById(getAuthPrincipal());
+		final User user = userDao.getRefById(principalService.getAuthPrincipal());
 		post.setUser(user);
 		
 		post.setPostTitle(data.getPostTitle());
@@ -308,7 +313,7 @@ public class PostService extends PrincipalServiceImpl {
 	public PojoInsertRes insertUserLike(final PojoUserLikeInsertReq data) {
 		final UserLike userLike = new UserLike();
 		
-		final User user = userDao.getRefById(getAuthPrincipal());
+		final User user = userDao.getRefById(principalService.getAuthPrincipal());
 		userLike.setUser(user);
 		
 		final Post post = postDao.getRefById(data.getPostId());
@@ -344,6 +349,7 @@ public class PostService extends PrincipalServiceImpl {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteById(id);
 		res.setMessage("Berhasil Menghapus Data");
+
 		return res;
 	}
 	
@@ -381,7 +387,8 @@ public class PostService extends PrincipalServiceImpl {
 	public PojoInsertRes insert(final PojoUserBookmarkInsertReq data) {
 		final UserBookmark userBookmark = new UserBookmark();
 		
-		final User user = userDao.getRefById(getAuthPrincipal());
+		final User user = userDao.getRefById(principalService.getAuthPrincipal());
+
 		userBookmark.setUser(user);
 		
 		final Post post = postDao.getByIdRef(Post.class, data.getPostId());
@@ -399,7 +406,7 @@ public class PostService extends PrincipalServiceImpl {
 	
 	public List<PojoUserBookmarkGetAllRes> getAllByUserRes() {
 		final List<PojoUserBookmarkGetAllRes> userBookmarkGetAllRes = new ArrayList<>();
-		final List<UserBookmark> bookmarks = getAllByUser(getAuthPrincipal());
+		final List<UserBookmark> bookmarks = getAllByUser(principalService.getAuthPrincipal());
 		
 		for(int i = 0; i < bookmarks.size(); i++) {
 			final PojoUserBookmarkGetAllRes pojoBookmark = new PojoUserBookmarkGetAllRes();
