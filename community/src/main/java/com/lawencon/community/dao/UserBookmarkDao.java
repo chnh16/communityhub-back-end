@@ -24,9 +24,9 @@ public class UserBookmarkDao extends BasePostDao<UserBookmark> {
 	public List<UserBookmark> getAllByUser(final String userId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM user_bookmark ")
-			.append("WHERE user_id = :id AND is_active = true ");
+			.append("WHERE user_id = :userId AND is_active = true ");
 		final List<UserBookmark> res = em().createNativeQuery(toStr(str), UserBookmark.class)
-				.setParameter("user_id", userId)
+				.setParameter("userId", userId)
 				.getResultList();
 		return res;
 	}

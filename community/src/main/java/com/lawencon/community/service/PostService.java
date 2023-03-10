@@ -17,6 +17,7 @@ import com.lawencon.community.dao.UserBookmarkDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.dao.UserLikeDao;
 import com.lawencon.community.model.Category;
+import com.lawencon.community.model.Course;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostDetail;
@@ -28,10 +29,12 @@ import com.lawencon.community.model.UserLike;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.course.PojoCourseResGetByCategoryId;
 import com.lawencon.community.pojo.post.PojoPostGetAllRes;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetAllRes;
+import com.lawencon.community.pojo.postdetail.PojoPostDetailGetByPostIdRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailInsertReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailUpdateReq;
 import com.lawencon.community.pojo.postfile.PojoPostFileGetAllRes;
@@ -77,6 +80,8 @@ public class PostService  {
 		Post postInsert = null;
 		try {
 			ConnHandler.begin();
+			User user = userDao.getRefById(principalService.getAuthPrincipal());
+			data.setUser(user);
 			postInsert = postDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -87,9 +92,7 @@ public class PostService  {
 	
 	public PojoInsertRes insertPost(final PojoPostInsertReq data) {
 		final Post post = new Post();
-		
-		final User user = userDao.getRefById(principalService.getAuthPrincipal());
-		post.setUser(user);
+		Post postInsert = null;
 		
 		post.setPostTitle(data.getPostTitle());
 		post.setPostContent(data.getPostContent());
@@ -102,7 +105,7 @@ public class PostService  {
 		
 		post.setIsActive(true);
 		
-		final Post postInsert = insertPost(post);
+		postInsert = insertPost(post);
 		
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
 		pojoInsertRes.setId(postInsert.getId());
@@ -302,6 +305,8 @@ public class PostService  {
 		UserLike userLikeInsert = null;
 		try {
 			ConnHandler.begin();
+			User user = userDao.getRefById(principalService.getAuthPrincipal());
+			data.setUser(user);
 			userLikeInsert = userLikeDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -334,7 +339,7 @@ public class PostService  {
 
 		try {
 			ConnHandler.begin();
-			userLikeDelete = userLikeDao.deleteById(Post.class, id);
+			userLikeDelete = userLikeDao.deleteById(UserLike.class, id);
 			ConnHandler.commit();
 
 		} catch (Exception e) {
@@ -347,7 +352,7 @@ public class PostService  {
 
 	public PojoDeleteRes deleteUserLikeRes(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
-		deleteById(id);
+		deleteUserLikeById(id);
 		res.setMessage("Berhasil Menghapus Data");
 
 		return res;
@@ -357,6 +362,8 @@ public class PostService  {
 		UserBookmark userBookmarkInsert = null;
 		try {
 			ConnHandler.begin();
+			User user = userDao.getRefById(principalService.getAuthPrincipal());
+			data.setUser(user);
 			userBookmarkInsert = userBookmarkDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -406,7 +413,7 @@ public class PostService  {
 	
 	public List<PojoUserBookmarkGetAllRes> getAllByUserRes() {
 		final List<PojoUserBookmarkGetAllRes> userBookmarkGetAllRes = new ArrayList<>();
-		final List<UserBookmark> bookmarks = getAllByUser(principalService.getAuthPrincipal());
+		final List<UserBookmark> bookmarks = userBookmarkDao.getAllByUser(principalService.getAuthPrincipal());
 		
 		for(int i = 0; i < bookmarks.size(); i++) {
 			final PojoUserBookmarkGetAllRes pojoBookmark = new PojoUserBookmarkGetAllRes();
@@ -431,7 +438,10 @@ public class PostService  {
 		PostDetail postDetailInsert = null;
 		try {
 			ConnHandler.begin();
-			postDetailInsert = postDetailDao.insert(data);
+			final File file = fileDao.insert(data.getFile());
+			postDetailInsert = data;
+			postDetailInsert.setFile(file);
+			postDetailInsert = postDetailDao.insert(postDetailInsert);
 			ConnHandler.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -483,9 +493,15 @@ public class PostService  {
 		
 		postDetail.setDetailContent(data.getDetailContent());
 		
-		final File files = fileDao.getByIdRef(File.class, data.getFileId());
-		files.setId(data.getFileId());
-		postDetail.setFile(files);
+		final File file = new File();
+		file.setFileName(data.getFile().getFileName());
+		file.setFileExtension(data.getFile().getFileExtension());
+		file.setFileContent(data.getFile().getFileContent());
+		
+		ConnHandler.begin();
+		final File fileInsert = fileDao.insert(file);
+		ConnHandler.commit();
+		postDetail.setFile(fileInsert);
 		
 		final Post post = postDao.getByIdRef(Post.class, data.getPostId());
 		post.setId(data.getPostId());
@@ -506,9 +522,15 @@ public class PostService  {
 		postDetail.setDetailContent(data.getDetailContent());
 		postDetail.setVersion(data.getVer());
 		
-		final File file = fileDao.getByIdRef(File.class, data.getFileId());
-		file.setId(data.getFileId());
-		postDetail.setFile(file);
+		final File file = new File();
+		file.setFileName(data.getFile().getFileName());
+		file.setFileExtension(data.getFile().getFileExtension());
+		file.setFileContent(data.getFile().getFileContent());
+		
+		ConnHandler.begin();
+		final File fileInsert = fileDao.insert(file);
+		ConnHandler.commit();
+		postDetail.setFile(fileInsert);
 		
 		final Post post = postDao.getByIdRef(Post.class, data.getPostId());
 		post.setId(data.getPostId());
@@ -537,6 +559,26 @@ public class PostService  {
 			getAllRes.add(detailGetAllRes);	
 		}
 		return getAllRes;
+	}
+	
+	public List<PojoPostDetailGetByPostIdRes> getByPostId(final String id) {
+		final List<PojoPostDetailGetByPostIdRes> pojos = new ArrayList<>();
+		final List<PostDetail> res = postDetailDao.getByPostId(id);
+
+		for (int i = 0; i < res.size(); i++) {
+			final PojoPostDetailGetByPostIdRes pojo = new PojoPostDetailGetByPostIdRes();
+			final PostDetail postDetail = res.get(i);
+
+			ConnHandler.getManager().detach(postDetail);
+			pojo.setFileId(postDetail.getFile().getFileName());
+			pojo.setId(postDetail.getId());
+			pojo.setPostId(postDetail.getPost().getId());
+			pojo.setDetailContent(postDetail.getDetailContent());
+
+			pojos.add(pojo);
+		}
+
+		return pojos;
 	}
 	
 	public PojoDeleteRes deletePostDetail(final String id) {

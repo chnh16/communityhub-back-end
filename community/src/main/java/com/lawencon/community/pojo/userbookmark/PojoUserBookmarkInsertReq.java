@@ -2,16 +2,8 @@ package com.lawencon.community.pojo.userbookmark;
 
 public class PojoUserBookmarkInsertReq {
 
-	private String userId;
+	
 	private String postId;
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
 
 	public String getPostId() {
 		return postId;

@@ -3,10 +3,13 @@ package com.lawencon.community.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.lawencon.community.dao.PostTypeDao;
 import com.lawencon.community.model.PostType;
 import com.lawencon.community.pojo.posttype.PojoPostTypeGetAllRes;
 
+@Service
 public class PostTypeService {
 	private final PostTypeDao postTypeDao;
 	

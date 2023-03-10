@@ -30,6 +30,15 @@ public class PostDetailDao extends MasterDao<PostDetail>{
 		final List<PostDetail> res = em().createNativeQuery(toStr(str), PostDetail.class).getResultList();
 		return res;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PostDetail> getByPostId (final String postId){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM post_detail pd ")
+		.append("WHERE pd.post_id = :postId");
+		final List<PostDetail> res = em().createNativeQuery(toStr(str), PostDetail.class).setParameter("postId", postId).getResultList();
+		return res;
+	}
 
 	@Override
 	public PostDetail update(final PostDetail data) {
