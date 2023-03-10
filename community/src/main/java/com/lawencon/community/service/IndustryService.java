@@ -1,6 +1,5 @@
 package com.lawencon.community.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -79,14 +78,19 @@ public class IndustryService{
 		
 		final Industry industry = industryUpdate;
 		
-		industry.setIndustryCode(data.getIndustryCode());
-		industry.setIndustryName(data.getIndustryName());
-		industry.setUpdatedAt(LocalDateTime.now());
+		if(data.getIndustryCode() != null) {
+			industry.setIndustryCode(data.getIndustryCode());			
+		}
+		
+		if(data.getIndustryName() != null) {
+			industry.setIndustryName(data.getIndustryName());			
+		}
+//		industry.setUpdatedAt(LocalDateTime.now());
 		
 		industryUpdate = updateIndustry(industry);
 		
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
-		pojoUpdateRes.setVer(data.getVer());
+		pojoUpdateRes.setVer(industryUpdate.getVersion());
 		pojoUpdateRes.setMessage("Berhasil Mengubah Data");
 		
 		return pojoUpdateRes;

@@ -50,7 +50,7 @@ public class UserService implements UserDetailsService {
 	public User update(final User data) {
 		User userUpdate = null;
 
-		final Optional<User> res = userDao.getById(Long.valueOf(data.getId()));
+		final Optional<User> res = userDao.getById(data.getId());
 
 		final User user = res.get();
 		try {
@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
 		return userUpdate;
 	}
 
-	public Optional<User> getById(final Long id) {
+	public Optional<User> getById(final String id) {
 		return userDao.getById(id);
 	}
 
@@ -72,7 +72,7 @@ public class UserService implements UserDetailsService {
 		return userDao.getAll();
 	}
 
-	public boolean deleteById(final Long id) {
+	public boolean deleteById(final String id) {
 		boolean userDelete = false;
 
 		try {

@@ -50,7 +50,7 @@ public class IndustryController {
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity<PojoDeleteRes> deleteIndustry(@PathVariable("id") Long id){
+	public ResponseEntity<PojoDeleteRes> deleteIndustry(@PathVariable("id") String id){
 		final PojoDeleteRes res = industryService.deleteRes(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
