@@ -82,13 +82,7 @@ public class PojoEventReqUpdate {
 		this.categoryId = categoryId;
 	}
 
-	public PojoFileInsertReq getFile() {
-		return file;
-	}
-
-	public void setFile(PojoFileInsertReq file) {
-		this.file = file;
-	}
+	
 
 	public Integer getVer() {
 		return ver;
@@ -96,6 +90,14 @@ public class PojoEventReqUpdate {
 
 	public void setVer(Integer ver) {
 		this.ver = ver;
+	}
+
+	public PojoFileInsertReq getFile() {
+		return file;
+	}
+
+	public void setFile(PojoFileInsertReq file) {
+		this.file = file;
 	}
 
 }

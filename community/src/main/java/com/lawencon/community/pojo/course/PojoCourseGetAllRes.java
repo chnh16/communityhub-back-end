@@ -3,8 +3,6 @@ package com.lawencon.community.pojo.course;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.lawencon.community.pojo.file.PojoFileInsertReq;
-
 public class PojoCourseGetAllRes {
 	private String id;
 	private String courseName;
@@ -15,7 +13,8 @@ public class PojoCourseGetAllRes {
 	private LocalDateTime endDate;
 	private BigDecimal price;
 	private String categoryId;
-	private PojoFileInsertReq file;
+	private String file;
+	private Integer ver;
 	
 	public String getId() {
 		return id;
@@ -71,12 +70,19 @@ public class PojoCourseGetAllRes {
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
 	}
-	public PojoFileInsertReq getFile() {
+	public String getFile() {
 		return file;
 	}
-	public void setFile(PojoFileInsertReq file) {
+	public void setFile(String file) {
 		this.file = file;
 	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
+	}
+	
 	
 	
 }
