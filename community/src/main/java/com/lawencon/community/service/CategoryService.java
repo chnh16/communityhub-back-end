@@ -1,6 +1,5 @@
 package com.lawencon.community.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +21,6 @@ import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
 public class CategoryService {
 	
 	private final CategoryDao categoryDao;
-	
 	
 	public CategoryService(final CategoryDao categoryDao) {
 		this.categoryDao = categoryDao;
@@ -76,14 +74,19 @@ public class CategoryService {
 		
 		final Category category = categoryUpdate;
 		
-		category.setCategoryCode(data.getCategoryCode());
-		category.setCategoryName(data.getCategoryName());
-		category.setUpdatedAt(LocalDateTime.now());
+		if(data.getCategoryCode() != null) {
+			category.setCategoryCode(data.getCategoryCode());			
+		}
+		
+		if(data.getCategoryName() != null) {
+			category.setCategoryName(data.getCategoryName());			
+		}
+//		category.setUpdatedAt(LocalDateTime.now());
 		
 		categoryUpdate = updateIndustry(category);
 		
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
-		pojoUpdateRes.setVer(data.getVer());
+		pojoUpdateRes.setVer(categoryUpdate.getVersion());
 		pojoUpdateRes.setMessage("Berhasil Mengubah Data");
 		
 		return pojoUpdateRes;
