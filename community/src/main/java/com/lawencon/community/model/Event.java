@@ -15,7 +15,7 @@ import com.lawencon.base.BaseEntity;
 @Entity
 @Table(name = "t_event",
 uniqueConstraints = {
-		@UniqueConstraint(name = "event_ck", columnNames = {"category_id", "file_id"}
+		@UniqueConstraint(name = "event_ck", columnNames = {"category_id", "file_id", "user_id"}
 )})
 
 public class Event extends BaseEntity {
@@ -29,7 +29,8 @@ public class Event extends BaseEntity {
 	@Column(length = 50, nullable = false)
 	private String provider;
 	
-	@Column(name = "user_id", nullable = false)
+	@OneToOne
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
 	@Column(length = 50, nullable = false)

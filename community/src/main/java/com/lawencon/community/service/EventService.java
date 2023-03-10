@@ -3,18 +3,25 @@ package com.lawencon.community.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.EventDao;
+import com.lawencon.community.dao.EventFileDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.Event;
+import com.lawencon.community.model.EventFile;
 import com.lawencon.community.model.File;
+import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.event.PojoEventReqInsert;
 import com.lawencon.community.util.Generate;
+import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class EventService {
@@ -22,11 +29,18 @@ public class EventService {
 	private EventDao eventDao;
 	private CategoryDao categoryDao;
 	private FileDao fileDao;
+	private UserDao userDao;
 	
-	public EventService(EventDao eventDao, CategoryDao categoryDao, FileDao fileDao) {
+	
+	@Inject
+	private PrincipalService principalService;
+	
+	public EventService(EventDao eventDao, CategoryDao categoryDao, FileDao fileDao, PrincipalService principalService, UserDao userDao) {
 		this.eventDao = eventDao;
 		this.categoryDao = categoryDao;
 		this.fileDao = fileDao;
+		this.principalService = principalService;
+		this.userDao = userDao;
 	}
 	
 	public Event insert(final Event data) {
@@ -87,6 +101,10 @@ public class EventService {
 	public PojoInsertRes insert(final PojoEventReqInsert data) {
 		final Event event = new Event();
 		final String generateId = Generate.generateCode(5);
+		
+		final User user = userDao.getById(principalService.getAuthPrincipal()).get();
+		user.setId(principalService.getAuthPrincipal());
+		event.setUser(user);
 
 		event.setEventCode(generateId);
 		event.setEventName(data.getEventName());
@@ -100,8 +118,14 @@ public class EventService {
 		category.setId(data.getCategoryId());
 		event.setCategory(category);
 		
-		final File file = fileDao.getByIdRef(File.class, data.getFileId());
-		file.setId(data.getFileId());
+		final File fileInsert = new File();
+		fileInsert.setFileName(data.getFile().getFileName());
+		fileInsert.setFileExtension(data.getFile().getFileExtension());
+		fileInsert.setFileContent(data.getFile().getFileContent());
+		
+		ConnHandler.begin();
+		final File file = fileDao.insert(fileInsert);
+		ConnHandler.commit();
 		event.setFile(file);
 
 		Event eventInsert = null;
