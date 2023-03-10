@@ -1,4 +1,4 @@
-package com.lawencon.community.pojo.positiion;
+package com.lawencon.community.pojo.position;
 
 public class PojoPositionGetAllRes {
 

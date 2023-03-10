@@ -103,7 +103,7 @@ public class IndustryService{
 		return industryDao.getByIdAndDetach(Industry.class, id);
 	}
 	
-	public Optional<Industry> getRefById(final String id){
+	public Industry getRefById(final String id){
 		return industryDao.getRefById(id);
 	}
 	

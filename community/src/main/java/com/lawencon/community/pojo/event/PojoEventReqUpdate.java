@@ -3,6 +3,8 @@ package com.lawencon.community.pojo.event;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.lawencon.community.pojo.file.PojoFileInsertReq;
+
 public class PojoEventReqUpdate {
 
 	private String id;
@@ -13,7 +15,7 @@ public class PojoEventReqUpdate {
 	private LocalDateTime endDate;
 	private BigDecimal price;
 	private String categoryId;
-	private String fileId;
+	private PojoFileInsertReq file;
 	private Integer ver;
 
 	public String getId() {
@@ -80,12 +82,12 @@ public class PojoEventReqUpdate {
 		this.categoryId = categoryId;
 	}
 
-	public String getFileId() {
-		return fileId;
+	public PojoFileInsertReq getFile() {
+		return file;
 	}
 
-	public void setFileId(String fileId) {
-		this.fileId = fileId;
+	public void setFile(PojoFileInsertReq file) {
+		this.file = file;
 	}
 
 	public Integer getVer() {

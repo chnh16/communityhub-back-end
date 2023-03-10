@@ -16,8 +16,8 @@ public class CategoryDao extends MasterDao<Category>{
 	}
 
 	@Override
-	public Optional<Category> getRefById(final String id) {
-		return Optional.ofNullable(super.getByIdRef(Category.class, id));
+	public Category getRefById(final String id) {
+		return super.getByIdRef(Category.class, id);
 	}
 
 	@SuppressWarnings("unchecked")

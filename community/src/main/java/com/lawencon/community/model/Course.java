@@ -14,7 +14,7 @@ import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(uniqueConstraints = {
-		@UniqueConstraint(name = "course_ck", columnNames = {"category_id", "file_id"}
+		@UniqueConstraint(name = "course_ck", columnNames = {"category_id", "file_id", "user_id"}
 )})
 public class Course extends BaseEntity {
 
@@ -29,6 +29,10 @@ public class Course extends BaseEntity {
 
 	@Column(length = 50, nullable = false)
 	private String trainer;
+	
+	@OneToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 
 	@Column(length = 50, nullable = false)
 	private String locationName;
@@ -129,5 +133,14 @@ public class Course extends BaseEntity {
 	public void setFile(File file) {
 		this.file = file;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
 
 }

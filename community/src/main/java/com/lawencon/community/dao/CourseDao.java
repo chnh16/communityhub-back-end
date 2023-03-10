@@ -16,9 +16,9 @@ public class CourseDao extends MasterDao<Course>{
 	}
 
 	@Override
-	public Optional<Course> getRefById(final String id) {
+	public Course getRefById(final String id) {
 		final Course res = getByIdRef(Course.class, id);
-		return Optional.ofNullable(res);
+		return res;
 	}
 
 	@SuppressWarnings("unchecked")

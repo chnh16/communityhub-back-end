@@ -7,14 +7,25 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.TransactionDao;
+import com.lawencon.community.model.Event;
+import com.lawencon.community.model.Membership;
 import com.lawencon.community.model.Transaction;
+import com.lawencon.community.model.User;
+import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.transaction.PojoInsertTransactionReq;
 
 @Service
 public class TransactionService {
 	private final TransactionDao transactionDao;
+	private final UserService userService;
+	private final EventService eventService;
+	private final MembershipService membershipService;
 	
-	public TransactionService(final TransactionDao transactionDao) {
+	public TransactionService(final TransactionDao transactionDao, final UserService userService, final EventService eventService, final MembershipService membershipService) {
 		this.transactionDao = transactionDao;
+		this.userService = userService;
+		this.eventService = eventService;
+		this.membershipService = membershipService;
 	}
 	
 	private Transaction insert(final Transaction data) {
@@ -93,5 +104,21 @@ public class TransactionService {
 		return transactionDao.getByMembershipId(id);
 	}
 	
-	
+	public PojoInsertRes insertRes(final PojoInsertTransactionReq data) {
+		final PojoInsertRes pojo = new PojoInsertRes();
+		Transaction transactionInsert = null;
+		final User user = userService.getByIdAndDetach(data.getUserId());
+		final Transaction trans = new Transaction();
+		trans.setUser(user);
+		if(data.getEventId() != null) {
+			final Event event = eventService.getByIdAndDetach(data.getEventId());
+			trans.setEvent(event);
+		}
+		if(data.getMembershipId() != null) {
+			final Membership membership = membershipService.getByIdAndDetach(data.getMembershipId());
+			trans.setMembership(membership);
+		}
+		transactionInsert = insert(transactionInsert);
+		return null;
+	}
 }

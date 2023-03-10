@@ -17,9 +17,9 @@ public class PostTypeDao extends MasterDao<PostType>{
 	}
 
 	@Override
-	public Optional<PostType> getRefById(final String id) {
+	public PostType getRefById(final String id) {
 		final PostType res = getByIdRef(PostType.class, id);
-		return Optional.ofNullable(res);
+		return res;
 	}
 
 	@SuppressWarnings("unchecked")

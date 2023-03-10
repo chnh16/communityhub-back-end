@@ -17,9 +17,9 @@ public class PollingChoiceDao extends MasterDao<PollingChoice>{
 	}
 
 	@Override
-	public Optional<PollingChoice> getRefById(final String id) {
+	public PollingChoice getRefById(final String id) {
 		final PollingChoice res = getByIdRef(PollingChoice.class, id);
-		return Optional.ofNullable(res);
+		return res;
 	}
 
 	@SuppressWarnings("unchecked")
