@@ -16,17 +16,16 @@ import com.lawencon.community.pojo.membership.PojoMembershipGetAllRes;
 import com.lawencon.community.pojo.membership.PojoMembershipInsertReq;
 import com.lawencon.community.pojo.membership.PojoMembershipUpdateReq;
 import com.lawencon.community.util.Generate;
-import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class MembershipService {
 
 	private final MembershipDao membershipDao;
-	private final PrincipalService principalService;
+	
 
-	public MembershipService(final MembershipDao membershipDao, final PrincipalService principalService) {
+	public MembershipService(final MembershipDao membershipDao) {
 		this.membershipDao = membershipDao;
-		this.principalService = principalService;
+		
 	}
 
 	public Membership insert(final Membership data) {

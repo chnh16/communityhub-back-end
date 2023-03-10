@@ -1,5 +1,6 @@
 package com.lawencon.community.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,36 +12,40 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.EventDao;
 import com.lawencon.community.dao.FileDao;
-import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.Event;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.User;
+import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.event.PojoEventReqInsert;
+import com.lawencon.community.pojo.event.PojoEventReqUpdate;
+import com.lawencon.community.pojo.event.PojoEventResGetAll;
+import com.lawencon.community.pojo.event.PojoEventResGetByCategoryId;
 import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class EventService {
-	
+
 	private EventDao eventDao;
 	private CategoryDao categoryDao;
 	private FileDao fileDao;
-	private UserDao userDao;
-	
-	
+	private UserService userService;
+
 	@Inject
 	private PrincipalService principalService;
-	
-	public EventService(EventDao eventDao, CategoryDao categoryDao, FileDao fileDao, PrincipalService principalService, UserDao userDao) {
+
+	public EventService(EventDao eventDao, CategoryDao categoryDao, FileDao fileDao, PrincipalService principalService,
+			UserService userService) {
 		this.eventDao = eventDao;
 		this.categoryDao = categoryDao;
 		this.fileDao = fileDao;
 		this.principalService = principalService;
-		this.userDao = userDao;
+		this.userService = userService;
 	}
-	
+
 	public Event insert(final Event data) {
 		Event eventInsert = null;
 
@@ -53,7 +58,7 @@ public class EventService {
 		}
 		return eventInsert;
 	}
-	
+
 	public Event update(final Event data) {
 		Event eventUpdate = null;
 
@@ -95,16 +100,17 @@ public class EventService {
 	public Event getByIdAndDetach(final String id) {
 		return eventDao.getByIdAndDetach(Event.class, id);
 	}
+
 	
 	public Event getRefById(final String id) {
 		return eventDao.getRefById(id);
 	}
-	
+
 	public PojoInsertRes insert(final PojoEventReqInsert data) {
 		final Event event = new Event();
 		final String generateId = Generate.generateCode(5);
-		
-		final User user = userDao.getById(principalService.getAuthPrincipal()).get();
+
+		final User user = userService.getByRefId(principalService.getAuthPrincipal());
 		user.setId(principalService.getAuthPrincipal());
 		event.setUser(user);
 
@@ -115,16 +121,16 @@ public class EventService {
 		event.setStartDate(data.getStartDate());
 		event.setEndDate(data.getEndDate());
 		event.setPrice(data.getPrice());
-		
-		final Category category = categoryDao.getByIdRef(Category.class ,data.getCategoryId());
+
+		final Category category = categoryDao.getByIdRef(Category.class, data.getCategoryId());
 		category.setId(data.getCategoryId());
 		event.setCategory(category);
-		
+
 		final File fileInsert = new File();
 		fileInsert.setFileName(data.getFile().getFileName());
 		fileInsert.setFileExtension(data.getFile().getFileExtension());
 		fileInsert.setFileContent(data.getFile().getFileContent());
-		
+
 		ConnHandler.begin();
 		final File file = fileDao.insert(fileInsert);
 		ConnHandler.commit();
@@ -137,6 +143,104 @@ public class EventService {
 		pojoInsertRes.setId(eventInsert.getId());
 		pojoInsertRes.setMessage("Success");
 		return pojoInsertRes;
+	}
+
+	public List<PojoEventResGetAll> getAllRes() {
+		final List<PojoEventResGetAll> pojos = new ArrayList<>();
+		final List<Event> res = getAll();
+
+		for (int i = 0; i < res.size(); i++) {
+			final PojoEventResGetAll pojo = new PojoEventResGetAll();
+			final Event event = res.get(i);
+
+			ConnHandler.getManager().detach(event);
+			pojo.setFileId(event.getFile().getFileName());
+			pojo.setId(event.getId());
+			pojo.setEventCode(event.getEventCode());
+			pojo.setEventName(event.getEventName());
+			pojo.setProvider(event.getProvider());
+			pojo.setLocationName(event.getLocationName());
+			pojo.setCategoryId(event.getCategory().getCategoryName());
+			pojo.setStartDate(event.getStartDate());
+			pojo.setEndDate(event.getEndDate());
+			pojo.setPrice(event.getPrice());
+			pojo.setVer(event.getVersion());
+
+			pojos.add(pojo);
+		}
+		return pojos;
+	}
+
+	public List<PojoEventResGetByCategoryId> getByCategoryId(final String id) {
+		final List<PojoEventResGetByCategoryId> pojos = new ArrayList<>();
+		final List<Event> res = eventDao.getByCategoryId(id);
+
+		for (int i = 0; i < res.size(); i++) {
+			final PojoEventResGetByCategoryId pojo = new PojoEventResGetByCategoryId();
+			final Event event = res.get(i);
+
+			ConnHandler.getManager().detach(event);
+			pojo.setFileId(event.getFile().getFileName());
+			pojo.setId(event.getId());
+			pojo.setEventCode(event.getEventCode());
+			pojo.setEventName(event.getEventName());
+			pojo.setProvider(event.getProvider());
+			pojo.setLocationName(event.getLocationName());
+			pojo.setCategoryId(event.getCategory().getCategoryName());
+			pojo.setStartDate(event.getStartDate());
+			pojo.setEndDate(event.getEndDate());
+			pojo.setPrice(event.getPrice());
+			pojo.setVer(event.getVersion());
+
+			pojos.add(pojo);
+		}
+
+		return pojos;
+	}
+
+	public PojoUpdateRes update(final PojoEventReqUpdate data) {
+		Event eventUpdate = null;
+
+		eventUpdate = getByIdAndDetach(data.getId());
+
+		final Event event = eventUpdate;
+
+		event.setEventName(data.getEventName());
+		event.setProvider(data.getProvider());
+		event.setLocationName(data.getLocationName());
+		event.setStartDate(data.getStartDate());
+		event.setEndDate(data.getEndDate());
+		event.setPrice(data.getPrice());
+		event.setVersion(data.getVer());
+
+		final Category category = categoryDao.getByIdRef(Category.class, data.getCategoryId());
+		category.setId(data.getCategoryId());
+		event.setCategory(category);
+
+		final File fileInsert = new File();
+		fileInsert.setFileName(data.getFile().getFileName());
+		fileInsert.setFileExtension(data.getFile().getFileExtension());
+		fileInsert.setFileContent(data.getFile().getFileContent());
+
+		ConnHandler.begin();
+		final File file = fileDao.insert(fileInsert);
+		ConnHandler.commit();
+		event.setFile(file);
+
+		eventUpdate = update(event);
+
+		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
+		pojoUpdate.setVer(data.getVer());
+		pojoUpdate.setMessage("Updated");
+		return pojoUpdate;
+
+	}
+
+	public PojoDeleteRes delete(final String id) {
+		final PojoDeleteRes res = new PojoDeleteRes();
+		deleteById(id);
+		res.setMessage("Event Berhasil Dihapus");
+		return res;
 	}
 
 }
