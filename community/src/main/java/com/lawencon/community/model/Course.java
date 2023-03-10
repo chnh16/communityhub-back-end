@@ -14,7 +14,7 @@ import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(uniqueConstraints = {
-		@UniqueConstraint(name = "course_ck", columnNames = {"category_id", "file_id"}
+		@UniqueConstraint(name = "course_ck", columnNames = {"category_id", "file_id", "user_id"}
 )})
 public class Course extends BaseEntity {
 
@@ -30,7 +30,8 @@ public class Course extends BaseEntity {
 	@Column(length = 50, nullable = false)
 	private String trainer;
 	
-	@Column(name = "user_id", nullable = false)
+	@OneToOne
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
 	@Column(length = 50, nullable = false)
