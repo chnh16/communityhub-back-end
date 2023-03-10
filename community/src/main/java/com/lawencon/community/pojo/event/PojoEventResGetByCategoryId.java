@@ -3,7 +3,7 @@ package com.lawencon.community.pojo.event;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class PojoEventResGetAll {
+public class PojoEventResGetByCategoryId {
 
 	private String id;
 	private String eventName;
@@ -104,7 +104,5 @@ public class PojoEventResGetAll {
 	public void setVer(Integer ver) {
 		this.ver = ver;
 	}
-
-	
 
 }

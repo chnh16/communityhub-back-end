@@ -1,15 +1,16 @@
-package com.lawencon.community.pojo.event;
+package com.lawencon.community.pojo.course;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class PojoEventResGetAll {
+public class PojoCourseResGetByCategoryId {
 
 	private String id;
-	private String eventName;
-	private String eventCode;
+	private String courseName;
+	private String courseCode;
 	private String provider;
 	private String locationName;
+	private String trainer;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
 	private BigDecimal price;
@@ -25,20 +26,20 @@ public class PojoEventResGetAll {
 		this.id = id;
 	}
 
-	public String getEventName() {
-		return eventName;
+	public String getCourseName() {
+		return courseName;
 	}
 
-	public void setEventName(String eventName) {
-		this.eventName = eventName;
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
 	}
 
-	public String getEventCode() {
-		return eventCode;
+	public String getCourseCode() {
+		return courseCode;
 	}
 
-	public void setEventCode(String eventCode) {
-		this.eventCode = eventCode;
+	public void setCourseCode(String courseCode) {
+		this.courseCode = courseCode;
 	}
 
 	public String getProvider() {
@@ -55,6 +56,14 @@ public class PojoEventResGetAll {
 
 	public void setLocationName(String locationName) {
 		this.locationName = locationName;
+	}
+
+	public String getTrainer() {
+		return trainer;
+	}
+
+	public void setTrainer(String trainer) {
+		this.trainer = trainer;
 	}
 
 	public LocalDateTime getStartDate() {
@@ -104,7 +113,5 @@ public class PojoEventResGetAll {
 	public void setVer(Integer ver) {
 		this.ver = ver;
 	}
-
-	
 
 }
