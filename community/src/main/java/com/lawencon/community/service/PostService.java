@@ -40,7 +40,7 @@ import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkGetAllRes;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkInsertReq;
 import com.lawencon.community.pojo.userlike.PojoUserLikeInsertReq;
 import com.lawencon.security.principal.PrincipalService;
-import com.lawencon.security.principal.PrincipalServiceImpl;
+
 
 @Service
 public class PostService  {
@@ -58,6 +58,7 @@ public class PostService  {
 	
 	public PostService(final PostDao postDao, final PostFileDao postFileDao, final UserLikeDao userLikeDao,final UserDao userDao, final PostTypeDao postTypeDao, final CategoryDao categoryDao, UserBookmarkDao userBookmarkDao,  PostDetailDao postDetailDao, FileDao fileDao, PrincipalService principalService) {
 
+
 		this.postDao = postDao;
 		this.userDao = userDao;
 		this.postTypeDao = postTypeDao;
@@ -70,7 +71,6 @@ public class PostService  {
 		this.principalService = principalService;
 		this.userBookmarkDao = userBookmarkDao;
 		this.postDetailDao = postDetailDao;
-
 	}
 	
 	public Post insertPost(final Post data) {
@@ -349,8 +349,10 @@ public class PostService  {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteById(id);
 		res.setMessage("Berhasil Menghapus Data");
-		return res;}
 
+		return res;
+	}
+	
 	public UserBookmark insert(final UserBookmark data) {
 		UserBookmark userBookmarkInsert = null;
 		try {
@@ -386,6 +388,7 @@ public class PostService  {
 		final UserBookmark userBookmark = new UserBookmark();
 		
 		final User user = userDao.getRefById(principalService.getAuthPrincipal());
+
 		userBookmark.setUser(user);
 		
 		final Post post = postDao.getByIdRef(Post.class, data.getPostId());
