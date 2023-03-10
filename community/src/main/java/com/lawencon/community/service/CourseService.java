@@ -56,6 +56,10 @@ public class CourseService {
 		return courseDao.getById(id);
 	}
 	
+	public Course getRefById(final String id) {
+		return courseDao.getRefById(id);
+	}
+	
 	public Course getByIdAndDetach(final String id) {
 		return courseDao.getByIdAndDetach(id);
 	}
@@ -71,7 +75,7 @@ public class CourseService {
 		File fileInsert = null;
 		final File file = new File();
 		final User user = userService.getByRefId(principalService.getAuthPrincipal());
-		final Category category = categoryDao.getByIdRef(Category.class, data.getCategoryId());
+		final Category category = categoryService.getRefById(data.getCategoryId());
 		file.setFileName(data.getFile().getFileName());
 		file.setFileContent(data.getFile().getFileContent());
 		file.setFileExtension(data.getFile().getFileExtension());

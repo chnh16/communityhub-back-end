@@ -10,12 +10,10 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.EventDao;
-import com.lawencon.community.dao.EventFileDao;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.Event;
-import com.lawencon.community.model.EventFile;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
@@ -96,6 +94,10 @@ public class EventService {
 
 	public Event getByIdAndDetach(final String id) {
 		return eventDao.getByIdAndDetach(Event.class, id);
+	}
+	
+	public Event getRefById(final String id) {
+		return eventDao.getRefById(id);
 	}
 	
 	public PojoInsertRes insert(final PojoEventReqInsert data) {

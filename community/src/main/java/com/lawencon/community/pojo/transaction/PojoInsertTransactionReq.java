@@ -13,7 +13,7 @@ public class PojoInsertTransactionReq {
 	private String eventId;
 	private String courseId;
 	private String membershipId;
-	private String voucherId;
+	private String voucherCode;
 	
 	public LocalDateTime getTransactionDate() {
 		return transactionDate;
@@ -57,11 +57,11 @@ public class PojoInsertTransactionReq {
 	public void setMembershipId(String membershipId) {
 		this.membershipId = membershipId;
 	}
-	public String getVoucherId() {
-		return voucherId;
+	public String getVoucherCode() {
+		return voucherCode;
 	}
-	public void setVoucherId(String voucherId) {
-		this.voucherId = voucherId;
+	public void setVoucherCode(String voucherCode) {
+		this.voucherCode = voucherCode;
 	}
 	
 	

@@ -52,5 +52,10 @@ public class VoucherDao extends MasterDao<Voucher> {
 	public Voucher getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Voucher.class, id);
 	}
+	
+	public Optional<Voucher> getByVoucherCode(final String voucherCode){
+		
+		return null;
+	}
 
 }

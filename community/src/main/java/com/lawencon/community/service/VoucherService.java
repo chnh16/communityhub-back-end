@@ -49,15 +49,19 @@ public class VoucherService {
 		}
 	}
 
-	private List<Voucher> getAll() {
+	public List<Voucher> getAll() {
 		return voucherDao.getAll();
 	}
+	
+	public Optional<Voucher> getByVoucherCode(final String voucherCode){
+		return null;
+	}
 
-	private Voucher getByIdAndDetach(final String id) {
+	public Voucher getByIdAndDetach(final String id) {
 		return voucherDao.getByIdAndDetach(Voucher.class, id);
 	}
 
-	private Voucher insert(final Voucher data) {
+	public Voucher insert(final Voucher data) {
 		Voucher voucherInsert = null;
 		try {
 			ConnHandler.begin();
@@ -73,7 +77,7 @@ public class VoucherService {
 		return voucherInsert;
 	}
 
-	private Voucher update(final Voucher data) {
+	public Voucher update(final Voucher data) {
 		Voucher voucherUpdate = null;
 		valIdNotNull(data);
 
@@ -98,7 +102,7 @@ public class VoucherService {
 		return voucherUpdate;
 	}
 
-	private boolean deleteById(final String id) {
+	public boolean deleteById(final String id) {
 		boolean voucherDelete = false;
 
 		try {

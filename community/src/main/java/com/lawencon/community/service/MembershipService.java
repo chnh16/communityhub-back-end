@@ -1,11 +1,8 @@
 package com.lawencon.community.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -61,6 +58,10 @@ public class MembershipService {
 
 	public Optional<Membership> getById(final String id) {
 		return membershipDao.getById(id);
+	}
+	
+	public Membership getRefById(final String id) {
+		return membershipDao.getRefById(id);
 	}
 
 	public List<Membership> getAll() {

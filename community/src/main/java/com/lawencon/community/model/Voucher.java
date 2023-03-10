@@ -1,5 +1,6 @@
 package com.lawencon.community.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -19,7 +20,7 @@ public class Voucher extends BaseEntity {
 	private LocalDateTime expiredDate;
 	
 	@Column (nullable = false)
-	private Integer amount;
+	private BigDecimal amount;
 
 	public String getVoucherCode() {
 		return voucherCode;
@@ -37,11 +38,11 @@ public class Voucher extends BaseEntity {
 		this.expiredDate = expiredDate;
 	}
 
-	public Integer getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Integer amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
