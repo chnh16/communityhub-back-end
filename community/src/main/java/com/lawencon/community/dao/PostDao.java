@@ -27,7 +27,7 @@ public class PostDao extends MasterDao<Post> {
 	public List<Post> getAll() {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM post p ")
-			.append(" INNER JOIN category c ON c.id = p.categoy_id ")
+			.append(" INNER JOIN category c ON c.id = p.category_id ")
 			.append(" INNER JOIN post_type pt ON pt.id = p.post_type_id ")
 			.append(" INNER JOIN post_user ON pu.post_id = p.id ")
 			.append(" INNER JOIN t_user ON tu.id = pu.user_id ")
