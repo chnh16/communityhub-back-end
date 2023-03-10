@@ -20,6 +20,7 @@ import com.lawencon.community.pojo.post.PojoPostGetAllRes;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetAllRes;
+import com.lawencon.community.pojo.postdetail.PojoPostDetailGetByPostIdRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailInsertReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailUpdateReq;
 import com.lawencon.community.pojo.postfile.PojoPostFileGetAllRes;
@@ -51,7 +52,7 @@ public class PostController {
 	}
 	
 	@GetMapping("list-post")
-	public ResponseEntity<List<PojoPostGetAllRes>> getAllIndustry(){
+	public ResponseEntity<List<PojoPostGetAllRes>> getAllPost(){
 		final List<PojoPostGetAllRes> res = postService.getAllPost();
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
@@ -93,7 +94,7 @@ public class PostController {
 	}
 	
 	@DeleteMapping("like/{id}")
-	public ResponseEntity<PojoDeleteRes> deleteUserLike(@PathVariable("id") String id){
+	public ResponseEntity<PojoDeleteRes> deleteUserLikeRes(@PathVariable("id") String id){
 		final PojoDeleteRes res = postService.deleteUserLikeRes(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
@@ -107,6 +108,12 @@ public class PostController {
 	@GetMapping("list-detail")
 	public ResponseEntity<List<PojoPostDetailGetAllRes>> getAllDetail(){
 		final List<PojoPostDetailGetAllRes> res = postService.getAllPostDetailRes();
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<List<PojoPostDetailGetByPostIdRes>> getByPostId(@PathVariable("id") final String id) {
+		final List<PojoPostDetailGetByPostIdRes> res = postService.getByPostId(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

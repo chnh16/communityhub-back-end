@@ -16,49 +16,50 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.event.PojoEventReqInsert;
-import com.lawencon.community.pojo.event.PojoEventReqUpdate;
-import com.lawencon.community.pojo.event.PojoEventResGetAll;
+import com.lawencon.community.pojo.course.PojoCourseGetAllRes;
+import com.lawencon.community.pojo.course.PojoCourseInsertReq;
+import com.lawencon.community.pojo.course.PojoCourseResGetByCategoryId;
+import com.lawencon.community.pojo.course.PojoCourseUpdateReq;
 import com.lawencon.community.pojo.event.PojoEventResGetByCategoryId;
-import com.lawencon.community.service.EventService;
+import com.lawencon.community.service.CourseService;
 
 @RestController
-@RequestMapping("events")
-public class EventController {
+@RequestMapping("courses")
+public class CourseController {
 	
-private final EventService eventService;
+private final CourseService courseService;
 	
-	public EventController(EventService eventService) {
-		this.eventService = eventService;
+	public CourseController(CourseService courseService) {
+		this.courseService = courseService;
 	}
 	
 	@PostMapping("/add")
-	private ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoEventReqInsert data){
-		final PojoInsertRes res = eventService.insert(data);
+	private ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoCourseInsertReq data){
+		final PojoInsertRes res = courseService.insertRes(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 	
 	@GetMapping
-	private ResponseEntity<List<PojoEventResGetAll>> getAllRes(){
-		final List<PojoEventResGetAll> res = eventService.getAllRes();
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<List<PojoEventResGetByCategoryId>> getByCategoryId(@PathVariable("id") final String id) {
-		final List<PojoEventResGetByCategoryId> res = eventService.getByCategoryId(id);
+	private ResponseEntity<List<PojoCourseGetAllRes>> getAllRes(){
+		final List<PojoCourseGetAllRes> res = courseService.getAllRes();
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
 	@PutMapping
-	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoEventReqUpdate data){
-		final PojoUpdateRes res = eventService.update(data);
+	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoCourseUpdateReq data){
+		final PojoUpdateRes res = courseService.update(data);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<List<PojoCourseResGetByCategoryId>> getByCategoryId(@PathVariable("id") final String id) {
+		final List<PojoCourseResGetByCategoryId> res = courseService.getByCategoryId(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<PojoDeleteRes> delete(@PathVariable final String id){
-		final PojoDeleteRes res = eventService.delete(id);
+		final PojoDeleteRes res = courseService.delete(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 

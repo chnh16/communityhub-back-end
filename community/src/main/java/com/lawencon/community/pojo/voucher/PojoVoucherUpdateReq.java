@@ -1,12 +1,13 @@
 package com.lawencon.community.pojo.voucher;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class PojoVoucherUpdateReq {
 	private String id;
 	private String voucherCode;
 	private LocalDateTime expiredDate;
-	private Integer amount;
+	private BigDecimal amount;
 	
 	public String getId() {
 		return id;
@@ -26,10 +27,10 @@ public class PojoVoucherUpdateReq {
 	public void setExpiredDate(LocalDateTime expiredDate) {
 		this.expiredDate = expiredDate;
 	}
-	public Integer getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
-	public void setAmount(Integer amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 }

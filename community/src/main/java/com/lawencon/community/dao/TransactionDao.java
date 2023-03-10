@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -49,6 +50,26 @@ public class TransactionDao extends BasePostDao<Transaction>{
 		str.append("SELECT * FROM t_transaction t ")
 		.append("WHERE t.membership_id = :membershipId");
 		final List<Transaction> res = em().createNativeQuery(toStr(str), Transaction.class).setParameter("membershipId", membershipId).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Transaction> getTransaction(final String type){
+		List<Transaction> res = new ArrayList<>();
+		final StringBuilder str = new StringBuilder();
+		if(type.equals(null)) {
+			str.append("SELECT * FROM t_transaction t ").append("AND t.is_active = TRUE");
+		}
+		if(type.equals("event")) {
+			str.append("SELECT * FROM t_transaction t ").append("WHERE t.event_id <> NULL ").append("AND t.is_active = TRUE");
+		}
+		if(type.equals("course")) {
+			str.append("SELECT * FROM t_transaction t ").append("WHERE t.course_id <> NULL ").append("AND t.is_active = TRUE");
+		}
+		if(type.equals("membership")) {
+			str.append("SELECT * FROM t_transaction t ").append("WHERE t.membership_id <> NULL ").append("AND t.is_active = TRUE");
+		}
+		res = em().createNativeQuery(toStr(str), Transaction.class).getResultList();
 		return res;
 	}
 	

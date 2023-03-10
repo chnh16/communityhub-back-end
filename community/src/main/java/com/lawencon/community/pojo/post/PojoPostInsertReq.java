@@ -1,7 +1,7 @@
 package com.lawencon.community.pojo.post;
 
 public class PojoPostInsertReq {
-	private String userId;
+//	private String userId;
 	private String postTitle;
 	private String postContent;
 	private String postTypeId;
@@ -30,12 +30,12 @@ public class PojoPostInsertReq {
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
 	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	
+//	public String getUserId() {
+//		return userId;
+//	}
+//	public void setUserId(String userId) {
+//		this.userId = userId;
+//	}
+//	
 	
 }

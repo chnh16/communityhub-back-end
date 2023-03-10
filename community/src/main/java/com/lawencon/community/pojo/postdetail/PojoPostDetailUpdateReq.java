@@ -1,10 +1,12 @@
 package com.lawencon.community.pojo.postdetail;
 
+import com.lawencon.community.pojo.file.PojoFileInsertReq;
+
 public class PojoPostDetailUpdateReq {
 
 	private String id;
 	private String postId;
-	private String fileId;
+	private PojoFileInsertReq file;
 	private String detailContent;
 	private Integer ver;
 
@@ -24,13 +26,7 @@ public class PojoPostDetailUpdateReq {
 		this.postId = postId;
 	}
 
-	public String getFileId() {
-		return fileId;
-	}
-
-	public void setFileId(String fileId) {
-		this.fileId = fileId;
-	}
+	
 
 	public String getDetailContent() {
 		return detailContent;
@@ -46,6 +42,14 @@ public class PojoPostDetailUpdateReq {
 
 	public void setVer(Integer ver) {
 		this.ver = ver;
+	}
+
+	public PojoFileInsertReq getFile() {
+		return file;
+	}
+
+	public void setFile(PojoFileInsertReq file) {
+		this.file = file;
 	}
 
 
