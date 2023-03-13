@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.community.model.Role;
 
 @Repository
-public class RoleDao extends MasterDao<Role>{
+public class RoleDao extends MasterDao<Role> {
 
 	@Override
 	public Optional<Role> getById(final String id) {
@@ -51,6 +51,23 @@ public class RoleDao extends MasterDao<Role>{
 	@Override
 	public Role getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Role.class, id);
+	}
+
+	public Optional<Role> getByRoleCode(final String roleCode) {
+		final StringBuilder str = new StringBuilder();
+		Role role = null;
+		try {
+			str.append("SELECT * FROM t_role")
+				.append(" WHERE role_code = :roleCode")
+				.append(" AND is_active = TRUE");
+			final Object result = em().createNativeQuery(toStr(str), Role.class).setParameter("roleCode", roleCode).getSingleResult();
+			if(result != null) {
+				role = (Role) result;
+			}
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		return Optional.ofNullable(role);
 	}
 
 }
