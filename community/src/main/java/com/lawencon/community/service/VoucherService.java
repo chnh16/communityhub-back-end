@@ -9,11 +9,15 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.VoucherDao;
+import com.lawencon.community.model.Event;
+import com.lawencon.community.model.Transaction;
 import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.event.PojoEventResGetByCategoryId;
 import com.lawencon.community.pojo.voucher.PojoVoucherGetAllRes;
+import com.lawencon.community.pojo.voucher.PojoVoucherGetByVoucherCodeRes;
 import com.lawencon.community.pojo.voucher.PojoVoucherInsertReq;
 import com.lawencon.community.pojo.voucher.PojoVoucherUpdateReq;
 
@@ -53,10 +57,12 @@ public class VoucherService {
 		return voucherDao.getAll();
 	}
 	
-	public Optional<Voucher> getByVoucherCode(final String voucherCode){
-		return null;
+	public Voucher getRefById(final String id) {
+		return voucherDao.getRefById(id);
 	}
 
+	
+	
 	public Voucher getByIdAndDetach(final String id) {
 		return voucherDao.getByIdAndDetach(Voucher.class, id);
 	}
@@ -130,6 +136,10 @@ public class VoucherService {
 			pojos.add(pojo);
 		}
 		return pojos;
+	}
+	
+	public Optional<Voucher> getByVoucherCode(final String vocherCode) {	
+		return voucherDao.getByVoucherCode(vocherCode);
 	}
 
 	public PojoInsertRes insertRes(final PojoVoucherInsertReq data) {

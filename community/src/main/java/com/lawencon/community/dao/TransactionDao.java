@@ -26,6 +26,11 @@ public class TransactionDao extends BasePostDao<Transaction>{
 		return res;
 	}
 	
+	public Transaction getRefById(final String id) {
+		final Transaction res = getByIdRef(Transaction.class, id);
+		return res;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Transaction> getByCourseId (final String courseId){
 		final StringBuilder str = new StringBuilder();

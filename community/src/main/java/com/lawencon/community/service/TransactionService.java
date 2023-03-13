@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -99,6 +100,10 @@ public class TransactionService {
 
 		return transactionUpdate;
 	}
+	
+	public Transaction getRefById(final String id) {
+		return transactionDao.getRefById(id);
+	}
 
 	public boolean deleteById(final String id) {
 		boolean eventDelete = false;
@@ -115,7 +120,7 @@ public class TransactionService {
 		return eventDelete;
 
 	}
-	
+
 	public Transaction getByIdAndDetach(final String id) {
 		return transactionDao.getByIdAndDetach(Transaction.class, id);
 	}
@@ -132,6 +137,7 @@ public class TransactionService {
 		final Transaction trans = new Transaction();
 		trans.setUser(user);
 		trans.setTransactionDate(LocalDateTime.now());
+
 		if (data.getEventId() != null) {
 			final Event event = eventService.getRefById(data.getEventId());
 			trans.setEvent(event);
@@ -148,10 +154,14 @@ public class TransactionService {
 			grandTotal = course.getPrice();
 		}
 		if (data.getVoucherCode() != null) {
-			final Voucher voucher = voucherService.getByVoucherCode(data.getVoucherCode()).get();
-			trans.setVoucher(voucher);
+			Voucher voucher = null;
+			final Optional<Voucher> optVoucher = voucherService.getByVoucherCode(data.getVoucherCode());
+			if (optVoucher.isPresent()) {
+				voucher = voucherService.getRefById(optVoucher.get().getId());
+				trans.setVoucher(voucher);
+			}
 		}
-		
+
 		trans.setGrandTotal(grandTotal);
 		trans.setIsApproved(false);
 
@@ -170,12 +180,12 @@ public class TransactionService {
 		pojo.setMessage("Berhasil");
 		return pojo;
 	}
-	
+
 	public PojoUpdateRes updateRes(final PojoUpdateTransactionReq data) {
 		Transaction transactionUpdate = null;
 
 		transactionUpdate = getByIdAndDetach(data.getTransactionId());
-		
+
 		final Transaction transaction = transactionUpdate;
 
 		transaction.setIsApproved(true);
@@ -189,7 +199,7 @@ public class TransactionService {
 		return pojoUpdate;
 
 	}
-	
+
 	public PojoDeleteRes deleteRes(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteById(id);

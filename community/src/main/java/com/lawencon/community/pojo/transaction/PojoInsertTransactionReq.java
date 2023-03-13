@@ -40,8 +40,6 @@ public class PojoInsertTransactionReq {
 		this.file = file;
 	}
 
-	
-
 	public String getEventId() {
 		return eventId;
 	}
@@ -66,20 +64,20 @@ public class PojoInsertTransactionReq {
 		this.membershipId = membershipId;
 	}
 
-	public String getVoucherCode() {
-		return voucherCode;
-	}
-
-	public void setVoucherCode(String voucherCode) {
-		this.voucherCode = voucherCode;
-	}
-
 	public Boolean getIsApproved() {
 		return isApproved;
 	}
 
 	public void setIsApproved(Boolean isApproved) {
 		this.isApproved = isApproved;
+	}
+
+	public String getVoucherCode() {
+		return voucherCode;
+	}
+
+	public void setVoucherCode(String voucherCode) {
+		this.voucherCode = voucherCode;
 	}
 
 }
