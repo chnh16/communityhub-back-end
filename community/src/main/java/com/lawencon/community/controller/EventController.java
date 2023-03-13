@@ -20,6 +20,8 @@ import com.lawencon.community.pojo.event.PojoEventReqInsert;
 import com.lawencon.community.pojo.event.PojoEventReqUpdate;
 import com.lawencon.community.pojo.event.PojoEventResGetAll;
 import com.lawencon.community.pojo.event.PojoEventResGetByCategoryId;
+import com.lawencon.community.pojo.userevent.PojoUserEventGetByUserIdRes;
+import com.lawencon.community.pojo.userevent.PojoUserEventInsertReq;
 import com.lawencon.community.service.EventService;
 
 @RestController
@@ -61,5 +63,25 @@ private final EventService eventService;
 		final PojoDeleteRes res = eventService.delete(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
+	
+	@PostMapping("/buy-event")
+	private ResponseEntity<PojoInsertRes> insertUserEvent(@RequestBody final PojoUserEventInsertReq data){
+		final PojoInsertRes res = eventService.insertUserEvent(data);
+		return new ResponseEntity<>(res, HttpStatus.CREATED);
+	}
+	
+	@GetMapping("user-event")
+	public ResponseEntity<List<PojoUserEventGetByUserIdRes>> getByUserId(final String id) {
+		final List<PojoUserEventGetByUserIdRes> res = eventService.getByUserId(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/user-event/{id}")
+	public ResponseEntity<PojoDeleteRes> deleteUserEvent(@PathVariable final String id){
+		final PojoDeleteRes res = eventService.deleteUserEvent(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	
 
 }
