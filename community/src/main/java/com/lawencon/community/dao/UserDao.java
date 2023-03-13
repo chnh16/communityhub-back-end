@@ -3,9 +3,11 @@ package com.lawencon.community.dao;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.community.constant.RoleList;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Role;
 import com.lawencon.community.model.User;
@@ -48,6 +50,10 @@ public class UserDao extends MasterDao<User>{
 	public User insert(final User data) {
 		final User res = saveAndFlush(data);
 		return res;
+	}
+	
+	public User insertNoLogin(final User data, final Supplier<String> idFunc) {
+		return saveNoLogin(data, idFunc);
 	}
 	
 	public Optional<User> getByEmail(final String email) {

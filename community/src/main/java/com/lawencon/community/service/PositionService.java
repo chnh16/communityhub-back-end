@@ -58,6 +58,10 @@ public class PositionService {
 	public Optional<Position> getById(final String id) {
 		return positionDao.getById(id);
 	}
+	
+	public Position getRefById(final String id) {
+		return positionDao.getRefById(id);
+	}
 
 	public List<Position> getAll() {
 		return positionDao.getAll();

@@ -51,6 +51,7 @@ public class Profile extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "position_id", nullable = false)
 	private Position position;
+	private String company;
 
 	public String getFullName() {
 		return fullName;
@@ -123,5 +124,30 @@ public class Profile extends BaseEntity {
 	public void setFile(File file) {
 		this.file = file;
 	}
+
+	public Industry getIndustry() {
+		return industry;
+	}
+
+	public void setIndustry(Industry industry) {
+		this.industry = industry;
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
+	public String getCompany() {
+		return company;
+	}
+
+	public void setCompany(String company) {
+		this.company = company;
+	}
+	
 
 }
