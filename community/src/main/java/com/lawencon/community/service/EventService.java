@@ -12,10 +12,12 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.EventDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.UserEventDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.Event;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.User;
+import com.lawencon.community.model.UserEvent;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -23,6 +25,8 @@ import com.lawencon.community.pojo.event.PojoEventReqInsert;
 import com.lawencon.community.pojo.event.PojoEventReqUpdate;
 import com.lawencon.community.pojo.event.PojoEventResGetAll;
 import com.lawencon.community.pojo.event.PojoEventResGetByCategoryId;
+import com.lawencon.community.pojo.userevent.PojoUserEventGetByUserIdRes;
+import com.lawencon.community.pojo.userevent.PojoUserEventInsertReq;
 import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -33,17 +37,19 @@ public class EventService {
 	private CategoryDao categoryDao;
 	private FileDao fileDao;
 	private UserService userService;
+	private UserEventDao userEventDao;
 
 	@Inject
 	private PrincipalService principalService;
 
 	public EventService(EventDao eventDao, CategoryDao categoryDao, FileDao fileDao, PrincipalService principalService,
-			UserService userService) {
+			UserService userService, UserEventDao userEventDao) {
 		this.eventDao = eventDao;
 		this.categoryDao = categoryDao;
 		this.fileDao = fileDao;
 		this.principalService = principalService;
 		this.userService = userService;
+		this.userEventDao = userEventDao;
 	}
 
 	public Event insert(final Event data) {
@@ -237,5 +243,61 @@ public class EventService {
 		res.setMessage("Event Berhasil Dihapus");
 		return res;
 	}
+	
+	
+	/** User Event Service */
+	
+	public PojoInsertRes insertUserEvent(final PojoUserEventInsertReq data) {
+		final UserEvent userEvent = new UserEvent();
+		
+		final User user = userService.getByRefId(principalService.getAuthPrincipal());
+		user.setId(principalService.getAuthPrincipal());
+		userEvent.setUser(user);
+
+		final Event event = eventDao.getByIdRef(Event.class, data.getEventId());
+		event.setId(data.getEventId());
+		userEvent.setEvent(event);
+
+		UserEvent eventInsert = null;
+		ConnHandler.begin();
+		eventInsert = userEventDao.insert(userEvent);
+		ConnHandler.commit();
+
+		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
+		pojoInsertRes.setId(eventInsert.getId());
+		pojoInsertRes.setMessage("Anda Berhasil Membeli Event");
+		return pojoInsertRes;
+	}
+	
+	public List<PojoUserEventGetByUserIdRes> getByUserId(final String id) {
+		final List<PojoUserEventGetByUserIdRes> pojos = new ArrayList<>();
+		final List<UserEvent> res = userEventDao.getByUserId(principalService.getAuthPrincipal());
+
+		for (int i = 0; i < res.size(); i++) {
+			final PojoUserEventGetByUserIdRes pojo = new PojoUserEventGetByUserIdRes();
+			final UserEvent userEvent = res.get(i);
+
+			ConnHandler.getManager().detach(userEvent);
+			
+			pojo.setId(userEvent.getId());
+			pojo.setUserId(userEvent.getUser().getProfile().getFullName());
+			pojo.setEventId(userEvent.getEvent().getEventName());
+
+			pojos.add(pojo);
+		}
+
+		return pojos;
+	}
+	
+	public PojoDeleteRes deleteUserEvent(final String id) {
+		final PojoDeleteRes res = new PojoDeleteRes();
+		ConnHandler.begin();
+		userEventDao.delete(id);
+		ConnHandler.commit();
+		res.setMessage("Berhasil Dihapus");
+		return res;
+	}
+	
+	
 
 }

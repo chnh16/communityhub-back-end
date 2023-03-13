@@ -1,11 +1,23 @@
 package com.lawencon.community.pojo.article;
 
+import com.lawencon.community.pojo.file.PojoFileInsertReq;
+
 public class PojoArticleUpdateReq {
 
 	private String id;
+	private PojoFileInsertReq photoId;
 	private String articleTitle;
 	private String articleContent;
 	private Integer ver;
+	
+
+	public PojoFileInsertReq getPhotoId() {
+		return photoId;
+	}
+
+	public void setPhotoId(PojoFileInsertReq photoId) {
+		this.photoId = photoId;
+	}
 
 	public String getId() {
 		return id;

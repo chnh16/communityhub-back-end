@@ -30,6 +30,7 @@ public class ArticleDao extends MasterDao<Article>{
 		return res;
 	}
 
+
 	@Override
 	public Article update(final Article data) {
 		final Article res = saveAndFlush(data);

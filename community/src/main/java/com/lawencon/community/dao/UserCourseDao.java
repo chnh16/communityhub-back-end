@@ -21,7 +21,7 @@ public class UserCourseDao extends BasePostDao<UserCourse>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<UserCourse> getByCourseId (final String userId){
+	public List<UserCourse> getByUserId (final String userId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM user_course uc ")
 		.append("WHERE uc.user_id = :userId");

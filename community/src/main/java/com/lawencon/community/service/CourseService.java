@@ -12,11 +12,12 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.CourseDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.UserCourseDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.Course;
-import com.lawencon.community.model.Event;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.User;
+import com.lawencon.community.model.UserCourse;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -24,7 +25,8 @@ import com.lawencon.community.pojo.course.PojoCourseGetAllRes;
 import com.lawencon.community.pojo.course.PojoCourseInsertReq;
 import com.lawencon.community.pojo.course.PojoCourseResGetByCategoryId;
 import com.lawencon.community.pojo.course.PojoCourseUpdateReq;
-import com.lawencon.community.pojo.event.PojoEventResGetByCategoryId;
+import com.lawencon.community.pojo.usercourse.PojoUserCourseGetByUserIdRes;
+import com.lawencon.community.pojo.usercourse.PojoUserCourseInsertReq;
 import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -35,16 +37,18 @@ public class CourseService {
 	private final CategoryService categoryService;
 	private final FileDao fileDao;
 	private final UserService userService;
+	private final UserCourseDao userCourseDao;
 	
 	@Inject
 	private PrincipalService principalService;
 	
-	public CourseService(final CourseDao courseDao, final CategoryDao categoryDao, final FileDao fileDao, final UserService userService, final CategoryService categoryService) {
+	public CourseService(final CourseDao courseDao, final CategoryDao categoryDao, final FileDao fileDao, final UserService userService, final CategoryService categoryService, UserCourseDao userCourseDao) {
 		this.courseDao = courseDao;
 		this.categoryDao = categoryDao;
 		this.fileDao = fileDao;
 		this.userService = userService;
 		this.categoryService = categoryService;
+		this.userCourseDao = userCourseDao;
 	}
 	
 	public Course insert(final Course data) {
@@ -223,6 +227,59 @@ public class CourseService {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteById(id);
 		res.setMessage("Course Berhasil Dihapus");
+		return res;
+	}
+	
+/** User Course Service */
+	
+	public PojoInsertRes inserCourseEvent(final PojoUserCourseInsertReq data) {
+		final UserCourse userCourse = new UserCourse();
+		
+		final User user = userService.getByRefId(principalService.getAuthPrincipal());
+		user.setId(principalService.getAuthPrincipal());
+		userCourse.setUser(user);
+
+		final Course course = courseDao.getByIdRef(Course.class, data.getCourseId());
+		course.setId(data.getCourseId());
+		userCourse.setCourse(course);
+
+		UserCourse userCourseInsert = null;
+		ConnHandler.begin();
+		userCourseInsert = userCourseDao.insert(userCourse);
+		ConnHandler.commit();
+
+		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
+		pojoInsertRes.setId(userCourseInsert.getId());
+		pojoInsertRes.setMessage("Anda Berhasil Membeli Course");
+		return pojoInsertRes;
+	}
+	
+	public List<PojoUserCourseGetByUserIdRes> getByUserId(final String id) {
+		final List<PojoUserCourseGetByUserIdRes> pojos = new ArrayList<>();
+		final List<UserCourse> res = userCourseDao.getByUserId(principalService.getAuthPrincipal());
+
+		for (int i = 0; i < res.size(); i++) {
+			final PojoUserCourseGetByUserIdRes pojo = new PojoUserCourseGetByUserIdRes();
+			final UserCourse userCourse = res.get(i);
+
+			ConnHandler.getManager().detach(userCourse);
+			
+			pojo.setId(userCourse.getId());
+			pojo.setUserId(userCourse.getUser().getProfile().getFullName());
+			pojo.setCourseId(userCourse.getCourse().getCourseName());
+
+			pojos.add(pojo);
+		}
+
+		return pojos;
+	}
+	
+	public PojoDeleteRes deleteUserEvent(final String id) {
+		final PojoDeleteRes res = new PojoDeleteRes();
+		ConnHandler.begin();
+		userCourseDao.delete(id);
+		ConnHandler.commit();
+		res.setMessage("Berhasil Dihapus");
 		return res;
 	}
 	

@@ -5,7 +5,10 @@ public class PojoArticleResGetAll {
 	private String id;
 	private String articleTitle;
 	private String articleContent;
+	private String photoId;
 	private Integer ver;
+	
+	
 
 	public String getId() {
 		return id;
@@ -37,6 +40,14 @@ public class PojoArticleResGetAll {
 
 	public void setVer(Integer ver) {
 		this.ver = ver;
+	}
+
+	public String getPhotoId() {
+		return photoId;
+	}
+
+	public void setPhotoId(String photoId) {
+		this.photoId = photoId;
 	}
 
 }
