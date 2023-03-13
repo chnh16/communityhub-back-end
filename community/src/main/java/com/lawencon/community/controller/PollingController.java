@@ -3,12 +3,15 @@ package com.lawencon.community.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.pollingdetail.PojoPollingDetailInsertReq;
+import com.lawencon.community.pojo.pollingdetail.PojoPollingDetailUpdateReq;
 import com.lawencon.community.service.PollingService;
 
 @RestController
@@ -25,5 +28,11 @@ public class PollingController {
 	public ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoPollingDetailInsertReq data) {
 		final PojoInsertRes res = pollingService.insertPollingDetail(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
+	}
+	
+	@PutMapping
+	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoPollingDetailUpdateReq data){
+		final PojoUpdateRes res = pollingService.updatePollingDetail(data);
+		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 }

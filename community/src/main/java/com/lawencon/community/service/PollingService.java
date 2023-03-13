@@ -8,7 +8,9 @@ import com.lawencon.community.dao.PostDao;
 import com.lawencon.community.model.PollingDetail;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.pollingdetail.PojoPollingDetailInsertReq;
+import com.lawencon.community.pojo.pollingdetail.PojoPollingDetailUpdateReq;
 
 @Service
 public class PollingService {
@@ -40,5 +42,29 @@ public class PollingService {
 		pojoInsertRes.setId(eventInsert.getId());
 		pojoInsertRes.setMessage("Success");
 		return pojoInsertRes;
+	}
+	
+
+	public PojoUpdateRes updatePollingDetail(final PojoPollingDetailUpdateReq data) {
+		PollingDetail pollingDetailUpdate = null;
+	
+		pollingDetailUpdate = pollingDetailDao.getByIdAndDetach(data.getId());
+		
+		final PollingDetail pollingDetail = pollingDetailUpdate;
+
+		pollingDetail.setPollingQuestion(data.getPollingQuestion());
+
+
+		pollingDetail.setVersion(data.getVer());
+		
+		ConnHandler.begin();
+		pollingDetailUpdate = pollingDetailDao.update(pollingDetail);
+		ConnHandler.commit();
+
+		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
+		pojoUpdate.setVer(data.getVer());
+		pojoUpdate.setMessage("Updated");
+		return pojoUpdate;
+
 	}
 }
