@@ -154,8 +154,6 @@ private final FileDao fileDao;
 		
 		article.setVersion(data.getVer());
 
-		
-
 		final File fileInsert = new File();
 		fileInsert.setFileName(data.getPhotoId().getFileName());
 		fileInsert.setFileExtension(data.getPhotoId().getFileExtension());
