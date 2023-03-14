@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.UserBookmark;
 
 @Repository
@@ -29,6 +30,20 @@ public class UserBookmarkDao extends BasePostDao<UserBookmark> {
 				.setParameter("userId", userId)
 				.getResultList();
 		return res;
+	}
+	
+	public Long getCount(final String postId) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT COUNT(ub.post_id) FROM user_bookmark ub ")
+		.append("INNER JOIN post p ON p.id = ub.post_id ")
+		.append("WHERE ub.post_id = :postId ");
+		
+		Long countLike = null;
+		countLike = Long.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str).toString())
+				.setParameter("postId", postId)
+				.getSingleResult().toString());
+		
+		return countLike;
 	}
 
 }

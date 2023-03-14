@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.PostDetail;
 
 @Repository
@@ -38,6 +39,18 @@ public class PostDetailDao extends MasterDao<PostDetail>{
 		.append("WHERE pd.post_id = :postId");
 		final List<PostDetail> res = em().createNativeQuery(toStr(str), PostDetail.class).setParameter("postId", postId).getResultList();
 		return res;
+	}
+	
+	public Long getCount (final String postId){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT COUNT(detail_content) FROM post_detail pd ")
+		.append("WHERE pd.post_id = :postId");
+		
+		Long countComment = null;
+		countComment = Long.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str).toString())
+				.setParameter("postId", postId)
+				.getSingleResult().toString());
+		return countComment;
 	}
 
 	@Override

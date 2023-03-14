@@ -38,7 +38,7 @@ public class CategoryController {
 	}
 
 	@GetMapping("list")
-	public ResponseEntity<List<PojoCategoryGetAllRes>> getAllIndustry() {
+	public ResponseEntity<List<PojoCategoryGetAllRes>> getAllCategory() {
 		final List<PojoCategoryGetAllRes> res = categoryService.getAllCategory();
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
@@ -50,7 +50,7 @@ public class CategoryController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<PojoDeleteRes> deleteIndustry(@PathVariable("id") String id) {
+	public ResponseEntity<PojoDeleteRes> deleteCategory(@PathVariable("id") String id) {
 		final PojoDeleteRes res = categoryService.deleteRes(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}

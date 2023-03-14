@@ -5,7 +5,8 @@ public class PojoUserBookmarkGetAllRes {
 	private String id;
 	private String userId;
 	private String postId;
-
+	private Long countedBookmark;
+	
 	public String getId() {
 		return id;
 	}
@@ -28,6 +29,14 @@ public class PojoUserBookmarkGetAllRes {
 
 	public void setPostId(String postId) {
 		this.postId = postId;
+	}
+
+	public Long getCountedBookmark() {
+		return countedBookmark;
+	}
+
+	public void setCountedBookmark(Long countedBookmark) {
+		this.countedBookmark = countedBookmark;
 	}
 
 }

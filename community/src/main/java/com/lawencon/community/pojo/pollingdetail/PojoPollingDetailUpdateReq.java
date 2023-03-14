@@ -1,9 +1,14 @@
 package com.lawencon.community.pojo.pollingdetail;
 
+import java.util.List;
+
+import com.lawencon.community.pojo.pollingchoice.PojoPollingChoiceUpdateReq;
+
 public class PojoPollingDetailUpdateReq {
 
 	private String id;
 	private String pollingQuestion;
+	private List<PojoPollingChoiceUpdateReq> choices;
 	private Integer ver;
 
 	public String getId() {
@@ -30,4 +35,11 @@ public class PojoPollingDetailUpdateReq {
 		this.ver = ver;
 	}
 
+	public List<PojoPollingChoiceUpdateReq> getChoices() {
+		return choices;
+	}
+
+	public void setChoices(List<PojoPollingChoiceUpdateReq> choices) {
+		this.choices = choices;
+	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.PollingAnswer;
 
 @Repository
@@ -29,6 +30,18 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer>{
 		return res;
 	}
 	
-	
+	public Long getCount(final String detailId) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT COUNT(pa.polling_choice_id) FROM polling_answer pa ")
+		.append(" INNER JOIN polling_choice pc ON pc.id = pa.polling_choice_id ")
+		.append(" WHERE pc.polling_detail_id = :detailId");
+		
+		Long countPoll = null;
+		countPoll = Long.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str).toString())
+				.setParameter("detailId", detailId)
+				.getSingleResult().toString());
+		
+		return countPoll;
+	}
 
 }

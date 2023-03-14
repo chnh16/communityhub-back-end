@@ -17,7 +17,6 @@ import com.lawencon.community.dao.UserBookmarkDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.dao.UserLikeDao;
 import com.lawencon.community.model.Category;
-import com.lawencon.community.model.Course;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostDetail;
@@ -29,7 +28,6 @@ import com.lawencon.community.model.UserLike;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.course.PojoCourseResGetByCategoryId;
 import com.lawencon.community.pojo.post.PojoPostGetAllRes;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
@@ -38,9 +36,10 @@ import com.lawencon.community.pojo.postdetail.PojoPostDetailGetByPostIdRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailInsertReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailUpdateReq;
 import com.lawencon.community.pojo.postfile.PojoPostFileGetAllRes;
-import com.lawencon.community.pojo.postfile.PojoPostFileInsertReq;
+import com.lawencon.community.pojo.postfile.PojoPostFileInsertListReq;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkGetAllRes;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkInsertReq;
+import com.lawencon.community.pojo.userlike.PojoUserLikeGetAllRes;
 import com.lawencon.community.pojo.userlike.PojoUserLikeInsertReq;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -76,10 +75,39 @@ public class PostService  {
 		this.postDetailDao = postDetailDao;
 	}
 	
+	private void valIdNull(final Post data) {
+		if (data.getId() != null) {
+			throw new RuntimeException("ID harus kosong");
+		}
+	}
+
+	private void valIdNotNull(final Post data) {
+		if (data.getId() == null) {
+			throw new RuntimeException("ID kosong");
+		}
+	}
+
+	private void valNotNullable(final Post data) {
+		if (data.getPostTitle() == null) {
+			throw new RuntimeException("Judul Postingan Kosong");
+		}
+		if (data.getPostContent() == null) {
+			throw new RuntimeException("Konten Postingan Kosong");
+		}
+		if (data.getPostType() == null) {
+			throw new RuntimeException("Tipe Postingan Kosong");
+		}
+		if (data.getCategory() == null) {
+			throw new RuntimeException("Kategori Kosong");
+		}
+	}
+	
 	public Post insertPost(final Post data) {
 		Post postInsert = null;
 		try {
 			ConnHandler.begin();
+			valIdNull(data);
+			valNotNullable(data);
 			User user = userDao.getRefById(principalService.getAuthPrincipal());
 			data.setUser(user);
 			postInsert = postDao.insert(data);
@@ -115,6 +143,7 @@ public class PostService  {
 	
 	public Post updatePost(final Post data) {
 		Post postUpdate = null;
+		valIdNotNull(data);
 		try {
 			ConnHandler.begin();
 			postUpdate = postDao.update(data);
@@ -222,10 +251,27 @@ public class PostService  {
 	}
 
 	
+	private void valIdNull(final PostFile data) {
+		if (data.getId() != null) {
+			throw new RuntimeException("ID harus kosong");
+		}
+	}
+
+	private void valNotNullable(final PostFile data) {
+		if (data.getPost() == null) {
+			throw new RuntimeException("Postingan Kosong");
+		}
+		if (data.getFile() == null) {
+			throw new RuntimeException("File Kosong");
+		}
+	}
+	
 	public PostFile insertPostFile(final PostFile data) {
 		PostFile postFileInsert = null;
 		try {
 			ConnHandler.begin();
+			valIdNull(data);
+			valNotNullable(data);
 			final File file = fileDao.insert(data.getFile());
 			postFileInsert = data;
 			postFileInsert.setFile(file);
@@ -237,33 +283,39 @@ public class PostService  {
 		return postFileInsert;
 	}
 	
-	public PojoInsertRes insertPostFile(final PojoPostFileInsertReq data) {
-		final PostFile postFile = new PostFile();
-		
-		final Post post = postDao.getRefById(data.getPostId());
-		postFile.setPost(post);
-		
-		final File file = new File();
-		file.setFileName(data.getFile().getFileName());
-		file.setFileExtension(data.getFile().getFileExtension());
-		file.setFileContent(data.getFile().getFileContent());
-		file.setIsActive(true);
-		final File fileInsert = fileDao.insert(file);
-		postFile.setFile(fileInsert);
-		
-		postFile.setIsActive(true);
-		
-		final PostFile postFileInsert = insertPostFile(postFile);
-		
-		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
-		pojoInsertRes.setId(postFileInsert.getId());
-		pojoInsertRes.setMessage("Berhasil Menambah Data");
+	public PojoInsertRes insertPostFile(final PojoPostFileInsertListReq data) {
+		PojoInsertRes pojoInsertRes = null;
+		for(int i = 0; i < data.getData().size(); i++) {
+			final PostFile postFile = new PostFile();
+			
+			final Post post = postDao.getRefById(data.getData().get(i).getPostId());
+			postFile.setPost(post);
+			
+			final File file = new File();
+			file.setFileName(data.getData().get(i).getFile().getFileName());
+			file.setFileExtension(data.getData().get(i).getFile().getFileExtension());
+			file.setFileContent(data.getData().get(i).getFile().getFileContent());
+			file.setIsActive(true);
+			ConnHandler.begin();
+			final File fileInsert = fileDao.insert(file);
+			ConnHandler.commit();
+			postFile.setFile(fileInsert);
+			
+			postFile.setIsActive(true);
+			
+			final PostFile postFileInsert = insertPostFile(postFile);
+			
+			pojoInsertRes = new PojoInsertRes();
+			pojoInsertRes.setId(postFileInsert.getId());
+			pojoInsertRes.setMessage("Berhasil Menambah Data");
+			
+		}
 		return pojoInsertRes;
 	}
 	
 	public boolean deletePostFileById(final String id) {
 		boolean postFileDelete = false;
-
+		
 		try {
 			ConnHandler.begin();
 			postFileDelete = postFileDao.deleteById(PostFile.class, id);
@@ -278,7 +330,7 @@ public class PostService  {
 	
 	public PojoDeleteRes deletePostFileRes(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
-		deleteById(id);
+		deletePostFileById(id);
 		res.setMessage("Berhasil Menghapus Data");
 		return res;
 	}
@@ -301,10 +353,27 @@ public class PostService  {
 		return listPojoPostFile;
 	}
 	
+	private void valIdNull(final UserLike data) {
+		if (data.getId() != null) {
+			throw new RuntimeException("ID harus kosong");
+		}
+	}
+
+	private void valNotNullable(final UserLike data) {
+		if (data.getPost() == null) {
+			throw new RuntimeException("Postingan Kosong");
+		}
+		if (data.getUser() == null) {
+			throw new RuntimeException("User Kosong");
+		}
+	}
+	
 	public UserLike insertUserLike(final UserLike data) {
 		UserLike userLikeInsert = null;
 		try {
 			ConnHandler.begin();
+			valIdNull(data);
+			valNotNullable(data);
 			User user = userDao.getRefById(principalService.getAuthPrincipal());
 			data.setUser(user);
 			userLikeInsert = userLikeDao.insert(data);
@@ -334,12 +403,12 @@ public class PostService  {
 		return pojoInsertRes;
 	}
 	
-	public boolean deleteUserLikeById(final String id) {
+	public boolean deleteUserLikeById(final String postId) {
 		boolean userLikeDelete = false;
 
 		try {
 			ConnHandler.begin();
-			userLikeDelete = userLikeDao.deleteById(UserLike.class, id);
+			userLikeDelete = userLikeDao.deleteUserLikeById(principalService.getAuthPrincipal(), postId);
 			ConnHandler.commit();
 
 		} catch (Exception e) {
@@ -349,19 +418,56 @@ public class PostService  {
 		return userLikeDelete;
 	}
 	
+	
+	public List<PojoUserLikeGetAllRes> getLikeByUser(final String postId){
+		final List<PojoUserLikeGetAllRes> listPojoUserLike = new ArrayList<>();
+		
+		final List<UserLike> listUserLike = userLikeDao.getLikeByUserId(principalService.getAuthPrincipal());
+		for(int i = 0; i < listUserLike.size(); i++) {
+			final PojoUserLikeGetAllRes pojoUserLike = new PojoUserLikeGetAllRes();
+			
+			pojoUserLike.setId(listUserLike.get(i).getId());
+			pojoUserLike.setUserId(listUserLike.get(i).getUser().getId());
+			pojoUserLike.setPostId(listUserLike.get(i).getPost().getId());
+			
+			pojoUserLike.setCountedLike(userLikeDao.getCount(postId));
+			
+			listPojoUserLike.add(pojoUserLike);
+		}
+		
+		return listPojoUserLike;
+	}
 
-	public PojoDeleteRes deleteUserLikeRes(final String id) {
+	public PojoDeleteRes deleteUserLikeRes(final String postId) {
 		final PojoDeleteRes res = new PojoDeleteRes();
-		deleteUserLikeById(id);
+		deleteUserLikeById(postId);
 		res.setMessage("Berhasil Menghapus Data");
 
 		return res;
+	}
+	
+	
+	private void valIdNull(final UserBookmark data) {
+		if (data.getId() != null) {
+			throw new RuntimeException("ID harus kosong");
+		}
+	}
+
+	private void valNotNullable(final UserBookmark data) {
+		if (data.getPost() == null) {
+			throw new RuntimeException("Postingan Kosong");
+		}
+		if (data.getUser() == null) {
+			throw new RuntimeException("User Kosong");
+		}
 	}
 	
 	public UserBookmark insert(final UserBookmark data) {
 		UserBookmark userBookmarkInsert = null;
 		try {
 			ConnHandler.begin();
+			valIdNull(data);
+			valNotNullable(data);
 			User user = userDao.getRefById(principalService.getAuthPrincipal());
 			data.setUser(user);
 			userBookmarkInsert = userBookmarkDao.insert(data);
@@ -422,9 +528,20 @@ public class PostService  {
 			pojoBookmark.setId(userBookmark.getId());
 			pojoBookmark.setPostId(bookmarks.get(i).getPost().getId());
 			pojoBookmark.setUserId(bookmarks.get(i).getUser().getId());
+						
 			userBookmarkGetAllRes.add(pojoBookmark);
 		}
 		return userBookmarkGetAllRes;
+	}
+	
+	public PojoUserBookmarkGetAllRes getCountBookmark(final String postId) {
+		final PojoUserBookmarkGetAllRes bookmark = new PojoUserBookmarkGetAllRes();
+		
+		bookmark.setUserId(principalService.getAuthPrincipal());
+		bookmark.setPostId(postId);
+		bookmark.setCountedBookmark(userBookmarkDao.getCount(postId));
+		
+		return bookmark;
 	}
 	
 	public PojoDeleteRes delete(final String id) {
@@ -434,10 +551,34 @@ public class PostService  {
 		return res;
 	}
 	
+	private void valIdNull(final PostDetail data) {
+		if (data.getId() != null) {
+			throw new RuntimeException("ID harus kosong");
+		}
+	}
+
+	private void valIdNotNull(final PostDetail data) {
+		if (data.getId() == null) {
+			throw new RuntimeException("ID kosong");
+		}
+	}
+
+	private void valNotNullable(final PostDetail data) {
+		if (data.getDetailContent() == null) {
+			throw new RuntimeException("Komentar Kosong");
+		}
+		if (data.getPost() == null) {
+			throw new RuntimeException("Postingan Kosong");
+		}
+	}
+	
+	
 	public PostDetail insert(final PostDetail data) {
 		PostDetail postDetailInsert = null;
 		try {
 			ConnHandler.begin();
+			valIdNull(data);
+			valNotNullable(data);
 			final File file = fileDao.insert(data.getFile());
 			postDetailInsert = data;
 			postDetailInsert.setFile(file);
@@ -451,7 +592,7 @@ public class PostService  {
 	
 	public PostDetail update(final PostDetail data) {
 		PostDetail postDetailUpdate = null;
-		
+		valIdNotNull(data);
 		try {
 			ConnHandler.begin();
 			postDetailUpdate = postDetailDao.update(data);
@@ -519,22 +660,30 @@ public class PostService  {
 	public PojoUpdateRes update(final PojoPostDetailUpdateReq data) {
 		final PostDetail postDetail = getDetailByIdAndDetach(data.getId());
 		
-		postDetail.setDetailContent(data.getDetailContent());
-		postDetail.setVersion(data.getVer());
+		if(data.getDetailContent() != null) {
+			postDetail.setDetailContent(data.getDetailContent());
+		}
 		
-		final File file = new File();
-		file.setFileName(data.getFile().getFileName());
-		file.setFileExtension(data.getFile().getFileExtension());
-		file.setFileContent(data.getFile().getFileContent());
+		if(data.getVer() != null) {
+			postDetail.setVersion(data.getVer());			
+		}
 		
-		ConnHandler.begin();
-		final File fileInsert = fileDao.insert(file);
-		ConnHandler.commit();
-		postDetail.setFile(fileInsert);
+		if(data.getFile() != null) {
+			final File file = new File();
+			file.setFileName(data.getFile().getFileName());
+			file.setFileExtension(data.getFile().getFileExtension());
+			file.setFileContent(data.getFile().getFileContent());
+			ConnHandler.begin();
+			final File fileInsert = fileDao.insert(file);
+			ConnHandler.commit();
+			postDetail.setFile(fileInsert);			
+		}
 		
-		final Post post = postDao.getByIdRef(Post.class, data.getPostId());
-		post.setId(data.getPostId());
-		postDetail.setPost(post);
+		if(data.getPostId() != null) {
+			final Post post = postDao.getByIdRef(Post.class, data.getPostId());
+			post.setId(data.getPostId());
+			postDetail.setPost(post);			
+		}
 		
 		final PostDetail postDetailUpdate = update(postDetail);
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
@@ -574,7 +723,7 @@ public class PostService  {
 			pojo.setId(postDetail.getId());
 			pojo.setPostId(postDetail.getPost().getId());
 			pojo.setDetailContent(postDetail.getDetailContent());
-
+			pojo.setCountedCommentar(postDetailDao.getCount(id));
 			pojos.add(pojo);
 		}
 

@@ -24,11 +24,11 @@ public class PostFileDao extends BasePostDao<PostFile>{
 	public List<PostFile> getAllPostFile(final String postId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM post_file pf ")
-			.append(" INNER JOIN post p ON p_id = pf.post_id ")
+			.append(" INNER JOIN post p ON p.id = pf.post_id ")
 			.append(" INNER JOIN file f ON f.id = pf.file_id ")
-			.append("WHERE post_id = :id AND is_active = true ");
+			.append("WHERE pf.post_id = :postId AND pf.is_active = true ");
 		final List<PostFile> res = em().createNativeQuery(toStr(str), PostFile.class)
-				.setParameter("post_id", postId)
+				.setParameter("postId", postId)
 				.getResultList();
 		return res;
 	}
