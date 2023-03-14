@@ -9,14 +9,17 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.constant.RoleList;
 import com.lawencon.community.constant.TransactionType;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.TransactionDao;
 import com.lawencon.community.dao.VoucherDao;
 import com.lawencon.community.model.Course;
 import com.lawencon.community.model.Event;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Membership;
+import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Transaction;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.Voucher;
@@ -36,17 +39,20 @@ public class TransactionService {
 	private final TransactionDao transactionDao;
 	private final FileDao fileDao;
 	private final VoucherDao voucherDao;
+	private final ProfileDao profileDao;
 	private final UserService userService;
 	private final EventService eventService;
 	private final MembershipService membershipService;
 	private final CourseService courseService;
 	private final PrincipalService principalService;
 	private final VoucherService voucherService;
+	private static final BigDecimal userShare = new BigDecimal(0.8);
+	private static final BigDecimal systemShare = new BigDecimal(0.2);
 
 	public TransactionService(final TransactionDao transactionDao, final UserService userService,
 			final EventService eventService, final MembershipService membershipService,
 			final CourseService courseService, final PrincipalService principalService,
-			final VoucherService voucherService, FileDao fileDao, VoucherDao voucherDao) {
+			final VoucherService voucherService, final FileDao fileDao, final VoucherDao voucherDao, final ProfileDao profileDao) {
 		this.transactionDao = transactionDao;
 		this.userService = userService;
 		this.eventService = eventService;
@@ -56,6 +62,7 @@ public class TransactionService {
 		this.voucherService = voucherService;
 		this.fileDao = fileDao;
 		this.voucherDao = voucherDao;
+		this.profileDao = profileDao;
 	}
 
 	private Transaction insert(final Transaction data) {
@@ -177,7 +184,7 @@ public class TransactionService {
 		final File file = fileDao.insert(fileInsert);
 		trans.setFile(file);
 
-		transactionInsert = transactionDao.insert(trans);
+		transactionInsert = insert(trans);
 		ConnHandler.commit();
 		pojo.setId(transactionInsert.getId());
 		pojo.setMessage("Berhasil");
@@ -191,11 +198,19 @@ public class TransactionService {
 
 		final Transaction transaction = transactionUpdate;
 
-		transaction.setIsApproved(true);
+		transaction.setIsApproved(data.getIsApproved());
 		transaction.setVersion(data.getVer());
 
 		transactionUpdate = update(transaction);
-
+		
+		if (transaction.getIsApproved() == false && transactionUpdate.getIsApproved() == true) {
+			if(transactionUpdate.getMembership() != null) {
+				addSystemBalance(transactionUpdate);
+			} else {
+				profitSharing(transactionUpdate);
+			}
+		}
+		
 		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
 		pojoUpdate.setVer(data.getVer());
 		pojoUpdate.setMessage("Updated");
@@ -325,6 +340,60 @@ public class TransactionService {
 		}
 
 		return pojos;
+	}
+	
+	private void addSystemBalance(final Transaction data) {
+		final Optional<User> system = userService.getUserSystem(RoleList.SYSTEM.getRoleCode());
+		final User userSystem = userService.getByRefId(system.get().getId());
+		final Profile systemProfile = profileDao.getRefById(userSystem.getProfile().getId());
+		Voucher voucher = null;
+		BigDecimal value = null;
+		
+		if(data.getMembership() != null) {
+			final Membership membership = membershipService.getRefById(data.getMembership().getId());
+			value = membership.getAmount();
+		}
+		if(data.getVoucher() != null) {
+			voucher = voucherService.getRefById(data.getVoucher().getId());
+		}
+		BigDecimal systemBalance = systemProfile.getBalance();
+		BigDecimal toSystem = systemBalance.add(value.subtract(voucher.getAmount()));
+		systemProfile.setBalance(toSystem);
+		ConnHandler.begin();
+		profileDao.update(systemProfile);
+		ConnHandler.commit();
+	}
+	
+	private void profitSharing(final Transaction data) {
+		final Optional<User> system = userService.getUserSystem(RoleList.SYSTEM.getRoleCode());
+		final User userSystem = userService.getByRefId(system.get().getId());
+		final Profile systemProfile = profileDao.getRefById(userSystem.getProfile().getId());
+		User organizer = null;
+		Profile organizerProfile = null;
+		BigDecimal value = null;
+		Voucher voucher = null;
+		if(data.getEvent() != null) {
+			final Event event = eventService.getRefById(data.getEvent().getId());
+			organizer = userService.getByRefId(event.getUser().getId());
+			organizerProfile = profileDao.getRefById(organizer.getProfile().getId());
+			value = event.getPrice();
+		}
+		if(data.getCourse() != null) {
+			final Course course = courseService.getRefById(data.getCourse().getId());
+			organizer = userService.getByRefId(course.getUser().getId());
+			organizerProfile = profileDao.getRefById(organizer.getProfile().getId());
+			value = course.getPrice();
+		}
+		if(data.getVoucher() != null) {
+			voucher = voucherService.getRefById(data.getVoucher().getId());
+		}
+		BigDecimal systemBalance = systemProfile.getBalance();
+		BigDecimal organizerBalance = organizerProfile.getBalance();
+		BigDecimal toOrganizer = organizerBalance.add(value.multiply(userShare));
+		BigDecimal toSystem = systemBalance.add(value.multiply(systemShare).subtract(voucher.getAmount()));
+		organizerProfile.setBalance(toOrganizer);
+		systemProfile.setBalance(toSystem);
+		//UPDATE HERE
 	}
 
 }

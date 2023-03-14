@@ -136,6 +136,10 @@ public class UserService implements UserDetailsService {
 	public User getByRefId(final String id) {
 		return userDao.getByIdRef(User.class, id);
 	}
+	
+	public Optional<User> getUserSystem(final String roleCode) {
+		return userDao.getUserSystem(roleCode);
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

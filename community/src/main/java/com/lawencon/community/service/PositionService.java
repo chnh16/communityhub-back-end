@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.bouncycastle.crypto.RuntimeCryptoException;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -18,7 +19,7 @@ import com.lawencon.community.pojo.position.PojoPositionUpdateReq;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
-public class PositionService {
+public class PositionService extends ValidationService<Position> {
 	
 	private final PositionDao positionDao;
 	private final PrincipalService principalService;
@@ -133,5 +134,17 @@ public class PositionService {
 		deleteById(id);
 		res.setMessage("Berhasil Dihapus");
 		return res;
+	}
+
+	@Override
+	void valId(Position data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valIdNull(Position data) {
+		// TODO Auto-generated method stub
+		
 	}
 }
