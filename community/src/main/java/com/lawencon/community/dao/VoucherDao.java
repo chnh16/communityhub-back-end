@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.community.model.Transaction;
 import com.lawencon.community.model.Voucher;
 
 @Repository
@@ -61,19 +60,38 @@ public class VoucherDao extends MasterDao<Voucher> {
 		Voucher voucher = null;
 		
 		try {
-			final String sql = "SELECT v.id "
+			final String sql = "SELECT v.id, voucher_code, expired_date, amount, v.created_by, v.updated_by, v.created_at, v.updated_at, v.ver, v.is_active "
 			+ "FROM voucher v"
-			+ " WHERE v.voucher_code = :voucherCode AND v.is_active = true";
+			+ " WHERE v.id = (SELECT id FROM voucher WHERE voucher_code = :voucherCode) AND v.is_active = true";
 			
-			final Object result = em().createNativeQuery(sql, Voucher.class)
-					.setParameter("voucherCode", voucherCode).getSingleResult();
+			
+			final Object result = em().createNativeQuery(sql).setParameter("voucherCode", voucherCode)
+					.getSingleResult();
 			
 			if (result != null) {
+				
 				voucher = new Voucher();
 				final Object[] objArr = (Object[]) result;
 				
 				voucher.setId(objArr[0].toString());
 				
+				voucher.setVoucherCode(objArr[1].toString());
+				voucher.setExpiredDate(Timestamp.valueOf(objArr[2].toString()).toLocalDateTime());
+				voucher.setAmount( new BigDecimal( (String) objArr[3].toString() ));
+				
+				voucher.setCreatedBy(objArr[4].toString());
+				if (objArr[5] != null) {
+					voucher.setUpdatedBy(objArr[5].toString());
+				}
+				
+				voucher.setCreatedAt(Timestamp.valueOf(objArr[6].toString()).toLocalDateTime());
+				
+				if (objArr[7] != null) {
+					voucher.setUpdatedAt(Timestamp.valueOf(objArr[7].toString()).toLocalDateTime());
+				}
+
+				voucher.setVersion(Integer.valueOf(objArr[8].toString()));
+				voucher.setIsActive(Boolean.valueOf(objArr[9].toString()));
 				
 			}
 		} catch (Exception e) {

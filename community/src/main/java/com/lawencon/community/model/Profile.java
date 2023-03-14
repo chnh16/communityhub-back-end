@@ -8,14 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name = "profile", uniqueConstraints = {
-		@UniqueConstraint(name = "profile_ck", columnNames = {"file_id", "industry_id", "position_id"}
-)})
+@Table(name = "profile")
 
 public class Profile extends BaseEntity {
 	@Column(length = 30, nullable = false)
