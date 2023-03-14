@@ -6,13 +6,17 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.community.model.RegisterVerification;
-import com.lawencon.community.model.User;
 
 @Repository
 public class RegisterVerificationDao extends BasePostDao<RegisterVerification> {
 
 	@Override
-	RegisterVerification insert(RegisterVerification data) {
+	public RegisterVerification insert(final RegisterVerification data) {
+		final RegisterVerification res = saveAndFlush(data);
+		return res;
+	}
+
+	public RegisterVerification update(final RegisterVerification data) {
 		final RegisterVerification res = saveAndFlush(data);
 		return res;
 	}
@@ -26,11 +30,12 @@ public class RegisterVerificationDao extends BasePostDao<RegisterVerification> {
 		RegisterVerification registerVerification = null;
 		
 		try {
-			final String sql = "SELECT rv.id, rv.created_by, rv.updated_by, rv.created_at, rv.updated_at, rv.ver, rv.is_active "
-					+ "FROM register_verification rv "
-					+ "WHERE email = :email AND code_verifcation = :codeVerifcation AND expired > now() AND is_active = TRUE ";
+			final StringBuilder str = new StringBuilder();
+			str.append("SELECT rv.id, rv.created_by, rv.updated_by, rv.created_at, rv.updated_at, rv.ver, rv.is_active ")
+			.append("FROM register_verification rv ")
+			.append("WHERE email = :email AND code_verifcation = :codeVerifcation AND expired > now() AND is_active = TRUE ");
 			
-			final Object result = em().createNativeQuery(sql).setParameter("email", email).setParameter("codeVerifcation", codeVerifcation).getSingleResult();
+			final Object result = em().createNativeQuery(toStr(str)).setParameter("email", email).setParameter("codeVerifcation", codeVerifcation).getSingleResult();
 			
 			if (result != null) {
 

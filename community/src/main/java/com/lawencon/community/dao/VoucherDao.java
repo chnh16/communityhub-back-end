@@ -60,14 +60,14 @@ public class VoucherDao extends MasterDao<Voucher> {
 		Voucher voucher = null;
 		
 		try {
-			final String sql = "SELECT v.id, voucher_code, expired_date, amount, v.created_by, v.updated_by, v.created_at, v.updated_at, v.ver, v.is_active "
-			+ "FROM voucher v"
-			+ " WHERE v.id = (SELECT id FROM voucher WHERE voucher_code = :voucherCode) "
-			+ "AND expired_date => NOW() "
-			+ "AND v.is_active = true";
+			 str.append("SELECT v.id, voucher_code, expired_date, amount, v.created_by, v.updated_by, v.created_at, v.updated_at, v.ver, v.is_active ")
+			.append("FROM voucher v")
+			.append(" WHERE v.id = (SELECT id FROM voucher WHERE voucher_code = :voucherCode) ")
+			.append("AND expired_date => NOW() ")
+			.append("AND v.is_active = true");
 			
 			
-			final Object result = em().createNativeQuery(sql).setParameter("voucherCode", voucherCode)
+			final Object result = em().createNativeQuery(toStr(str)).setParameter("voucherCode", voucherCode)
 					.getSingleResult();
 			
 			if (result != null) {

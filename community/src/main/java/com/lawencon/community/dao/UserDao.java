@@ -1,6 +1,5 @@
 package com.lawencon.community.dao;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -8,11 +7,9 @@ import java.util.function.Supplier;
 
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.community.constant.RoleList;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.Role;
 import com.lawencon.community.model.User;
-import com.lawencon.community.model.Voucher;
 
 @Repository
 public class UserDao extends MasterDao<User> {
@@ -61,12 +58,13 @@ public class UserDao extends MasterDao<User> {
 		User user = null;
 
 		try {
-			final String sql = " SELECT tu.id, tu.email, tu.password_user, tu.role_id, tr.role_code ,tu.profile_id, tu.created_by, tu.updated_by, tu.created_at, tu.updated_at, tu.ver, tu.is_active, p.full_name "
-					+ "FROM t_user tu INNER JOIN t_role tr ON tu.role_id = tr.id "
-					+ "INNER JOIN profile p ON tu.profile_id = p.id "
-					+ "WHERE tu.email = :email AND tu.is_active = TRUE ";
+			final StringBuilder str = new StringBuilder();
+			str.append(" SELECT tu.id, tu.email, tu.password_user, tu.role_id, tr.role_code ,tu.profile_id, tu.created_by, tu.updated_by, tu.created_at, tu.updated_at, tu.ver, tu.is_active, p.full_name ")
+					.append("FROM t_user tu INNER JOIN t_role tr ON tu.role_id = tr.id ")
+					.append("INNER JOIN profile p ON tu.profile_id = p.id ")
+					.append("WHERE tu.email = :email AND tu.is_active = TRUE ");
 
-			final Object result = em().createNativeQuery(sql).setParameter("email", email).getSingleResult();
+			final Object result = em().createNativeQuery(toStr(str)).setParameter("email", email).getSingleResult();
 
 			if (result != null) {
 
@@ -121,12 +119,15 @@ public class UserDao extends MasterDao<User> {
 		User user = null;
 
 		try {
-			final String sql = " SELECT tu.id, tu.created_by, tu.updated_by, tu.created_at, tu.updated_at, tu.ver, tu.is_active "
-					+ "FROM t_user tu INNER JOIN t_role tr ON tu.role_id = tr.id "
-					+ "INNER JOIN profile p ON tu.profile_id = p.id " + "INNER JOIN t_role r ON tu.role_id = r.id "
-					+ "WHERE r.role_code = :roleCode AND tu.is_active = TRUE ";
+			final StringBuilder str = new StringBuilder();
+			str.append(" SELECT tu.id, tu.created_by, tu.updated_by, tu.created_at, tu.updated_at, tu.ver, tu.is_active ")
+					.append("FROM t_user tu ")
+					.append("INNER JOIN t_role tr ON tu.role_id = tr.id ")
+					.append("INNER JOIN profile p ON tu.profile_id = p.id " )
+					.append("INNER JOIN t_role r ON tu.role_id = r.id ")
+					.append("WHERE r.role_code = :roleCode AND tu.is_active = TRUE ");
 
-			final Object result = em().createNativeQuery(sql).setParameter("roleCode", roleCode).getSingleResult();
+			final Object result = em().createNativeQuery(toStr(str)).setParameter("roleCode", roleCode).getSingleResult();
 
 			if (result != null) {
 

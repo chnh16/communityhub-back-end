@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.community.model.Role;
-import com.lawencon.community.model.User;
 
 @Repository
 public class RoleDao extends MasterDao<Role> {
