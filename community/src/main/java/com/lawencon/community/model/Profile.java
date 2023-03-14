@@ -27,8 +27,8 @@ public class Profile extends BaseEntity {
 	@Column(length = 30, nullable = false)
 	private String city;
 
-	@Column(nullable = false)
-	private Integer postalCode;
+	@Column(length = 30, nullable = false)
+	private String postalCode;
 
 	@Column(length = 13, nullable = false)
 	private String noHandphone;
@@ -82,11 +82,11 @@ public class Profile extends BaseEntity {
 		this.city = city;
 	}
 
-	public Integer getPostalCode() {
+	public String getPostalCode() {
 		return postalCode;
 	}
 
-	public void setPostalCode(Integer postalCode) {
+	public void setPostalCode(String postalCode) {
 		this.postalCode = postalCode;
 	}
 
