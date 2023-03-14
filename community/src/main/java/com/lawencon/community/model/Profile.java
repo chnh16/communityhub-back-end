@@ -8,14 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name = "profile", uniqueConstraints = {
-		@UniqueConstraint(name = "profile_ck", columnNames = {"file_id", "industry_id", "position_id"}
-)})
+@Table(name = "profile")
 
 public class Profile extends BaseEntity {
 	@Column(length = 30, nullable = false)
@@ -30,8 +27,8 @@ public class Profile extends BaseEntity {
 	@Column(length = 30, nullable = false)
 	private String city;
 
-	@Column(nullable = false)
-	private Integer postalCode;
+	@Column(length = 30, nullable = false)
+	private String postalCode;
 
 	@Column(length = 13, nullable = false)
 	private String noHandphone;
@@ -51,6 +48,7 @@ public class Profile extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "position_id", nullable = false)
 	private Position position;
+	private String company;
 
 	public String getFullName() {
 		return fullName;
@@ -84,11 +82,11 @@ public class Profile extends BaseEntity {
 		this.city = city;
 	}
 
-	public Integer getPostalCode() {
+	public String getPostalCode() {
 		return postalCode;
 	}
 
-	public void setPostalCode(Integer postalCode) {
+	public void setPostalCode(String postalCode) {
 		this.postalCode = postalCode;
 	}
 
@@ -123,5 +121,30 @@ public class Profile extends BaseEntity {
 	public void setFile(File file) {
 		this.file = file;
 	}
+
+	public Industry getIndustry() {
+		return industry;
+	}
+
+	public void setIndustry(Industry industry) {
+		this.industry = industry;
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
+	public String getCompany() {
+		return company;
+	}
+
+	public void setCompany(String company) {
+		this.company = company;
+	}
+	
 
 }

@@ -26,6 +26,11 @@ public class TransactionDao extends BasePostDao<Transaction>{
 		return res;
 	}
 	
+	public Transaction getRefById(final String id) {
+		final Transaction res = getByIdRef(Transaction.class, id);
+		return res;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Transaction> getByCourseId (final String courseId){
 		final StringBuilder str = new StringBuilder();
@@ -61,13 +66,13 @@ public class TransactionDao extends BasePostDao<Transaction>{
 			str.append("SELECT * FROM t_transaction t ").append("AND t.is_active = TRUE");
 		}
 		if(type.equals("event")) {
-			str.append("SELECT * FROM t_transaction t ").append("WHERE t.event_id <> NULL ").append("AND t.is_active = TRUE");
+			str.append("SELECT * FROM t_transaction t ").append("WHERE t.event_id IS NOT NULL ").append("AND t.is_active = TRUE");
 		}
 		if(type.equals("course")) {
-			str.append("SELECT * FROM t_transaction t ").append("WHERE t.course_id <> NULL ").append("AND t.is_active = TRUE");
+			str.append("SELECT * FROM t_transaction t ").append("WHERE t.course_id IS NOT NULL ").append("AND t.is_active = TRUE");
 		}
 		if(type.equals("membership")) {
-			str.append("SELECT * FROM t_transaction t ").append("WHERE t.membership_id <> NULL ").append("AND t.is_active = TRUE");
+			str.append("SELECT * FROM t_transaction t ").append("WHERE t.membership_id IS NOT NULL ").append("AND t.is_active = TRUE");
 		}
 		res = em().createNativeQuery(toStr(str), Transaction.class).getResultList();
 		return res;

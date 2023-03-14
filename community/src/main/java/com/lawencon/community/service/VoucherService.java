@@ -53,10 +53,12 @@ public class VoucherService {
 		return voucherDao.getAll();
 	}
 	
-	public Optional<Voucher> getByVoucherCode(final String voucherCode){
-		return null;
+	public Voucher getRefById(final String id) {
+		return voucherDao.getRefById(id);
 	}
 
+	
+	
 	public Voucher getByIdAndDetach(final String id) {
 		return voucherDao.getByIdAndDetach(Voucher.class, id);
 	}
@@ -130,6 +132,10 @@ public class VoucherService {
 			pojos.add(pojo);
 		}
 		return pojos;
+	}
+	
+	public Optional<Voucher> getByVoucherCode(final String vocherCode) {	
+		return voucherDao.getByVoucherCode(vocherCode);
 	}
 
 	public PojoInsertRes insertRes(final PojoVoucherInsertReq data) {
