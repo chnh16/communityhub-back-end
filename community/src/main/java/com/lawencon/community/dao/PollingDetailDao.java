@@ -31,6 +31,18 @@ public class PollingDetailDao extends MasterDao<PollingDetail>{
 		final List<PollingDetail> res = em().createNativeQuery(toStr(str), PollingDetail.class).getResultList();
 		return res;
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<PollingDetail> getAllByPostId(final String postId) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM polling_detail pd ")
+			.append(" WHERE pd.post_id = :postId AND pd.is_active = true");
+		final List<PollingDetail> res = em().createNativeQuery(toStr(str), PollingDetail.class)
+				.setParameter("postId", postId)
+				.getResultList();
+		return res;
+	}
 
 	@Override
 	public PollingDetail update(final PollingDetail data) {

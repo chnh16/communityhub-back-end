@@ -26,10 +26,33 @@ public class CategoryService {
 		this.categoryDao = categoryDao;
 	}
 	
+	private void valIdNull(final Category data) {
+		if (data.getId() != null) {
+			throw new RuntimeException("ID harus kosong");
+		}
+	}
+
+	private void valIdNotNull(final Category data) {
+		if (data.getId() == null) {
+			throw new RuntimeException("ID kosong");
+		}
+	}
+
+	private void valNotNullable(final Category data) {
+		if (data.getCategoryCode() == null) {
+			throw new RuntimeException("Kode Kategori Kosong");
+		}
+		if (data.getCategoryName() == null) {
+			throw new RuntimeException("Nama Kategori Kosong");
+		}
+	}
+	
 	public Category insertCategory(final Category data) {
 		Category categoryInsert = null;
 		try {
 			ConnHandler.begin();
+			valIdNull(data);
+			valNotNullable(data);
 			categoryInsert = categoryDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -57,6 +80,7 @@ public class CategoryService {
 	
 	public Category updateIndustry(final Category data) {
 		Category categoryUpdate = null;
+		valIdNotNull(data);
 		try {
 			ConnHandler.begin();
 			categoryUpdate = categoryDao.update(data);
@@ -81,7 +105,6 @@ public class CategoryService {
 		if(data.getCategoryName() != null) {
 			category.setCategoryName(data.getCategoryName());			
 		}
-//		category.setUpdatedAt(LocalDateTime.now());
 		
 		categoryUpdate = updateIndustry(category);
 		

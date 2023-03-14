@@ -30,11 +30,34 @@ public class IndustryService{
 		this.industryDao = industryDao;
 	}
 
+	private void valIdNull(final Industry data) {
+		if (data.getId() != null) {
+			throw new RuntimeException("ID harus kosong");
+		}
+	}
+
+	private void valIdNotNull(final Industry data) {
+		if (data.getId() == null) {
+			throw new RuntimeException("ID kosong");
+		}
+	}
+
+	private void valNotNullable(final Industry data) {
+		if (data.getIndustryCode() == null) {
+			throw new RuntimeException("Kode Industry Kosong");
+		}
+		if (data.getIndustryName() == null) {
+			throw new RuntimeException("Nama Industry Kosong");
+		}
+	}
+	
 	
 	public Industry insertIndustry(final Industry data) {
 		Industry industryInsert = null;
 		try {
 			ConnHandler.begin();
+			valIdNull(data);
+			valNotNullable(data);
 			industryInsert = industryDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -61,7 +84,10 @@ public class IndustryService{
 	
 	public Industry updateIndustry(final Industry data) {
 		Industry industryUpdate = null;
+		valIdNotNull(data);
+		
 		try {
+			ConnHandler.getManager().detach(industryUpdate);
 			ConnHandler.begin();
 			industryUpdate = industryDao.update(data);
 			ConnHandler.commit();

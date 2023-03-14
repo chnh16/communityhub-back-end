@@ -1,15 +1,24 @@
 package com.lawencon.community.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.pollinganswer.PojoPollingAnswerGetCountRes;
+import com.lawencon.community.pojo.pollinganswer.PojoPollingAnswerInsertReq;
+import com.lawencon.community.pojo.pollingdetail.PojoPollingDetailGetAllRes;
 import com.lawencon.community.pojo.pollingdetail.PojoPollingDetailInsertReq;
 import com.lawencon.community.pojo.pollingdetail.PojoPollingDetailUpdateReq;
 import com.lawencon.community.service.PollingService;
@@ -35,4 +44,30 @@ public class PollingController {
 		final PojoUpdateRes res = pollingService.updatePollingDetail(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
+	
+	@GetMapping("{postId}")
+	public ResponseEntity<List<PojoPollingDetailGetAllRes>> getAll(@PathVariable("postId") String postId) {
+		final List<PojoPollingDetailGetAllRes> res = pollingService.getAllDetail(postId);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	
+	@DeleteMapping("{pollingId}")
+	public ResponseEntity<PojoDeleteRes> deletePolling(@PathVariable("pollingId") String pollingId) {
+		final PojoDeleteRes res = pollingService.deletePollingRes(pollingId);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@PostMapping("answer")
+	public ResponseEntity<PojoInsertRes> insertPollingAnswer(@RequestBody PojoPollingAnswerInsertReq data) {
+		final PojoInsertRes res = pollingService.insertPollingAnswer(data);
+		return new ResponseEntity<>(res, HttpStatus.CREATED);
+	}
+	
+	@GetMapping("count/{detailId}")
+	public ResponseEntity<PojoPollingAnswerGetCountRes> getCount(@PathVariable("detailId") String detailId) {
+		final PojoPollingAnswerGetCountRes res = pollingService.getCountAnswer(detailId);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
 }

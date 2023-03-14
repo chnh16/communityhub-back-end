@@ -50,7 +50,7 @@ public class CategoryController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<PojoDeleteRes> deleteIndustry(@PathVariable("id") String id) {
+	public ResponseEntity<PojoDeleteRes> deleteCategory(@PathVariable("id") String id) {
 		final PojoDeleteRes res = categoryService.deleteRes(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}

@@ -24,10 +24,11 @@ import com.lawencon.community.pojo.postdetail.PojoPostDetailGetByPostIdRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailInsertReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailUpdateReq;
 import com.lawencon.community.pojo.postfile.PojoPostFileGetAllRes;
-import com.lawencon.community.pojo.postfile.PojoPostFileInsertReq;
+import com.lawencon.community.pojo.postfile.PojoPostFileInsertListReq;
 import com.lawencon.community.pojo.posttype.PojoPostTypeGetAllRes;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkGetAllRes;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkInsertReq;
+import com.lawencon.community.pojo.userlike.PojoUserLikeGetAllRes;
 import com.lawencon.community.pojo.userlike.PojoUserLikeInsertReq;
 import com.lawencon.community.service.PostService;
 import com.lawencon.community.service.PostTypeService;
@@ -70,7 +71,7 @@ public class PostController {
 	}
 	
 	@PostMapping("post-file")
-	public ResponseEntity<PojoInsertRes> insertPostFile(@RequestBody PojoPostFileInsertReq data){
+	public ResponseEntity<PojoInsertRes> insertPostFile(@RequestBody PojoPostFileInsertListReq data){
 		final PojoInsertRes res = postService.insertPostFile(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
@@ -93,9 +94,15 @@ public class PostController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("like/{id}")
-	public ResponseEntity<PojoDeleteRes> deleteUserLikeRes(@PathVariable("id") String id){
-		final PojoDeleteRes res = postService.deleteUserLikeRes(id);
+	@GetMapping("likes/{postId}")
+	public ResponseEntity<List<PojoUserLikeGetAllRes>> getAllUserLike(@PathVariable("postId") String postId){
+		final List<PojoUserLikeGetAllRes> res = postService.getLikeByUser(postId);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("like/{postId}")
+	public ResponseEntity<PojoDeleteRes> deleteUserLikeRes(@PathVariable("postId") String postId){
+		final PojoDeleteRes res = postService.deleteUserLikeRes(postId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
@@ -111,8 +118,8 @@ public class PostController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<List<PojoPostDetailGetByPostIdRes>> getByPostId(@PathVariable("id") final String id) {
+	@GetMapping("total-commentar/{id}")
+	public ResponseEntity<List<PojoPostDetailGetByPostIdRes>> getByPostId(@PathVariable("id") String id) {
 		final List<PojoPostDetailGetByPostIdRes> res = postService.getByPostId(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
@@ -144,6 +151,12 @@ public class PostController {
 	@GetMapping("list-bookmark")
 	public ResponseEntity<List<PojoUserBookmarkGetAllRes>> getAllBookmark(){
 		final List<PojoUserBookmarkGetAllRes> res = postService.getAllByUserRes();
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("total-bookmark/{postId}")
+	public ResponseEntity<PojoUserBookmarkGetAllRes> getAllCountedBookmark(@PathVariable("postId") String postId){
+		final PojoUserBookmarkGetAllRes res = postService.getCountBookmark(postId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
