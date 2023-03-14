@@ -33,13 +33,13 @@ public class MembershipController {
 		this.membershipService = membershipService;
 	}
 	
-	@PostMapping("/add")
+	@PostMapping("add")
 	private ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoMembershipInsertReq data){
 		final PojoInsertRes res = membershipService.insert(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 	
-	@PutMapping
+	@PutMapping("edit")
 	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoMembershipUpdateReq data){
 		final PojoUpdateRes res = membershipService.update(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);

@@ -31,19 +31,19 @@ public class CategoryController {
 		this.categoryService = categoryService;
 	}
 
-	@PostMapping
+	@PostMapping("add")
 	public ResponseEntity<PojoInsertRes> insertCategory(@RequestBody PojoCategoryInsertReq data) {
 		final PojoInsertRes res = categoryService.insertCategory(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 
-	@GetMapping("list")
+	@GetMapping
 	public ResponseEntity<List<PojoCategoryGetAllRes>> getAllIndustry() {
 		final List<PojoCategoryGetAllRes> res = categoryService.getAllCategory();
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 
-	@PutMapping
+	@PutMapping("edit")
 	public ResponseEntity<PojoUpdateRes> updateCategory(@RequestBody PojoCategoryUpdateReq data) {
 		final PojoUpdateRes res = categoryService.updateIndustry(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);

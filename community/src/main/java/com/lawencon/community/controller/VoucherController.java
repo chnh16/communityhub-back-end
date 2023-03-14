@@ -36,19 +36,19 @@ public class VoucherController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@PostMapping("/add")
+	@PostMapping("add")
 	private ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoVoucherInsertReq data){
 		final PojoInsertRes res = voucherService.insertRes(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("edit")
 	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoVoucherUpdateReq data){
 		final PojoUpdateRes res = voucherService.updateRes(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("{id}")
 	private ResponseEntity<PojoDeleteRes> delete(@PathVariable final String id){
 		final PojoDeleteRes res = voucherService.deleteRes(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
