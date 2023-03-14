@@ -1,11 +1,13 @@
 package com.lawencon.community.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.community.model.Role;
+import com.lawencon.community.model.User;
 
 @Repository
 public class RoleDao extends MasterDao<Role> {
@@ -57,12 +59,30 @@ public class RoleDao extends MasterDao<Role> {
 		final StringBuilder str = new StringBuilder();
 		Role role = null;
 		try {
-			str.append("SELECT * FROM t_role")
-				.append(" WHERE role_code = :roleCode")
-				.append(" AND is_active = TRUE");
-			final Object result = em().createNativeQuery(toStr(str), Role.class).setParameter("roleCode", roleCode).getSingleResult();
-			if(result != null) {
-				role = (Role) result;
+			str.append("SELECT r.id, r.created_by, r.updated_by, r.created_at, r.updated_at, r.ver, r.is_active FROM t_role r")
+				.append(" WHERE r.role_code = :roleCode")
+				.append(" AND r.is_active = TRUE");
+			final Object result = em().createNativeQuery(toStr(str)).setParameter("roleCode", roleCode).getSingleResult();
+			if (result != null) {
+
+				role = new Role();
+				final Object[] objArr = (Object[]) result;
+
+				role.setId(objArr[0].toString());
+
+				role.setCreatedBy(objArr[1].toString());
+				if (objArr[2] != null) {
+					role.setUpdatedBy(objArr[2].toString());
+				}
+
+				role.setCreatedAt(Timestamp.valueOf(objArr[3].toString()).toLocalDateTime());
+
+				if (objArr[4] != null) {
+					role.setUpdatedAt(Timestamp.valueOf(objArr[4].toString()).toLocalDateTime());
+				}
+
+				role.setVersion(Integer.valueOf(objArr[5].toString()));
+				role.setIsActive(Boolean.valueOf(objArr[6].toString()));
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();

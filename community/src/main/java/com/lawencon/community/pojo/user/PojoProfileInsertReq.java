@@ -8,7 +8,7 @@ public class PojoProfileInsertReq {
 	private String province;
 	private String city;
 	private String phoneNumber;
-	private Integer postalCode;
+	private String postalCode;
 	private String positionId;
 	private String industryId;
 	private String company;
@@ -44,10 +44,10 @@ public class PojoProfileInsertReq {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public Integer getPostalCode() {
+	public String getPostalCode() {
 		return postalCode;
 	}
-	public void setPostalCode(Integer postalCode) {
+	public void setPostalCode(String postalCode) {
 		this.postalCode = postalCode;
 	}
 	public String getPositionId() {

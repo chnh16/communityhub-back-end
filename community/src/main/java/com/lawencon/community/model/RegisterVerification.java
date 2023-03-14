@@ -1,5 +1,8 @@
 package com.lawencon.community.model;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
@@ -15,7 +18,7 @@ public class RegisterVerification extends BaseEntity {
 	private String codeVerifcation;
 
 	@Column(nullable = false)
-	private Integer expired;
+	private LocalDateTime expired;
 
 	public String getEmail() {
 		return email;
@@ -33,11 +36,11 @@ public class RegisterVerification extends BaseEntity {
 		this.codeVerifcation = codeVerifcation;
 	}
 
-	public Integer getExpired() {
+	public LocalDateTime getExpired() {
 		return expired;
 	}
 
-	public void setExpired(Integer expired) {
+	public void setExpired(LocalDateTime expired) {
 		this.expired = expired;
 	}
 

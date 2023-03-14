@@ -9,15 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.VoucherDao;
-import com.lawencon.community.model.Event;
-import com.lawencon.community.model.Transaction;
 import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.event.PojoEventResGetByCategoryId;
 import com.lawencon.community.pojo.voucher.PojoVoucherGetAllRes;
-import com.lawencon.community.pojo.voucher.PojoVoucherGetByVoucherCodeRes;
 import com.lawencon.community.pojo.voucher.PojoVoucherInsertReq;
 import com.lawencon.community.pojo.voucher.PojoVoucherUpdateReq;
 
