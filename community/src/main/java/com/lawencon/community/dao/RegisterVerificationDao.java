@@ -15,8 +15,7 @@ public class RegisterVerificationDao extends BasePostDao<RegisterVerification>{
 
 	@Override
 	boolean delete(String id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		return deleteById(RegisterVerification.class, id);
+		}
 	
 }

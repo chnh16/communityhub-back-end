@@ -12,6 +12,7 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.constant.TransactionType;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.TransactionDao;
+import com.lawencon.community.dao.VoucherDao;
 import com.lawencon.community.model.Course;
 import com.lawencon.community.model.Event;
 import com.lawencon.community.model.File;
@@ -34,6 +35,7 @@ import com.lawencon.security.principal.PrincipalService;
 public class TransactionService {
 	private final TransactionDao transactionDao;
 	private final FileDao fileDao;
+	private final VoucherDao voucherDao;
 	private final UserService userService;
 	private final EventService eventService;
 	private final MembershipService membershipService;
@@ -44,7 +46,7 @@ public class TransactionService {
 	public TransactionService(final TransactionDao transactionDao, final UserService userService,
 			final EventService eventService, final MembershipService membershipService,
 			final CourseService courseService, final PrincipalService principalService,
-			final VoucherService voucherService, FileDao fileDao) {
+			final VoucherService voucherService, FileDao fileDao, VoucherDao voucherDao) {
 		this.transactionDao = transactionDao;
 		this.userService = userService;
 		this.eventService = eventService;
@@ -53,6 +55,7 @@ public class TransactionService {
 		this.principalService = principalService;
 		this.voucherService = voucherService;
 		this.fileDao = fileDao;
+		this.voucherDao = voucherDao;
 	}
 
 	private Transaction insert(final Transaction data) {
@@ -155,7 +158,7 @@ public class TransactionService {
 		}
 		if (data.getVoucherCode() != null) {
 			Voucher voucher = null;
-			final Optional<Voucher> optVoucher = voucherService.getByVoucherCode(data.getVoucherCode());
+			final Optional<Voucher> optVoucher = voucherDao.getByVoucherCode(data.getVoucherCode());
 			if (optVoucher.isPresent()) {
 				voucher = voucherService.getRefById(optVoucher.get().getId());
 				trans.setVoucher(voucher);
