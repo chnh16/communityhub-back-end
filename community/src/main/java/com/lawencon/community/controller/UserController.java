@@ -14,13 +14,19 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.model.User;
+import com.lawencon.community.pojo.PojoInsertRes;
+import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
 import com.lawencon.community.pojo.user.PojoLoginReq;
 import com.lawencon.community.pojo.user.PojoLoginRes;
+import com.lawencon.community.pojo.user.PojoUserRegisterReq;
+import com.lawencon.community.pojo.user.PojoVerificationUpdateReq;
 import com.lawencon.community.service.JwtService;
 import com.lawencon.community.service.UserService;
 
@@ -64,6 +70,17 @@ public class UserController {
         return new ResponseEntity<>(loginRes, HttpStatus.OK);
     }
 	
+	@PostMapping("regis")
+	public ResponseEntity<PojoInsertRes> register(@Valid @RequestBody final PojoUserRegisterReq data){
+		final PojoInsertRes res = userService.register(data);
+		return new ResponseEntity<>(res, HttpStatus.CREATED);
+	}
+	
+	@PutMapping
+	public ResponseEntity<PojoUpdateRes> verification(@RequestBody PojoVerificationUpdateReq data) {
+		final PojoUpdateRes res = userService.verification(data);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
 	
 
 }
