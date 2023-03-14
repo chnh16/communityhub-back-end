@@ -20,7 +20,6 @@ import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.RegisterVerificationDao;
 import com.lawencon.community.dao.RoleDao;
 import com.lawencon.community.dao.UserDao;
-import com.lawencon.community.model.Article;
 import com.lawencon.community.model.EmailDetails;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Industry;
@@ -31,8 +30,8 @@ import com.lawencon.community.model.Role;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.event.PojoEventReqUpdate;
 import com.lawencon.community.pojo.user.PojoUserRegisterReq;
+import com.lawencon.community.pojo.user.PojoVerificationCodeUpdateReq;
 import com.lawencon.community.pojo.user.PojoVerificationUpdateReq;
 import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
@@ -53,7 +52,8 @@ public class UserService implements UserDetailsService {
 
 	public UserService(UserDao userDao, FileDao fileDao, RoleDao roleDao, ProfileDao profileDao,
 			PositionService positionService, PasswordEncoder encoder, IndustryService industryService,
-			EmailService emailService, RegisterVerificationDao registerVerificationDao, PrincipalService principalService) {
+			EmailService emailService, RegisterVerificationDao registerVerificationDao,
+			PrincipalService principalService) {
 		this.userDao = userDao;
 		this.fileDao = fileDao;
 		this.profileDao = profileDao;
@@ -209,8 +209,9 @@ public class UserService implements UserDetailsService {
 		ConnHandler.commit();
 
 		final EmailDetails email = new EmailDetails();
-		email.setMsgBody("Halo " + userInsert.getProfile().getFullName() + "Akun anda " + " email : "
-				+ userInsert.getEmail() + ", Mohon Lakukan Verification " + generatePass);
+		email.setMsgBody("Halo " + userInsert.getProfile().getFullName() + "\nAkun anda " + " email : "
+				+ userInsert.getEmail() + "\nKode Verifikasi : " + generatePass
+				+ "\nMohon lakukan verifkasi untuk akun anda, menggunakan kode verifikasi diatas, lakukan verifikasi dalam 5 menit \n TerimaKasih");
 		email.setRecipient(userInsert.getEmail());
 		email.setSubject("Berhasil ");
 
@@ -222,32 +223,51 @@ public class UserService implements UserDetailsService {
 	}
 
 	public PojoUpdateRes verification(final PojoVerificationUpdateReq data) {
-		
+
 		final User userEmail = userDao.getRefById(principalService.getAuthPrincipal());
-		
-		if(registerVerificationDao.getVerification(userEmail.getEmail(), data.getCodeVerifcation()).isEmpty()) {
-            throw new RuntimeException("Kode verifikasi anda tidak cocok");
-        }
-		
+
+		if (registerVerificationDao.getVerification(userEmail.getEmail(), data.getCodeVerifcation()).isEmpty()) {
+			throw new RuntimeException("Kode verifikasi anda tidak cocok");
+		}
+
 		User userVerification = null;
 
 		userVerification = getByIdAndDetach(principalService.getAuthPrincipal());
 
 		final User user = userVerification;
-		
-//		final RegisterVerification = get
-//		
-//		if(data.getCodeVerifcation().equals(user))
-		
+
 		user.setIsVerified(true);
-		
+
 		ConnHandler.begin();
 		userDao.update(user);
 		ConnHandler.commit();
+
+		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
+
+		pojoUpdate.setMessage("Anda Berhasil Melakukan Verifikasi");
+		return pojoUpdate;
+	}
+
+	public PojoUpdateRes updateCodeVerification(final PojoVerificationCodeUpdateReq data) {
+
+		RegisterVerification registerVerification = null;
+		registerVerification = registerVerificationDao.getByIdAndDetach(RegisterVerification.class, data.getRegisterVerificationId());
+
+		final User userEmail = userDao.getRefById(principalService.getAuthPrincipal());
 		
+		final RegisterVerification registerVerificationUpdate = new RegisterVerification();
+		final String generatePass = Generate.generateCode(8);
+
+		registerVerificationUpdate.setEmail(userEmail.getEmail());
+		registerVerificationUpdate.setCodeVerifcation(generatePass);
+		registerVerificationUpdate.setExpired(LocalDateTime.now().plusMinutes(5));
+		
+		ConnHandler.begin();
+		registerVerificationDao.update(registerVerificationUpdate);
+		ConnHandler.commit();
 		
 		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
-		
+
 		pojoUpdate.setMessage("Anda Berhasil Melakukan Verifikasi");
 		return pojoUpdate;
 	}

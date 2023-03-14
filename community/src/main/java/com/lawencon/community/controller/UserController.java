@@ -26,6 +26,7 @@ import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
 import com.lawencon.community.pojo.user.PojoLoginReq;
 import com.lawencon.community.pojo.user.PojoLoginRes;
 import com.lawencon.community.pojo.user.PojoUserRegisterReq;
+import com.lawencon.community.pojo.user.PojoVerificationCodeUpdateReq;
 import com.lawencon.community.pojo.user.PojoVerificationUpdateReq;
 import com.lawencon.community.service.JwtService;
 import com.lawencon.community.service.UserService;
@@ -79,6 +80,12 @@ public class UserController {
 	@PutMapping
 	public ResponseEntity<PojoUpdateRes> verification(@RequestBody PojoVerificationUpdateReq data) {
 		final PojoUpdateRes res = userService.verification(data);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@PutMapping("code")
+	public ResponseEntity<PojoUpdateRes> updateCodeVerification(@RequestBody PojoVerificationCodeUpdateReq data) {
+		final PojoUpdateRes res = userService.updateCodeVerification(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
