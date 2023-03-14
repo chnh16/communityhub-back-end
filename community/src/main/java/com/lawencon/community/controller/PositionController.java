@@ -31,13 +31,13 @@ public class PositionController {
 		this.positionService = positionService;
 	}
 
-	@PostMapping("/add")
+	@PostMapping("add")
 	public ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoPositionInsertReq data) {
 		final PojoInsertRes res = positionService.insert(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 
-	@PutMapping
+	@PutMapping("edit")
 	public ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoPositionUpdateReq data) {
 		final PojoUpdateRes res = positionService.update(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);

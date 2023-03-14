@@ -31,19 +31,19 @@ public class IndustryController {
 		this.industryService = industryService;
 	}
 	
-	@PostMapping
+	@PostMapping("add")
 	public ResponseEntity<PojoInsertRes> insertIndustry(@RequestBody PojoIndustryInsertReq data){
 		final PojoInsertRes res = industryService.insertIndustry(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping("list")
+	@GetMapping
 	public ResponseEntity<List<PojoIndustryGetAllRes>> getAllIndustry(){
 		final List<PojoIndustryGetAllRes> res = industryService.getAllIndustry();
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@PutMapping
+	@PutMapping("edit")
 	public ResponseEntity<PojoUpdateRes> updateIndustry(@RequestBody PojoIndustryUpdateReq data){
 		final PojoUpdateRes res = industryService.updateIndustry(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
