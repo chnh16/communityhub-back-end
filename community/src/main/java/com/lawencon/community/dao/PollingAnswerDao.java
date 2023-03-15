@@ -1,11 +1,13 @@
 package com.lawencon.community.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.PollingAnswer;
+import com.lawencon.community.pojo.pollinganswer.PojoPollingAnswerGetCountRes;
 
 @Repository
 public class PollingAnswerDao extends BasePostDao<PollingAnswer>{
@@ -42,6 +44,40 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer>{
 				.getSingleResult().toString());
 		
 		return countPoll;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PojoPollingAnswerGetCountRes> getCountByChoiceId(final String detailId){
+		final List<PojoPollingAnswerGetCountRes> listPollingAnswer = new ArrayList<>();
+		
+		try {
+			final StringBuilder str = new StringBuilder();
+			str.append("SELECT pc.id, COUNT(pa.polling_choice_id) FROM polling_answer pa ")
+			.append(" INNER JOIN polling_choice pc ON pc.id = pa.polling_choice_id ")
+			.append("GROUP BY pc.id ")
+			.append(" HAVING pc.polling_detail_id = :detailId");
+			
+			final List<Object> result = em().createNativeQuery(toStr(str))
+					.setParameter("detailId", detailId)
+					.getResultList();
+			
+			if (result != null) {
+				for (final Object objs : result) {
+					final Object[] obj = (Object[]) objs;
+					
+					final PojoPollingAnswerGetCountRes pollingChoice = new PojoPollingAnswerGetCountRes();
+					pollingChoice.setPollingChoiceId(obj[0].toString());
+					pollingChoice.setCountPollAnswer(Long.valueOf(obj[1].toString()));
+					
+					listPollingAnswer.add(pollingChoice);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return listPollingAnswer;
 	}
 
 }

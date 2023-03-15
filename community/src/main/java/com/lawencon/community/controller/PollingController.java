@@ -45,9 +45,9 @@ public class PollingController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping("{postId}")
-	public ResponseEntity<List<PojoPollingDetailGetAllRes>> getAll(@PathVariable("postId") String postId) {
-		final List<PojoPollingDetailGetAllRes> res = pollingService.getAllDetail(postId);
+	@GetMapping("{postId}/{detailId}")
+	public ResponseEntity<List<PojoPollingDetailGetAllRes>> getAll(@PathVariable("postId") String postId, @PathVariable("detailId") String detailId) {
+		final List<PojoPollingDetailGetAllRes> res = pollingService.getAllDetail(postId, detailId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
@@ -64,9 +64,15 @@ public class PollingController {
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 	
+//	@GetMapping("count/{detailId}")
+//	public ResponseEntity<PojoPollingAnswerGetCountRes> getCount(@PathVariable("detailId") String detailId) {
+//		final PojoPollingAnswerGetCountRes res = pollingService.getCountAnswer(detailId);
+//		return new ResponseEntity<>(res, HttpStatus.OK);
+//	}
+	
 	@GetMapping("count/{detailId}")
-	public ResponseEntity<PojoPollingAnswerGetCountRes> getCount(@PathVariable("detailId") String detailId) {
-		final PojoPollingAnswerGetCountRes res = pollingService.getCountAnswer(detailId);
+	public ResponseEntity<List<PojoPollingAnswerGetCountRes>> getTotalAnswerByChoiceId(@PathVariable("detailId") String detailId) {
+		final List<PojoPollingAnswerGetCountRes> res = pollingService.getAnswerByChoiceId(detailId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
