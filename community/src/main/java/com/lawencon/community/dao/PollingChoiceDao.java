@@ -26,9 +26,20 @@ public class PollingChoiceDao extends MasterDao<PollingChoice>{
 	@Override
 	public List<PollingChoice> getAll() {
 		final StringBuilder str = new StringBuilder();
-		str.append("SELECT * FROM polling_answer pa")
-			.append(" WHERE is_active = true");
+		str.append("SELECT * FROM polling_choice pc ")
+			.append(" WHERE pc.is_active = true");
 		final List<PollingChoice> res = em().createNativeQuery(toStr(str), PollingChoice.class).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PollingChoice> getChoiceByDetail(final String detailId) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM polling_choice pc ")
+		.append(" WHERE pc.polling_detail_id = :detailId AND pc.is_active = true");
+		final List<PollingChoice> res = em().createNativeQuery(toStr(str), PollingChoice.class)
+				.setParameter("detailId", detailId)
+				.getResultList();
 		return res;
 	}
 
