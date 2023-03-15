@@ -46,23 +46,23 @@ public class TransactionController {
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/event/{id}")
-	public ResponseEntity<List<PojoTransactionGetByEventIdRes>> getByEventId(@PathVariable("id") final String id) {
-		final List<PojoTransactionGetByEventIdRes> res = transactionService.getByEventId(id);
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
-	
-	@GetMapping("/course/{id}")
-	public ResponseEntity<List<PojoTransactionGetByCourseIdRes>> getByCourseId(@PathVariable("id") final String id) {
-		final List<PojoTransactionGetByCourseIdRes> res = transactionService.getByCourseId(id);
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
-	
-	@GetMapping("/membership/{id}")
-	public ResponseEntity<List<PojoTransactionGetByMembershipIdRes>> getByMembershipId(@PathVariable("id") final String id) {
-		final List<PojoTransactionGetByMembershipIdRes> res = transactionService.getByMembershipId(id);
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
+//	@GetMapping("/event/{id}")
+//	public ResponseEntity<List<PojoTransactionGetByEventIdRes>> getByEventId(@PathVariable("id") final String id) {
+//		final List<PojoTransactionGetByEventIdRes> res = transactionService.getByEventId(id);
+//		return new ResponseEntity<>(res, HttpStatus.OK);
+//	}
+//	
+//	@GetMapping("/course/{id}")
+//	public ResponseEntity<List<PojoTransactionGetByCourseIdRes>> getByCourseId(@PathVariable("id") final String id) {
+//		final List<PojoTransactionGetByCourseIdRes> res = transactionService.getByCourseId(id);
+//		return new ResponseEntity<>(res, HttpStatus.OK);
+//	}
+//	
+//	@GetMapping("/membership/{id}")
+//	public ResponseEntity<List<PojoTransactionGetByMembershipIdRes>> getByMembershipId(@PathVariable("id") final String id) {
+//		final List<PojoTransactionGetByMembershipIdRes> res = transactionService.getByMembershipId(id);
+//		return new ResponseEntity<>(res, HttpStatus.OK);
+//	}
 	
 	@PutMapping
 	private ResponseEntity<PojoUpdateRes> updateRes(@RequestBody final PojoUpdateTransactionReq data){

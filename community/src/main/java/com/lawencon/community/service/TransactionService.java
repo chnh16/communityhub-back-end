@@ -67,12 +67,12 @@ public class TransactionService {
 
 	private Transaction insert(final Transaction data) {
 		Transaction transInsert = null;
-		BigDecimal grandTotal = null;
+		
 		try {
 			final Transaction trans = new Transaction();
 			ConnHandler.begin();
 			trans.setTransactionDate(LocalDateTime.now());
-			trans.setGrandTotal(grandTotal);
+			trans.setGrandTotal(data.getGrandTotal());
 			trans.setFile(data.getFile());
 			trans.setCreatedAt(LocalDateTime.now());
 			trans.setIsApproved(false);
@@ -182,10 +182,10 @@ public class TransactionService {
 
 		ConnHandler.begin();
 		final File file = fileDao.insert(fileInsert);
+		ConnHandler.commit();
 		trans.setFile(file);
 
 		transactionInsert = insert(trans);
-		ConnHandler.commit();
 		pojo.setId(transactionInsert.getId());
 		pojo.setMessage("Berhasil");
 		return pojo;
@@ -199,14 +199,25 @@ public class TransactionService {
 		final Transaction transaction = transactionUpdate;
 
 		transaction.setIsApproved(data.getIsApproved());
+		
 		transaction.setVersion(data.getVer());
 
 		transactionUpdate = update(transaction);
 		
-		if (transaction.getIsApproved() == false && transactionUpdate.getIsApproved() == true) {
+		if (transactionUpdate.getIsApproved() == true) {
 			if(transactionUpdate.getMembership() != null) {
 				addSystemBalance(transactionUpdate);
-			} else {
+				final User user = userService.getByRefId(principalService.getAuthPrincipal());
+				
+				Profile profileUpdate = null;
+				Profile profile = profileDao.getByIdAndDetach(user.getProfile().getId());
+			
+				profile.setPremiumUntil(LocalDateTime.now().plusDays(transactionUpdate.getMembership().getDuration()));
+				
+				ConnHandler.begin();
+				profileUpdate = profileDao.update(profile);
+				ConnHandler.commit();
+			} else if (transactionUpdate.getEvent() != null || transactionUpdate.getCourse() != null){
 				profitSharing(transactionUpdate);
 			}
 		}
@@ -267,80 +278,80 @@ public class TransactionService {
 		return pojos;
 	}
 
-	public List<PojoTransactionGetByEventIdRes> getByEventId(final String id) {
-		final List<PojoTransactionGetByEventIdRes> pojos = new ArrayList<>();
-		final List<Transaction> res = transactionDao.getByEventId(id);
-
-		for (int i = 0; i < res.size(); i++) {
-			final PojoTransactionGetByEventIdRes pojo = new PojoTransactionGetByEventIdRes();
-			final Transaction transaction = res.get(i);
-			final User user = userService.getByRefId(transaction.getUser().getId());
-
-			final Event event = eventService.getRefById(transaction.getEvent().getId());
-			pojo.setItemName(event.getEventName());
-
-			ConnHandler.getManager().detach(transaction);
-			pojo.setId(transaction.getId());
-			pojo.setGrandTotal(transaction.getGrandTotal());
-			pojo.setFileId(transaction.getFile().getId());
-			pojo.setFullName(user.getProfile().getFullName());
-			pojo.setIsApproved(transaction.getIsApproved());
-
-			pojos.add(pojo);
-		}
-
-		return pojos;
-	}
-
-	public List<PojoTransactionGetByCourseIdRes> getByCourseId(final String id) {
-		final List<PojoTransactionGetByCourseIdRes> pojos = new ArrayList<>();
-		final List<Transaction> res = transactionDao.getByCourseId(id);
-
-		for (int i = 0; i < res.size(); i++) {
-			final PojoTransactionGetByCourseIdRes pojo = new PojoTransactionGetByCourseIdRes();
-			final Transaction transaction = res.get(i);
-			final User user = userService.getByRefId(transaction.getUser().getId());
-
-			final Course course = courseService.getRefById(transaction.getCourse().getId());
-			pojo.setItemName(course.getCourseName());
-
-			ConnHandler.getManager().detach(transaction);
-			pojo.setId(transaction.getId());
-			pojo.setGrandTotal(transaction.getGrandTotal());
-			pojo.setFileId(transaction.getFile().getId());
-			pojo.setFullName(user.getProfile().getFullName());
-			pojo.setIsApproved(transaction.getIsApproved());
-
-			pojos.add(pojo);
-		}
-
-		return pojos;
-	}
-
-	public List<PojoTransactionGetByMembershipIdRes> getByMembershipId(final String id) {
-		final List<PojoTransactionGetByMembershipIdRes> pojos = new ArrayList<>();
-		final List<Transaction> res = transactionDao.getByMembershipId(id);
-
-		for (int i = 0; i < res.size(); i++) {
-			final PojoTransactionGetByMembershipIdRes pojo = new PojoTransactionGetByMembershipIdRes();
-			final Transaction transaction = res.get(i);
-			final User user = userService.getByRefId(transaction.getUser().getId());
-
-			final Membership membership = membershipService.getRefById(transaction.getMembership().getId());
-			pojo.setItemName(membership.getMembershipName());
-
-			ConnHandler.getManager().detach(transaction);
-			pojo.setId(transaction.getId());
-			pojo.setGrandTotal(transaction.getGrandTotal());
-			pojo.setFileId(transaction.getFile().getId());
-			pojo.setFullName(user.getProfile().getFullName());
-			pojo.setIsApproved(transaction.getIsApproved());
-
-			pojos.add(pojo);
-		}
-
-		return pojos;
-	}
+//	public List<PojoTransactionGetByEventIdRes> getByEventId(final String id) {
+//		final List<PojoTransactionGetByEventIdRes> pojos = new ArrayList<>();
+//		final List<Transaction> res = transactionDao.getByEventId(id);
+//
+//		for (int i = 0; i < res.size(); i++) {
+//			final PojoTransactionGetByEventIdRes pojo = new PojoTransactionGetByEventIdRes();
+//			final Transaction transaction = res.get(i);
+//			final User user = userService.getByRefId(transaction.getUser().getId());
+//
+//			final Event event = eventService.getRefById(transaction.getEvent().getId());
+//			pojo.setItemName(event.getEventName());
+//
+//			ConnHandler.getManager().detach(transaction);
+//			pojo.setId(transaction.getId());
+//			pojo.setGrandTotal(transaction.getGrandTotal());
+//			pojo.setFileId(transaction.getFile().getId());
+//			pojo.setFullName(user.getProfile().getFullName());
+//			pojo.setIsApproved(transaction.getIsApproved());
+//
+//			pojos.add(pojo);
+//		}
+//
+//		return pojos;
+//	}
+//
+//	public List<PojoTransactionGetByCourseIdRes> getByCourseId(final String id) {
+//		final List<PojoTransactionGetByCourseIdRes> pojos = new ArrayList<>();
+//		final List<Transaction> res = transactionDao.getByCourseId(id);
+//
+//		for (int i = 0; i < res.size(); i++) {
+//			final PojoTransactionGetByCourseIdRes pojo = new PojoTransactionGetByCourseIdRes();
+//			final Transaction transaction = res.get(i);
+//			final User user = userService.getByRefId(transaction.getUser().getId());
+//
+//			final Course course = courseService.getRefById(transaction.getCourse().getId());
+//			pojo.setItemName(course.getCourseName());
+//
+//			ConnHandler.getManager().detach(transaction);
+//			pojo.setId(transaction.getId());
+//			pojo.setGrandTotal(transaction.getGrandTotal());
+//			pojo.setFileId(transaction.getFile().getId());
+//			pojo.setFullName(user.getProfile().getFullName());
+//			pojo.setIsApproved(transaction.getIsApproved());
+//
+//			pojos.add(pojo);
+//		}
+//
+//		return pojos;
+//	}
+//
+//	public List<PojoTransactionGetByMembershipIdRes> getByMembershipId(final String id) {
+//		final List<PojoTransactionGetByMembershipIdRes> pojos = new ArrayList<>();
+//		final List<Transaction> res = transactionDao.getByMembershipId(id);
+//
+//		for (int i = 0; i < res.size(); i++) {
+//			final PojoTransactionGetByMembershipIdRes pojo = new PojoTransactionGetByMembershipIdRes();
+//			final Transaction transaction = res.get(i);
+//			final User user = userService.getByRefId(transaction.getUser().getId());
+//
+//			final Membership membership = membershipService.getRefById(transaction.getMembership().getId());
+//			pojo.setItemName(membership.getMembershipName());
+//
+//			ConnHandler.getManager().detach(transaction);
+//			pojo.setId(transaction.getId());
+//			pojo.setGrandTotal(transaction.getGrandTotal());
+//			pojo.setFileId(transaction.getFile().getId());
+//			pojo.setFullName(user.getProfile().getFullName());
+//			pojo.setIsApproved(transaction.getIsApproved());
+//
+//			pojos.add(pojo);
+//		}
+//
+//		return pojos;
+//	}
 	
 	private void addSystemBalance(final Transaction data) {
 		final Optional<User> system = userService.getUserSystem(RoleList.SYSTEM.getRoleCode());
@@ -355,9 +366,10 @@ public class TransactionService {
 		}
 		if(data.getVoucher() != null) {
 			voucher = voucherService.getRefById(data.getVoucher().getId());
+			value.subtract(voucher.getAmount());
 		}
 		BigDecimal systemBalance = systemProfile.getBalance();
-		BigDecimal toSystem = systemBalance.add(value.subtract(voucher.getAmount()));
+		BigDecimal toSystem = systemBalance.add(value);
 		systemProfile.setBalance(toSystem);
 		ConnHandler.begin();
 		profileDao.update(systemProfile);
@@ -386,14 +398,21 @@ public class TransactionService {
 		}
 		if(data.getVoucher() != null) {
 			voucher = voucherService.getRefById(data.getVoucher().getId());
+			value.subtract(voucher.getAmount());
 		}
 		BigDecimal systemBalance = systemProfile.getBalance();
 		BigDecimal organizerBalance = organizerProfile.getBalance();
 		BigDecimal toOrganizer = organizerBalance.add(value.multiply(userShare));
-		BigDecimal toSystem = systemBalance.add(value.multiply(systemShare).subtract(voucher.getAmount()));
+		BigDecimal toSystem = systemBalance.add(value.multiply(systemShare));
 		organizerProfile.setBalance(toOrganizer);
 		systemProfile.setBalance(toSystem);
 		//UPDATE HERE
+		ConnHandler.begin();
+		profileDao.update(organizerProfile);
+		profileDao.update(systemProfile);
+		ConnHandler.commit();
+		
+		
 	}
 
 }
