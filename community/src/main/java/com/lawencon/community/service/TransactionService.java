@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -132,8 +133,8 @@ public class TransactionService {
 		return transactionDao.getByIdAndDetach(Transaction.class, id);
 	}
 
-	private List<Transaction> getAll(final String type) {
-		return transactionDao.getTransaction(type);
+	private List<Transaction> getAll(final String type, final String id) {
+		return transactionDao.getTransaction(type, id);
 	}
 
 	public PojoInsertRes insertRes(final PojoInsertTransactionReq data) {
@@ -190,17 +191,11 @@ public class TransactionService {
 
 	public PojoUpdateRes updateRes(final PojoUpdateTransactionReq data) {
 		Transaction transactionUpdate = null;
-
 		transactionUpdate = getByIdAndDetach(data.getTransactionId());
-
 		final Transaction transaction = transactionUpdate;
-
 		transaction.setIsApproved(data.getIsApproved());
-		
 		transaction.setVersion(data.getVer());
-
 		transactionUpdate = update(transaction);
-		
 		if (transactionUpdate.getIsApproved() == true) {
 			if(transactionUpdate.getMembership() != null) {
 				addSystemBalance(transactionUpdate);
@@ -232,21 +227,21 @@ public class TransactionService {
 		res.setMessage("Berhasil Dihapus");
 		return res;
 	}
-
-	public List<PojoTransactionGetAllRes> getAllRes(final String type) {
+	
+	public List<PojoTransactionGetAllRes> getAllTransaction(final String type){
 		final List<PojoTransactionGetAllRes> pojos = new ArrayList<>();
 		List<Transaction> res = new ArrayList<>();
-		if (type.equals(null)) {
-			res = getAll(type);
+		if(type.isEmpty()) {
+			res = transactionDao.getAll();
 		}
-		if (type.equals(TransactionType.EVENT.getTypeName())) {
-			res = getAll(TransactionType.EVENT.getTypeName());
+		if(type.equals(TransactionType.EVENT.getTypeName())) {
+			res = transactionDao.getByEvent();
 		}
-		if (type.equals(TransactionType.COURSE.getTypeName())) {
-			res = getAll(TransactionType.COURSE.getTypeName());
+		if(type.equals(TransactionType.COURSE.getTypeName())) {
+			res = transactionDao.getByCourse();
 		}
-		if (type.equals(TransactionType.MEMBERSHIP.getTypeName())) {
-			res = getAll(TransactionType.MEMBERSHIP.getTypeName());
+		if(type.equals(TransactionType.MEMBERSHIP.getTypeName())) {
+			res = transactionDao.getByMembership();
 		}
 		for (int i = 0; i < res.size(); i++) {
 			final PojoTransactionGetAllRes pojo = new PojoTransactionGetAllRes();
@@ -271,9 +266,50 @@ public class TransactionService {
 			pojo.setIsApproved(transaction.getIsApproved());
 			pojos.add(pojo);
 		}
-
 		return pojos;
 	}
+
+//	public List<PojoTransactionGetAllRes> getAllRes(final String type) {
+//		final List<PojoTransactionGetAllRes> pojos = new ArrayList<>();
+//		List<Transaction> res = new ArrayList<>();
+//		if (type.equals(null)) {
+//			res = getAll(type);
+//		}
+//		if (type.equals(TransactionType.EVENT.getTypeName())) {
+//			res = getAll(TransactionType.EVENT.getTypeName());
+//		}
+//		if (type.equals(TransactionType.COURSE.getTypeName())) {
+//			res = getAll(TransactionType.COURSE.getTypeName());
+//		}
+//		if (type.equals(TransactionType.MEMBERSHIP.getTypeName())) {
+//			res = getAll(TransactionType.MEMBERSHIP.getTypeName());
+//		}
+//		for (int i = 0; i < res.size(); i++) {
+//			final PojoTransactionGetAllRes pojo = new PojoTransactionGetAllRes();
+//			final Transaction transaction = res.get(i);
+//			final User user = userService.getByRefId(transaction.getUser().getId());
+//			if (transaction.getEvent() != null) {
+//				final Event event = eventService.getRefById(transaction.getEvent().getId());
+//				pojo.setItemName(event.getEventName());
+//			}
+//			if (transaction.getCourse() != null) {
+//				final Course course = courseService.getRefById(transaction.getCourse().getId());
+//				pojo.setItemName(course.getCourseName());
+//			}
+//			if (transaction.getMembership() != null) {
+//				final Membership membership = membershipService.getRefById(transaction.getMembership().getId());
+//				pojo.setItemName(membership.getMembershipName());
+//			}
+//			pojo.setId(transaction.getId());
+//			pojo.setGrandTotal(transaction.getGrandTotal());
+//			pojo.setFileId(transaction.getFile().getId());
+//			pojo.setFullName(user.getProfile().getFullName());
+//			pojo.setIsApproved(transaction.getIsApproved());
+//			pojos.add(pojo);
+//		}
+//
+//		return pojos;
+//	}
 
 //	public List<PojoTransactionGetByEventIdRes> getByEventId(final String id) {
 //		final List<PojoTransactionGetByEventIdRes> pojos = new ArrayList<>();
