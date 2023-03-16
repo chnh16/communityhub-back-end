@@ -27,7 +27,8 @@ public class PostDao extends MasterDao<Post> {
 	public List<Post> getAll() {
 		final StringBuilder str = new StringBuilder();
 
-		str.append("SELECT * FROM post p ").append("WHERE p.is_active = true ");
+		str.append("SELECT * FROM post p ").append(" p.is_active = true ")
+		.append(" p.created_at DESC ");
 
 		final List<Post> res = em().createNativeQuery(toStr(str), Post.class).getResultList();
 		return res;
