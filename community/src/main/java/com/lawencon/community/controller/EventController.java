@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoDeleteRes;
@@ -19,7 +20,6 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.event.PojoEventReqInsert;
 import com.lawencon.community.pojo.event.PojoEventReqUpdate;
 import com.lawencon.community.pojo.event.PojoEventResGetAll;
-import com.lawencon.community.pojo.event.PojoEventResGetByCategoryId;
 import com.lawencon.community.pojo.userevent.PojoUserEventGetByUserIdRes;
 import com.lawencon.community.pojo.userevent.PojoUserEventInsertReq;
 import com.lawencon.community.service.EventService;
@@ -41,16 +41,16 @@ private final EventService eventService;
 	}
 	
 	@GetMapping
-	private ResponseEntity<List<PojoEventResGetAll>> getAllRes(){
-		final List<PojoEventResGetAll> res = eventService.getAllRes();
+	private ResponseEntity<List<PojoEventResGetAll>> getAllEvent(@RequestParam(required = false, value = "catgoryId") String catgoryId, String price){
+		final List<PojoEventResGetAll> res = eventService.getAllEvent(catgoryId, price);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<List<PojoEventResGetByCategoryId>> getByCategoryId(@PathVariable("id") final String id) {
-		final List<PojoEventResGetByCategoryId> res = eventService.getByCategoryId(id);
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
+//	@GetMapping("/{id}")
+//	public ResponseEntity<List<PojoEventResGetByCategoryId>> getByCategoryId(@PathVariable("id") final String id) {
+//		final List<PojoEventResGetByCategoryId> res = eventService.getByCategoryId(id);
+//		return new ResponseEntity<>(res, HttpStatus.OK);
+//	}
 	
 	@PutMapping
 	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoEventReqUpdate data){
