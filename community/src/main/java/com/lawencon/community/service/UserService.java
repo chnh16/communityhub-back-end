@@ -20,6 +20,7 @@ import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.RegisterVerificationDao;
 import com.lawencon.community.dao.RoleDao;
 import com.lawencon.community.dao.UserDao;
+import com.lawencon.community.model.Category;
 import com.lawencon.community.model.EmailDetails;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Industry;
@@ -30,6 +31,8 @@ import com.lawencon.community.model.Role;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.user.PojoProfileUpdateReq;
+import com.lawencon.community.pojo.user.PojoUserGetUserProfileRes;
 import com.lawencon.community.pojo.user.PojoUserRegisterReq;
 import com.lawencon.community.pojo.user.PojoVerificationCodeUpdateReq;
 import com.lawencon.community.pojo.user.PojoVerificationUpdateReq;
@@ -255,7 +258,7 @@ public class UserService implements UserDetailsService {
 
 		final User userEmail = userDao.getRefById(principalService.getAuthPrincipal());
 		
-		final RegisterVerification registerVerificationUpdate = new RegisterVerification();
+		final RegisterVerification registerVerificationUpdate = registerVerification;
 		final String generatePass = Generate.generateCode(8);
 
 		registerVerificationUpdate.setEmail(userEmail.getEmail());
@@ -268,8 +271,136 @@ public class UserService implements UserDetailsService {
 		
 		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
 
-		pojoUpdate.setMessage("Anda Berhasil Melakukan Verifikasi");
+		pojoUpdate.setMessage("Code Baru Berhasil Dikirim");
 		return pojoUpdate;
+	}
+	
+	public PojoInsertRes createAdmin(final PojoUserRegisterReq data) {
+		final PojoInsertRes pojo = new PojoInsertRes();
+		File fileInsert = null;
+		Profile profileInsert = null;
+
+		
+		final Role getRole = roleDao.getByRoleCode(RoleList.ADMIN.getRoleCode()).get();
+
+		final User user = new User();
+		final Profile profile = new Profile();
+		final Position position = positionService.getRefById(data.getProfile().getPositionId());
+		final Industry industry = industryService.getRefById(data.getProfile().getIndustryId());
+		profile.setFullName(data.getProfile().getFullName());
+		profile.setCountry(data.getProfile().getCountry());
+		profile.setProvince(data.getProfile().getProvince());
+		profile.setCity(data.getProfile().getCity());
+		profile.setBalance(BigDecimal.ZERO);
+		profile.setCompany(data.getProfile().getCompany());
+		profile.setPosition(position);
+		profile.setIndustry(industry);
+		profile.setPostalCode(data.getProfile().getPostalCode());
+		profile.setNoHandphone(data.getProfile().getPhoneNumber());
+
+		if (data.getProfile().getFile() != null) {
+			final File file = new File();
+			file.setFileName(data.getProfile().getFile().getFileName());
+			file.setFileContent(data.getProfile().getFile().getFileContent());
+			file.setFileExtension(data.getProfile().getFile().getFileExtension());
+			file.setCreatedAt(LocalDateTime.now());
+			ConnHandler.begin();
+			fileInsert = fileDao.insert(file);
+			ConnHandler.commit();
+
+		}
+		profile.setFile(fileInsert);
+		ConnHandler.begin();
+		profileInsert = profileDao.insert(profile);
+
+		user.setEmail(data.getEmail());
+		user.setPasswordUser(encoder.encode(data.getPasswordUser()));
+		user.setRole(getRole);
+		user.setIsVerified(true);
+		user.setProfile(profileInsert);
+
+		final User userInsert = userDao.insert(user);
+
+		ConnHandler.commit();
+
+		final EmailDetails email = new EmailDetails();
+		email.setMsgBody("Halo " + data.getProfile().getFullName() + "\nAkun anda " + " Email : "
+				+ data.getEmail() + "\nPassword : " + data.getPasswordUser()
+				+ "\n TerimaKasih");
+		email.setRecipient(userInsert.getEmail());
+		email.setSubject("Berhasil ");
+
+		emailService.sendSimpleMail(email);
+
+		pojo.setId(userInsert.getId());
+		pojo.setMessage("Create Akun Admin Berhasil");
+		return pojo;
+	}
+	
+	public PojoUserGetUserProfileRes getUserProfile() {
+		final User user = getByRefId(principalService.getAuthPrincipal());
+		
+		final PojoUserGetUserProfileRes pojo = new PojoUserGetUserProfileRes();
+		
+		
+		pojo.setEmail(user.getEmail());
+		pojo.setFullName(user.getProfile().getFullName());
+		pojo.setCountry(user.getProfile().getCountry());
+		pojo.setProvince(user.getProfile().getProvince());
+		pojo.setCity(user.getProfile().getCity());
+		pojo.setPhoneNumber(user.getProfile().getNoHandphone());
+		pojo.setPostalCode(user.getProfile().getPostalCode());;
+		pojo.setCompany(user.getProfile().getCompany());
+		pojo.setPositionId(user.getProfile().getPosition().getPositionName());
+		pojo.setIndustryId(user.getProfile().getIndustry().getIndustryName());
+		pojo.setFile(user.getProfile().getFile().getId());
+		
+		return pojo;
+		
+	}
+	
+	public PojoUpdateRes updateProfile(final PojoProfileUpdateReq data) {
+		Profile profileUpdate = null;
+		
+		User user = getByRefId(principalService.getAuthPrincipal());
+		
+		profileUpdate = profileDao.getByIdAndDetach(user.getProfile().getId());
+		final Profile profile = profileUpdate;
+		
+		final Position position = positionService.getRefById(data.getPositionId());
+		final Industry industry = industryService.getRefById(data.getIndustryId());
+		
+		
+			profile.setFullName(data.getFullName());
+			profile.setCountry(data.getCountry());
+			profile.setProvince(data.getProvince());
+			profile.setCity(data.getCity());
+			profile.setNoHandphone(data.getPhoneNumber());
+			profile.setPostalCode(data.getPostalCode());
+			profile.setCompany(data.getCompany());
+			position.setId(data.getPositionId());
+			profile.setPosition(position);
+			industry.setId(data.getIndustryId());
+			profile.setIndustry(industry);
+			final File fileUpdate = new File();
+			fileUpdate.setFileName(data.getFile().getFileName());
+			fileUpdate.setFileExtension(data.getFile().getFileExtension());
+			fileUpdate.setFileContent(data.getFile().getFileContent());
+
+			ConnHandler.begin();
+			final File file = fileDao.update(fileUpdate);
+			ConnHandler.commit();
+			profile.setFile(file);
+		//}
+		
+		ConnHandler.begin();
+		final Profile userProfileUpdate = profileDao.update(profile);
+		ConnHandler.commit();
+		
+		final PojoUpdateRes pojoUpdateReq = new PojoUpdateRes();
+		pojoUpdateReq.setVer(userProfileUpdate.getVersion());
+		pojoUpdateReq.setMessage("Succes");
+		return pojoUpdateReq;
 	}
 
 }
