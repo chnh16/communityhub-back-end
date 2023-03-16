@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,9 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
 import com.lawencon.community.pojo.user.PojoLoginReq;
 import com.lawencon.community.pojo.user.PojoLoginRes;
+import com.lawencon.community.pojo.user.PojoProfileUpdateReq;
+import com.lawencon.community.pojo.user.PojoUserGetUserProfileRes;
 import com.lawencon.community.pojo.user.PojoUserRegisterReq;
 import com.lawencon.community.pojo.user.PojoVerificationCodeUpdateReq;
 import com.lawencon.community.pojo.user.PojoVerificationUpdateReq;
@@ -76,6 +78,12 @@ public class UserController {
 		final PojoInsertRes res = userService.register(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
+
+	@PostMapping("regis-admin")
+	public ResponseEntity<PojoInsertRes> createAdmin(@Valid @RequestBody final PojoUserRegisterReq data){
+		final PojoInsertRes res = userService.createAdmin(data);
+		return new ResponseEntity<>(res, HttpStatus.CREATED);
+	}
 	
 	@PutMapping
 	public ResponseEntity<PojoUpdateRes> verification(@RequestBody PojoVerificationUpdateReq data) {
@@ -86,6 +94,18 @@ public class UserController {
 	@PutMapping("code")
 	public ResponseEntity<PojoUpdateRes> updateCodeVerification(@RequestBody PojoVerificationCodeUpdateReq data) {
 		final PojoUpdateRes res = userService.updateCodeVerification(data);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("user-profile")
+	public ResponseEntity<PojoUserGetUserProfileRes> getUserProfile(){
+		final PojoUserGetUserProfileRes res = userService.getUserProfile();
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@PutMapping("update-profile")
+	public ResponseEntity<PojoUpdateRes> updateProfile(@RequestBody PojoProfileUpdateReq data) {
+		final PojoUpdateRes res = userService.updateProfile(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

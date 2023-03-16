@@ -28,9 +28,6 @@ import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.transaction.PojoInsertTransactionReq;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetAllRes;
-import com.lawencon.community.pojo.transaction.PojoTransactionGetByCourseIdRes;
-import com.lawencon.community.pojo.transaction.PojoTransactionGetByEventIdRes;
-import com.lawencon.community.pojo.transaction.PojoTransactionGetByMembershipIdRes;
 import com.lawencon.community.pojo.transaction.PojoUpdateTransactionReq;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -406,7 +403,6 @@ public class TransactionService {
 		BigDecimal toSystem = systemBalance.add(value.multiply(systemShare));
 		organizerProfile.setBalance(toOrganizer);
 		systemProfile.setBalance(toSystem);
-		//UPDATE HERE
 		ConnHandler.begin();
 		profileDao.update(organizerProfile);
 		profileDao.update(systemProfile);
