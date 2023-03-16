@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.community.constant.TransactionType;
 import com.lawencon.community.model.Transaction;
 
 @Repository
@@ -65,13 +66,13 @@ public class TransactionDao extends BasePostDao<Transaction>{
 		if(type.equals(null)) {
 			str.append("SELECT * FROM t_transaction t ").append("AND t.is_active = TRUE");
 		}
-		if(type.equals("event")) {
+		if(type.equals(TransactionType.EVENT.getTypeName())) {
 			str.append("SELECT * FROM t_transaction t ").append("WHERE t.event_id IS NOT NULL ").append("AND t.is_active = TRUE");
 		}
-		if(type.equals("course")) {
+		if(type.equals(TransactionType.COURSE.getTypeName())) {
 			str.append("SELECT * FROM t_transaction t ").append("WHERE t.course_id IS NOT NULL ").append("AND t.is_active = TRUE");
 		}
-		if(type.equals("membership")) {
+		if(type.equals(TransactionType.MEMBERSHIP.getTypeName())) {
 			str.append("SELECT * FROM t_transaction t ").append("WHERE t.membership_id IS NOT NULL ").append("AND t.is_active = TRUE");
 		}
 		res = em().createNativeQuery(toStr(str), Transaction.class).getResultList();
