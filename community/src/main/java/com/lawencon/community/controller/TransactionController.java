@@ -11,17 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
-import com.lawencon.community.pojo.membership.PojoMembershipUpdateReq;
 import com.lawencon.community.pojo.transaction.PojoInsertTransactionReq;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetAllRes;
-import com.lawencon.community.pojo.transaction.PojoTransactionGetByCourseIdRes;
-import com.lawencon.community.pojo.transaction.PojoTransactionGetByEventIdRes;
-import com.lawencon.community.pojo.transaction.PojoTransactionGetByMembershipIdRes;
 import com.lawencon.community.pojo.transaction.PojoUpdateTransactionReq;
 import com.lawencon.community.service.TransactionService;
 
@@ -34,16 +31,22 @@ public class TransactionController {
 		this.transactionService = transactionService;
 	}
 	
-	@GetMapping("/{type}")
-	public ResponseEntity<List<PojoTransactionGetAllRes>> getAllRes(@PathVariable("type") final String type){
-		final List<PojoTransactionGetAllRes> res = transactionService.getAllRes(type);
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
+//	@GetMapping("/{type}")
+//	public ResponseEntity<List<PojoTransactionGetAllRes>> getAllRes(@PathVariable("type") final String type){
+//		final List<PojoTransactionGetAllRes> res = transactionService.getAllRes(type);
+//		return new ResponseEntity<>(res, HttpStatus.OK);
+//	}
 	
 	@PostMapping("/add")
 	private ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoInsertTransactionReq data){
 		final PojoInsertRes res = transactionService.insertRes(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
+	}
+	
+	@GetMapping
+	private ResponseEntity<List<PojoTransactionGetAllRes>> getAll(@RequestParam(required = false, value = "type") String type){
+		final List<PojoTransactionGetAllRes> res = transactionService.getAllTransaction(type);
+		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
 //	@GetMapping("/event/{id}")

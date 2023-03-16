@@ -33,6 +33,45 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<Transaction> getAll(){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM t_transaction t")
+			.append(" AND t.is_active = TRUE");
+		final List<Transaction> res = em().createNativeQuery(toStr(str), Transaction.class).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Transaction> getByCourse(){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM t_transaction t")
+			.append(" WHERE t.course_id IS NOT NULL")
+			.append(" AND t.is_active = TRUE");
+		final List<Transaction> res = em().createNativeQuery(toStr(str), Transaction.class).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Transaction> getByEvent(){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM t_transaction t")
+			.append(" WHERE t.event_id IS NOT NULL")
+			.append(" AND t.is_active = TRUE");
+		final List<Transaction> res = em().createNativeQuery(toStr(str), Transaction.class).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Transaction> getByMembership(){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM t_transaction t")
+			.append(" WHERE t.membership_id IS NOT NULL")
+			.append(" AND t.is_active = TRUE");
+		final List<Transaction> res = em().createNativeQuery(toStr(str), Transaction.class).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Transaction> getByCourseId (final String courseId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_transaction t ")
@@ -60,10 +99,10 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Transaction> getTransaction(final String type){
+	public List<Transaction> getTransaction(final String type, final String id){
 		List<Transaction> res = new ArrayList<>();
 		final StringBuilder str = new StringBuilder();
-		if(type.equals(null)) {
+		if(type.equals("") && id.equals("")) {
 			str.append("SELECT * FROM t_transaction t ").append("AND t.is_active = TRUE");
 		}
 		if(type.equals(TransactionType.EVENT.getTypeName())) {
