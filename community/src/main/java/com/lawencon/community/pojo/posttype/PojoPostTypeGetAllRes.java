@@ -4,6 +4,7 @@ public class PojoPostTypeGetAllRes {
 	private String id;
 	private String typeCode;
 	private String typeName;
+	private Integer ver;
 
 	public String getId() {
 		return id;
@@ -27,6 +28,14 @@ public class PojoPostTypeGetAllRes {
 
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
+	}
+
+	public Integer getVer() {
+		return ver;
+	}
+
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 
 }

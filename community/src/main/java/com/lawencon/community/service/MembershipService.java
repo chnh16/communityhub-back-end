@@ -154,5 +154,19 @@ public class MembershipService {
 		res.setMessage("Berhasil Dihapus");
 		return res;
 	}
+	
+	public PojoMembershipGetAllRes getMembershipById(final String id) {
+		final Optional<Membership> membership = membershipDao.getMembershipById(id);
+		
+		final PojoMembershipGetAllRes pojoMembership = new PojoMembershipGetAllRes();
+		pojoMembership.setId(membership.get().getId());
+		pojoMembership.setMembershipCode(membership.get().getMembershipCode());
+		pojoMembership.setMembershipName(membership.get().getMembershipName());
+		pojoMembership.setDuration(membership.get().getDuration());
+		pojoMembership.setAmount(membership.get().getAmount());
+		pojoMembership.setVer(membership.get().getVersion());
+		
+		return pojoMembership;
+	}
 
 }

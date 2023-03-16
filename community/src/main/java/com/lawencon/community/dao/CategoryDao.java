@@ -31,14 +31,14 @@ public class CategoryDao extends MasterDao<Category>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Category> getCategoryById(final String id) {
+	public Optional<Category> getCategoryById(final String id) {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM category c ")
 			.append(" WHERE c.id = :id AND c.is_active = true");
 		final List<Category> res = em().createNativeQuery(toStr(str), Category.class)
 				.setParameter("id", id)
 				.getResultList();
-		return res;
+		return Optional.ofNullable(res.get(0));
 	}
 
 	public Category update(final Category data) {

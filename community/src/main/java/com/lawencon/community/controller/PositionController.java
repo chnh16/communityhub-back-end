@@ -48,6 +48,12 @@ public class PositionController {
 		final List<PojoPositionGetAllRes> res = positionService.getAllRes();
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
+	
+	@GetMapping("{id}")
+	public ResponseEntity<PojoPositionGetAllRes> getAllRes(@PathVariable("id") String id) {
+		final PojoPositionGetAllRes res = positionService.getPositionById(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<PojoDeleteRes> delete(@PathVariable final String id) {

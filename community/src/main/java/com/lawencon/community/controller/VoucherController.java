@@ -36,6 +36,12 @@ public class VoucherController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
+	@GetMapping("{id}")
+	private ResponseEntity<PojoVoucherGetAllRes> getVoucherById(@PathVariable("id") String id){
+		final PojoVoucherGetAllRes res = voucherService.getVoucherById(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
 	@PostMapping("add")
 	private ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoVoucherInsertReq data){
 		final PojoInsertRes res = voucherService.insertRes(data);

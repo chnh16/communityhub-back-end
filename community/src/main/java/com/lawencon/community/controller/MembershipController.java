@@ -51,6 +51,12 @@ public class MembershipController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
+	@GetMapping("{id}")
+	public ResponseEntity<PojoMembershipGetAllRes> getMembershipById(@PathVariable("id") String id) {
+		final PojoMembershipGetAllRes res = membershipService.getMembershipById(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
 	@DeleteMapping("{id}")
 	private ResponseEntity<PojoDeleteRes> delete(@PathVariable("id") final String id){
 		final PojoDeleteRes res = membershipService.delete(id);
