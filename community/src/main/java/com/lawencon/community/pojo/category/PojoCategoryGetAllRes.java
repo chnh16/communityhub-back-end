@@ -4,6 +4,7 @@ public class PojoCategoryGetAllRes {
 	private String id;
 	private String categoryCode;
 	private String categoryName;
+	private Integer ver;
 	public String getId() {
 		return id;
 	}
@@ -21,6 +22,12 @@ public class PojoCategoryGetAllRes {
 	}
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 	
 	
