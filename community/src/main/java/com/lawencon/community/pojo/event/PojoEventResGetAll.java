@@ -16,6 +16,8 @@ public class PojoEventResGetAll {
 	private String categoryId;
 	private String fileId;
 	private Integer ver;
+	
+	
 
 	public String getId() {
 		return id;
