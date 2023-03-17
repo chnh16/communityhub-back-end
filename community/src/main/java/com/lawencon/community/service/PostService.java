@@ -37,8 +37,10 @@ import com.lawencon.community.pojo.postdetail.PojoPostDetailInsertReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailUpdateReq;
 import com.lawencon.community.pojo.postfile.PojoPostFileGetAllRes;
 import com.lawencon.community.pojo.postfile.PojoPostFileInsertListReq;
+import com.lawencon.community.pojo.userbookmark.PojoPostBookmarkRes;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkGetAllRes;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkInsertReq;
+import com.lawencon.community.pojo.userlike.PojoPostLikeRes;
 import com.lawencon.community.pojo.userlike.PojoUserLikeGetAllRes;
 import com.lawencon.community.pojo.userlike.PojoUserLikeInsertReq;
 import com.lawencon.security.principal.PrincipalService;
@@ -59,17 +61,13 @@ public class PostService  {
 	private final PrincipalService principalService;
 	
 	public PostService(final PostDao postDao, final PostFileDao postFileDao, final UserLikeDao userLikeDao,final UserDao userDao, final PostTypeDao postTypeDao, final CategoryDao categoryDao, UserBookmarkDao userBookmarkDao,  PostDetailDao postDetailDao, FileDao fileDao, PrincipalService principalService) {
-
-
 		this.postDao = postDao;
 		this.userDao = userDao;
 		this.postTypeDao = postTypeDao;
 		this.categoryDao = categoryDao;
-
 		this.postFileDao = postFileDao;
 		this.fileDao = fileDao;
 		this.userLikeDao = userLikeDao;
-
 		this.principalService = principalService;
 		this.userBookmarkDao = userBookmarkDao;
 		this.postDetailDao = postDetailDao;
@@ -233,7 +231,20 @@ public class PostService  {
 		
 		for(int i = 0 ; i < listPost.size(); i++) {
 			final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
-			
+			PojoPostLikeRes pojoLike = null;
+			PojoPostBookmarkRes pojoBookmark = null;
+			final Optional<UserLike> postLike = userLikeDao.getLikeByPostId(listPost.get(i).getId(), principalService.getAuthPrincipal());
+			final Optional<UserBookmark> postBookmark = userBookmarkDao.getBookmarkByPostId(listPost.get(i).getId(), principalService.getAuthPrincipal());
+			if(postLike.isPresent()) {
+				pojoLike = new PojoPostLikeRes();
+				pojoLike.setId(postLike.get().getId());
+				pojoLike.setStatus(true);
+			}
+			if(postBookmark.isPresent()) {
+				pojoBookmark = new PojoPostBookmarkRes();
+				pojoBookmark.setId(postBookmark.get().getId());
+				pojoBookmark.setStatus(true);
+			}
 			pojoPost.setId(listPost.get(i).getId());
 			pojoPost.setUserId(listPost.get(i).getUser().getId());
 			pojoPost.setFullName(listPost.get(i).getUser().getProfile().getFullName());
@@ -243,6 +254,8 @@ public class PostService  {
 			pojoPost.setCategoryName(listPost.get(i).getCategory().getCategoryName());
 			pojoPost.setPostTypeId(listPost.get(i).getPostType().getId());
 			pojoPost.setTypeName(listPost.get(i).getPostType().getTypeName());
+			pojoPost.setIsLiked(pojoLike);
+			pojoPost.setIsBookmarked(pojoBookmark);
 			
 			listPojoPost.add(pojoPost);
 		}
