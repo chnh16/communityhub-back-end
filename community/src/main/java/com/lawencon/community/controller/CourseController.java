@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoDeleteRes;
@@ -41,8 +42,8 @@ private final CourseService courseService;
 	}
 	
 	@GetMapping
-	private ResponseEntity<List<PojoCourseGetAllRes>> getAllRes(){
-		final List<PojoCourseGetAllRes> res = courseService.getAllRes();
+	private ResponseEntity<List<PojoCourseGetAllRes>> getAllRes(@RequestParam(required = false, value = "category") String category, String price){
+		final List<PojoCourseGetAllRes> res = courseService.getAllRes(category, price);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

@@ -136,20 +136,20 @@ public class CourseService {
 		return pojo;
 	}
 
-	public List<PojoCourseGetAllRes> getAllRes(String catgoryId, String price) {
+	public List<PojoCourseGetAllRes> getAllRes(String category, String price) {
 		final List<PojoCourseGetAllRes> pojos = new ArrayList<>();
-		final List<Course> res = new ArrayList<>();
+		List<Course> res = new ArrayList<>();
 
-		final Category category = categoryDao.getRefById(catgoryId);
+		final Category categoryId = categoryDao.getRefById(category);
 
-		if (catgoryId.isEmpty() && price.isEmpty()) {
-			res = eventDao.getAll();
-		} else if (catgoryId.equals(category.getId())) {
-			res = eventDao.getByCategoryId(category.getId());
-		} else if (catgoryId.isEmpty() && price.equals("ASC")) {
-			res = eventDao.getByPriceAsc();
-		} else if (catgoryId.isEmpty() && price.equals("DESC")) {
-			res = eventDao.getByPriceDesc();
+		if (category.isEmpty() && price.isEmpty()) {
+			res = courseDao.getAll();
+		} else if (category.equals(categoryId.getId())) {
+			res = courseDao.getByCategoryId(categoryId.getId());
+		} else if (category.isEmpty() && price.equals("ASC")) {
+			res = courseDao.getByPriceAsc();
+		} else if (category.isEmpty() && price.equals("DESC")) {
+			res = courseDao.getByPriceDesc();
 		}
 
 		for (int i = 0; i < res.size(); i++) {

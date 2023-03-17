@@ -150,18 +150,18 @@ public class EventService {
 		return pojoInsertRes;
 	}
 
-	public List<PojoEventResGetAll> getAllEvent(String catgoryId, String price) {
+	public List<PojoEventResGetAll> getAllEvent(String category, String price) {
 		final List<PojoEventResGetAll> pojos = new ArrayList<>();
 		List<Event> res = new ArrayList<>();
-		final Category category = categoryDao.getRefById(catgoryId);
+		final Category categoryId = categoryDao.getRefById(category);
 		
-		if(catgoryId.isEmpty() && price.isEmpty()) {
+		if(category.isEmpty() && price.isEmpty()) {
 			res = eventDao.getAll();
-		}else if(catgoryId.equals(category.getId())) {
-			res = eventDao.getByCategoryId(category.getId());
-		}else if(catgoryId.isEmpty() && price.equals("ASC")){
+		}else if(category.equals(categoryId.getId())) {
+			res = eventDao.getByCategoryId(categoryId.getId());
+		}else if(category.isEmpty() && price.equals("ASC")){
 			res = eventDao.getByPriceAsc();
-		}else if(catgoryId.isEmpty() && price.equals("DESC")){
+		}else if(category.isEmpty() && price.equals("DESC")){
 			res = eventDao.getByPriceDesc();
 		}
 		

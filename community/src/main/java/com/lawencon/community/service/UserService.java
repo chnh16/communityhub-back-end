@@ -32,6 +32,7 @@ import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.user.PojoProfileUpdateReq;
+import com.lawencon.community.pojo.user.PojoUserChangePasswordReq;
 import com.lawencon.community.pojo.user.PojoUserGetUserProfileRes;
 import com.lawencon.community.pojo.user.PojoUserRegisterReq;
 import com.lawencon.community.pojo.user.PojoVerificationCodeUpdateReq;
@@ -391,7 +392,7 @@ public class UserService implements UserDetailsService {
 			final File file = fileDao.update(fileUpdate);
 			ConnHandler.commit();
 			profile.setFile(file);
-		//}
+		
 		
 		ConnHandler.begin();
 		final Profile userProfileUpdate = profileDao.update(profile);
@@ -399,6 +400,32 @@ public class UserService implements UserDetailsService {
 		
 		final PojoUpdateRes pojoUpdateReq = new PojoUpdateRes();
 		pojoUpdateReq.setVer(userProfileUpdate.getVersion());
+		pojoUpdateReq.setMessage("Succes");
+		return pojoUpdateReq;
+	}
+	
+	public PojoUpdateRes changePass(final PojoUserChangePasswordReq data) {
+		User userUpdate = null;
+		userUpdate = getByIdAndDetach(principalService.getAuthPrincipal());
+		User user = userUpdate;
+		
+		if(!encoder.matches(data.getPasswordUser(), user.getPasswordUser())) {
+			throw new RuntimeException("Password Lama Anda Salah");
+		}
+		
+		if (!encoder.matches(data.getNewPassword(), data.getConfirmPassword())) {
+			throw new RuntimeException("Confirm Password Anda Salah");
+		}
+		
+		user.setPasswordUser(encoder.encode(data.getConfirmPassword()));
+		
+		ConnHandler.begin();
+		userDao.update(user);
+		ConnHandler.commit();
+		
+		
+		final PojoUpdateRes pojoUpdateReq = new PojoUpdateRes();
+		pojoUpdateReq.setVer(user.getVersion());
 		pojoUpdateReq.setMessage("Succes");
 		return pojoUpdateReq;
 	}
