@@ -8,6 +8,7 @@ public class PojoVoucherGetAllRes {
 	private String voucherCode;
 	private LocalDateTime expiredDate;
 	private BigDecimal amount;
+	private Integer ver;
 	
 	public String getId() {
 		return id;
@@ -32,5 +33,11 @@ public class PojoVoucherGetAllRes {
 	}
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 }

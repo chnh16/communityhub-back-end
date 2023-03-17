@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.bouncycastle.crypto.RuntimeCryptoException;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -134,6 +133,16 @@ public class PositionService extends ValidationService<Position> {
 		deleteById(id);
 		res.setMessage("Berhasil Dihapus");
 		return res;
+	}
+	
+	public PojoPositionGetAllRes getPositionById(final String id) {
+		final Optional<Position> position = positionDao.getPositionById(id);
+		
+		final PojoPositionGetAllRes pojoPosition = new PojoPositionGetAllRes();
+		pojoPosition.setId(position.get().getId());
+		pojoPosition.setPositionName(position.get().getPositionName());
+		pojoPosition.setVer(position.get().getVersion());
+		return pojoPosition;
 	}
 
 	@Override

@@ -44,8 +44,8 @@ public class CategoryController {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<List<PojoCategoryGetAllRes>> getCategoryById(@PathVariable("id") String id) {
-		final List<PojoCategoryGetAllRes> res = categoryService.getCategoryById(id);
+	public ResponseEntity<PojoCategoryGetAllRes> getCategoryById(@PathVariable("id") String id) {
+		final PojoCategoryGetAllRes res = categoryService.getCategoryById(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 

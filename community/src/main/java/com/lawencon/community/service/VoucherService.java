@@ -180,5 +180,18 @@ public class VoucherService {
 		res.setMessage("Berhasil menghapus");
 		return res;
 	}
-
-}
+	
+	public PojoVoucherGetAllRes getVoucherById(final String id) {
+		final Optional<Voucher> voucher = voucherDao.getVoucherById(id);
+		
+		final PojoVoucherGetAllRes pojoVoucher = new PojoVoucherGetAllRes();
+		
+		pojoVoucher.setId(voucher.get().getId());
+		pojoVoucher.setVoucherCode(voucher.get().getVoucherCode());
+		pojoVoucher.setExpiredDate(voucher.get().getExpiredDate());
+		pojoVoucher.setAmount(voucher.get().getAmount());
+		pojoVoucher.setVer(voucher.get().getVersion());
+		
+		return pojoVoucher;
+	}
+}	

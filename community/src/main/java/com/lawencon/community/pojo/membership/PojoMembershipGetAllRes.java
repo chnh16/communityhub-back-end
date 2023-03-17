@@ -9,6 +9,7 @@ public class PojoMembershipGetAllRes {
 	private String membershipName;
 	private Long duration;
 	private BigDecimal amount;
+	private Integer ver;
 
 	public String getId() {
 		return id;
@@ -48,6 +49,14 @@ public class PojoMembershipGetAllRes {
 
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
+	}
+
+	public Integer getVer() {
+		return ver;
+	}
+
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 
 }

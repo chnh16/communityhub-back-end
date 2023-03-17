@@ -30,6 +30,17 @@ public class IndustryDao extends MasterDao<Industry>{
 		final List<Industry> res = em().createNativeQuery(toStr(str), Industry.class).getResultList();
 		return res;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Optional<Industry> getIndustryById(final String id) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM industry i ")
+			.append(" WHERE i.id = :id AND i.is_active = true");
+		final List<Industry> res = em().createNativeQuery(toStr(str), Industry.class)
+				.setParameter("id", id)
+				.getResultList();
+		return Optional.ofNullable(res.get(0));
+	}
 
 	@Override
 	public Industry update(final Industry data) {

@@ -168,18 +168,15 @@ public class CategoryService {
 		return listPojoCategory;
 	}
 	
-	public List<PojoCategoryGetAllRes> getCategoryById(final String id){
-		final List<PojoCategoryGetAllRes> listPojoCategory = new ArrayList<>();
+	public PojoCategoryGetAllRes getCategoryById(final String id){
 		
-		final List<Category> listCategory = categoryDao.getCategoryById(id);
-		for(int i = 0; i < listCategory.size(); i++) {
-			final PojoCategoryGetAllRes pojoCategoryGetAll = new PojoCategoryGetAllRes();
-			pojoCategoryGetAll.setId(listCategory.get(i).getId());
-			pojoCategoryGetAll.setCategoryCode(listCategory.get(i).getCategoryCode());
-			pojoCategoryGetAll.setCategoryName(listCategory.get(i).getCategoryName());
-			pojoCategoryGetAll.setVer(listCategory.get(i).getVersion());
-			listPojoCategory.add(pojoCategoryGetAll);
-		}
-		return listPojoCategory;
+		final Optional<Category> listCategory = categoryDao.getCategoryById(id);
+		final PojoCategoryGetAllRes pojoCategoryGetAll = new PojoCategoryGetAllRes();
+		pojoCategoryGetAll.setId(listCategory.get().getId());
+		pojoCategoryGetAll.setCategoryCode(listCategory.get().getCategoryCode());
+		pojoCategoryGetAll.setCategoryName(listCategory.get().getCategoryName());
+		pojoCategoryGetAll.setVer(listCategory.get().getVersion());
+		
+		return pojoCategoryGetAll;
 	}
 }

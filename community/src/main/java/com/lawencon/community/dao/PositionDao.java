@@ -30,6 +30,17 @@ public class PositionDao extends MasterDao<Position>{
 		final List<Position> res = em().createNativeQuery(toStr(str), Position.class).getResultList();
 		return res;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Optional<Position> getPositionById(final String id) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM position p ")
+			.append(" WHERE p.id = :id AND p.is_active = true");
+		final List<Position> res = em().createNativeQuery(toStr(str), Position.class)
+				.setParameter("id", id)
+				.getResultList();
+		return Optional.ofNullable(res.get(0));
+	}
 
 	@Override
 	public Position update(final Position data) {

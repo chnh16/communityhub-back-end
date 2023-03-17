@@ -30,6 +30,18 @@ public class MembershipDao extends MasterDao<Membership>{
 		final List<Membership> res = em().createNativeQuery(toStr(str), Membership.class).getResultList();
 		return res;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Optional<Membership> getMembershipById(final String id) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM membership  ")
+			.append(" WHERE m.id = :id AND m.is_active = true");
+		final List<Membership> res = em().createNativeQuery(toStr(str), Membership.class)
+				.setParameter("id", id)
+				.getResultList();
+		return Optional.ofNullable(res.get(0));
+	}
+
 
 	@Override
 	public Membership update(final Membership data) {

@@ -173,4 +173,16 @@ public class IndustryService{
 		}
 		return listPojoIndustry;
 	}
+	
+	public PojoIndustryGetAllRes getIndustryById(final String id) {
+		final Optional<Industry> industry = industryDao.getIndustryById(id);
+		
+		final PojoIndustryGetAllRes pojoIndustry = new PojoIndustryGetAllRes();
+		pojoIndustry.setId(industry.get().getId());
+		pojoIndustry.setIndustryCode(industry.get().getIndustryCode());
+		pojoIndustry.setIndustryName(industry.get().getIndustryName());
+		pojoIndustry.setVer(industry.get().getVersion());
+		
+		return pojoIndustry;
+	}
 }

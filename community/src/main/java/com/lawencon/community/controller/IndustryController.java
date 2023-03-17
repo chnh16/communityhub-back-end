@@ -43,6 +43,12 @@ public class IndustryController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
+	@GetMapping("{id}")
+	public ResponseEntity<PojoIndustryGetAllRes> getIndustryById(@PathVariable("id") String id) {
+		final PojoIndustryGetAllRes res = industryService.getIndustryById(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
 	@PutMapping("edit")
 	public ResponseEntity<PojoUpdateRes> updateIndustry(@RequestBody PojoIndustryUpdateReq data){
 		final PojoUpdateRes res = industryService.updateIndustry(data);

@@ -4,6 +4,8 @@ public class PojoIndustryGetAllRes {
 	private String id;
 	private String industryCode;
 	private String industryName;
+	private Integer ver;
+	
 	public String getId() {
 		return id;
 	}
@@ -21,6 +23,12 @@ public class PojoIndustryGetAllRes {
 	}
 	public void setIndustryName(String industryName) {
 		this.industryName = industryName;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 	
 	

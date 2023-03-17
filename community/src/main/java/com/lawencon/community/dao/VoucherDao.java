@@ -32,6 +32,17 @@ public class VoucherDao extends MasterDao<Voucher> {
 		final List<Voucher> res = em().createNativeQuery(toStr(str), Voucher.class).getResultList();
 		return res;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Optional<Voucher> getVoucherById(final String id) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM voucher v  ")
+			.append(" WHERE v.id = :id AND v.is_active = true");
+		final List<Voucher> res = em().createNativeQuery(toStr(str), Voucher.class)
+				.setParameter("id", id)
+				.getResultList();
+		return Optional.ofNullable(res.get(0));
+	}
 
 	@Override
 	public Voucher update(final Voucher data) {
