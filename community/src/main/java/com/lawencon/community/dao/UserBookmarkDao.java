@@ -1,11 +1,13 @@
 package com.lawencon.community.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.UserBookmark;
+import com.lawencon.community.model.UserLike;
 
 @Repository
 public class UserBookmarkDao extends BasePostDao<UserBookmark> {
@@ -44,6 +46,25 @@ public class UserBookmarkDao extends BasePostDao<UserBookmark> {
 				.getSingleResult().toString());
 		
 		return countLike;
+	}
+	
+	public Optional<UserBookmark> getBookmarkByPostId(final String postId, final String userId) {
+		UserBookmark userBookmark = null;
+		try {
+			final StringBuilder str = new StringBuilder();
+			str.append("SELECT ub.id FROM user_bookmark ub").append(" WHERE ub.post_id = :postId")
+					.append(" AND ub.user_id = :userId").append(" AND ub.is_active = TRUE");
+			final Object res = em().createNativeQuery(toStr(str)).setParameter("postId", postId)
+					.setParameter("userId", userId).getSingleResult();
+			if (res != null) {
+				userBookmark = new UserBookmark();
+				final Object[] objArr = (Object[]) res;
+				userBookmark.setId(objArr[0].toString());
+			}
+		} catch(final Exception e){
+			e.printStackTrace();
+		}
+		return Optional.ofNullable(userBookmark);
 	}
 
 }
