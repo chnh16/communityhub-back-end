@@ -34,7 +34,7 @@ public class MembershipDao extends MasterDao<Membership>{
 	@SuppressWarnings("unchecked")
 	public Optional<Membership> getMembershipById(final String id) {
 		final StringBuilder str = new StringBuilder();
-		str.append("SELECT * FROM membership  ")
+		str.append("SELECT * FROM membership m")
 			.append(" WHERE m.id = :id AND m.is_active = true");
 		final List<Membership> res = em().createNativeQuery(toStr(str), Membership.class)
 				.setParameter("id", id)
