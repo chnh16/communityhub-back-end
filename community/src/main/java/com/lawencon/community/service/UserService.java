@@ -413,7 +413,7 @@ public class UserService implements UserDetailsService {
 			throw new RuntimeException("Password Lama Anda Salah");
 		}
 		
-		if (!encoder.matches(data.getNewPassword(), data.getConfirmPassword())) {
+		if (!(data.getNewPassword().equals(data.getConfirmPassword()))) {
 			throw new RuntimeException("Confirm Password Anda Salah");
 		}
 		
