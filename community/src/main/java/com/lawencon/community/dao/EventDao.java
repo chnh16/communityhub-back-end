@@ -83,8 +83,8 @@ public class EventDao extends MasterDao<Event>{
 	@SuppressWarnings("unchecked")
 	public List<Event> getEvent(final Integer limit, final Integer offset) {
 		final StringBuilder str = new StringBuilder();
-		str.append("SELECT * FROM event e ")
-			.append(" WHERE c.is_active = true");
+		str.append("SELECT * FROM t_event e ")
+			.append(" WHERE e.is_active = true");
 		final List<Event> res = em().createNativeQuery(toStr(str).toString(), Event.class)
 				.setMaxResults(limit)
 				.setFirstResult(offset)
@@ -94,7 +94,7 @@ public class EventDao extends MasterDao<Event>{
 	
 	public int getTotalEvent() {
 		final StringBuilder str = new StringBuilder();
-		str.append("SELECT COUNT(e.id) FROM event e ")
+		str.append("SELECT COUNT(e.id) FROM t_event e ")
 			.append(" WHERE e.is_active = true");
 		
 		final int totalEvent = Integer.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str)
@@ -104,10 +104,10 @@ public class EventDao extends MasterDao<Event>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Optional<Event> getArticleById(final String id) {
+	public Optional<Event> getEventById(final String id) {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_event e ")
-			.append(" WHERE e.id = :id AND e.is_active = true");
+			.append("WHERE e.id = :id AND e.is_active = true");
 		final List<Event> res = em().createNativeQuery(toStr(str), Event.class)
 				.setParameter("id", id)
 				.getResultList();
