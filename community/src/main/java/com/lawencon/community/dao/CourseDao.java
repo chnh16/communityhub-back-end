@@ -50,11 +50,31 @@ public class CourseDao extends MasterDao<Course>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Course> getByCategoryId (final String categoryId){
+	public List<Course> getByCategoryId (final String catgoryId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM course c ")
-		.append("WHERE c.category_id = :categoryId");
-		final List<Course> res = em().createNativeQuery(toStr(str), Course.class).setParameter("categoryId", categoryId).getResultList();
+		.append("WHERE c.category_id = :catgoryId");
+		final List<Course> res = em().createNativeQuery(toStr(str), Course.class).setParameter("catgoryId", catgoryId).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Course> getByPriceAsc(){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM course")
+		.append(" WHERE is_active = TRUE")
+		.append(" ORDER BY price ASC");
+		final List<Course> res = em().createNativeQuery(toStr(str), Course.class).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Course> getByPriceDesc(){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM course")
+		.append(" WHERE is_active = TRUE")
+		.append(" ORDER BY price DESC");
+		final List<Course> res = em().createNativeQuery(toStr(str), Course.class).getResultList();
 		return res;
 	}
 	

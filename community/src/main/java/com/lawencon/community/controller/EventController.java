@@ -21,7 +21,6 @@ import com.lawencon.community.pojo.event.PojoEventGetAllResData;
 import com.lawencon.community.pojo.event.PojoEventReqInsert;
 import com.lawencon.community.pojo.event.PojoEventReqUpdate;
 import com.lawencon.community.pojo.event.PojoEventResGetAll;
-import com.lawencon.community.pojo.event.PojoEventResGetByCategoryId;
 import com.lawencon.community.pojo.userevent.PojoUserEventGetByUserIdRes;
 import com.lawencon.community.pojo.userevent.PojoUserEventInsertReq;
 import com.lawencon.community.service.EventService;
@@ -43,8 +42,8 @@ private final EventService eventService;
 	}
 	
 	@GetMapping
-	private ResponseEntity<List<PojoEventResGetAll>> getAllRes(){
-		final List<PojoEventResGetAll> res = eventService.getAllRes();
+	private ResponseEntity<List<PojoEventResGetAll>> getAllEvent(@RequestParam(required = false, value = "category") String category, @RequestParam(required = false, value = "price") String price){
+		final List<PojoEventResGetAll> res = eventService.getAllEvent(category, price);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

@@ -39,11 +39,12 @@ public class CourseService {
 	private final FileDao fileDao;
 	private final UserService userService;
 	private final UserCourseDao userCourseDao;
-	
+
 	@Inject
 	private PrincipalService principalService;
-	
-	public CourseService(final CourseDao courseDao, final CategoryDao categoryDao, final FileDao fileDao, final UserService userService, final CategoryService categoryService, UserCourseDao userCourseDao) {
+
+	public CourseService(final CourseDao courseDao, final CategoryDao categoryDao, final FileDao fileDao,
+			final UserService userService, final CategoryService categoryService, UserCourseDao userCourseDao) {
 		this.courseDao = courseDao;
 		this.categoryDao = categoryDao;
 		this.fileDao = fileDao;
@@ -51,15 +52,15 @@ public class CourseService {
 		this.categoryService = categoryService;
 		this.userCourseDao = userCourseDao;
 	}
-	
+
 	public Course insert(final Course data) {
 		Course insertCourse = null;
 		ConnHandler.begin();
-		insertCourse =courseDao.insert(data);
+		insertCourse = courseDao.insert(data);
 		ConnHandler.commit();
 		return insertCourse;
 	}
-	
+
 	public Course update(final Course data) {
 		Course updateCourse = null;
 		ConnHandler.begin();
@@ -67,23 +68,23 @@ public class CourseService {
 		ConnHandler.commit();
 		return updateCourse;
 	}
-	
-	public Optional<Course> getById(final String id){
+
+	public Optional<Course> getById(final String id) {
 		return courseDao.getById(id);
 	}
-	
+
 	public Course getRefById(final String id) {
 		return courseDao.getRefById(id);
 	}
-	
+
 	public Course getByIdAndDetach(final String id) {
 		return courseDao.getByIdAndDetach(id);
 	}
-	
-	public List<Course> getAll(){
+
+	public List<Course> getAll() {
 		return courseDao.getAll();
 	}
-	
+
 	public boolean deleteById(final String id) {
 		boolean eventDelete = false;
 
@@ -99,7 +100,7 @@ public class CourseService {
 		return eventDelete;
 
 	}
-	
+
 	public PojoInsertRes insertRes(final PojoCourseInsertReq data) {
 		final PojoInsertRes pojo = new PojoInsertRes();
 		Course courseInsert = null;
@@ -108,21 +109,18 @@ public class CourseService {
 		final File file = new File();
 		final User user = userService.getByRefId(principalService.getAuthPrincipal());
 
-		
-
 		final Category category = categoryDao.getByIdRef(Category.class, data.getCategoryId());
 		category.setId(data.getCategoryId());
 		course.setCategory(category);
-		
 
 		file.setFileName(data.getFile().getFileName());
 		file.setFileContent(data.getFile().getFileContent());
 		file.setFileExtension(data.getFile().getFileExtension());
-		
+
 		ConnHandler.begin();
 		fileInsert = fileDao.insert(file);
 		ConnHandler.commit();
-		
+
 		course.setCourseCode(Generate.generateCode(5));
 		course.setCourseName(data.getCourseName());
 		course.setStartDate(data.getStartDate());
@@ -138,10 +136,22 @@ public class CourseService {
 		pojo.setMessage("Berhasil membuat course");
 		return pojo;
 	}
-	
-	public List<PojoCourseGetAllRes> getAllRes() {
+
+	public List<PojoCourseGetAllRes> getAllRes(String category, String price) {
 		final List<PojoCourseGetAllRes> pojos = new ArrayList<>();
-		final List<Course> res = getAll();
+		List<Course> res = new ArrayList<>();
+
+		final Category categoryId = categoryDao.getRefById(category);
+
+		if (category.isEmpty() && price.isEmpty()) {
+			res = courseDao.getAll();
+		} else if (category.equals(categoryId.getId())) {
+			res = courseDao.getByCategoryId(categoryId.getId());
+		} else if (category.isEmpty() && price.equals("ASC")) {
+			res = courseDao.getByPriceAsc();
+		} else if (category.isEmpty() && price.equals("DESC")) {
+			res = courseDao.getByPriceDesc();
+		}
 
 		for (int i = 0; i < res.size(); i++) {
 			final PojoCourseGetAllRes pojo = new PojoCourseGetAllRes();
@@ -159,12 +169,12 @@ public class CourseService {
 			pojo.setEndDate(course.getEndDate());
 			pojo.setPrice(course.getPrice());
 			pojo.setVer(course.getVersion());
-			
+
 			pojos.add(pojo);
 		}
 		return pojos;
 	}
-	
+
 	public List<PojoCourseResGetByCategoryId> getByCategoryId(final String id) {
 		final List<PojoCourseResGetByCategoryId> pojos = new ArrayList<>();
 		final List<Course> res = courseDao.getByCategoryId(id);
@@ -192,12 +202,12 @@ public class CourseService {
 
 		return pojos;
 	}
-	
+
 	public PojoUpdateRes update(final PojoCourseUpdateReq data) {
 		Course courseUpdate = null;
-	
+
 		courseUpdate = getByIdAndDetach(data.getId());
-		
+
 		final Course course = courseUpdate;
 
 		course.setCourseName(data.getCourseName());
@@ -208,21 +218,21 @@ public class CourseService {
 		course.setEndDate(data.getEndDate());
 		course.setPrice(data.getPrice());
 		course.setVersion(data.getVer());
-		
-		final Category category = categoryDao.getByIdRef(Category.class ,data.getCategoryId());
+
+		final Category category = categoryDao.getByIdRef(Category.class, data.getCategoryId());
 		category.setId(data.getCategoryId());
 		course.setCategory(category);
-		
+
 		final File fileInsert = new File();
 		fileInsert.setFileName(data.getFile().getFileName());
 		fileInsert.setFileExtension(data.getFile().getFileExtension());
 		fileInsert.setFileContent(data.getFile().getFileContent());
-		
+
 		ConnHandler.begin();
 		final File file = fileDao.insert(fileInsert);
 		ConnHandler.commit();
 		course.setFile(file);
-	
+
 		courseUpdate = update(course);
 
 		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
@@ -231,19 +241,19 @@ public class CourseService {
 		return pojoUpdate;
 
 	}
-	
+
 	public PojoDeleteRes delete(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteById(id);
 		res.setMessage("Course Berhasil Dihapus");
 		return res;
 	}
-	
-/** User Course Service */
-	
+
+	/** User Course Service */
+
 	public PojoInsertRes inserCourseEvent(final PojoUserCourseInsertReq data) {
 		final UserCourse userCourse = new UserCourse();
-		
+
 		final User user = userService.getByRefId(principalService.getAuthPrincipal());
 		user.setId(principalService.getAuthPrincipal());
 		userCourse.setUser(user);
@@ -262,7 +272,7 @@ public class CourseService {
 		pojoInsertRes.setMessage("Anda Berhasil Membeli Course");
 		return pojoInsertRes;
 	}
-	
+
 	public List<PojoUserCourseGetByUserIdRes> getByUserId(final String id) {
 		final List<PojoUserCourseGetByUserIdRes> pojos = new ArrayList<>();
 		final List<UserCourse> res = userCourseDao.getByUserId(principalService.getAuthPrincipal());
@@ -272,7 +282,7 @@ public class CourseService {
 			final UserCourse userCourse = res.get(i);
 
 			ConnHandler.getManager().detach(userCourse);
-			
+
 			pojo.setId(userCourse.getId());
 			pojo.setUserId(userCourse.getUser().getProfile().getFullName());
 			pojo.setCourseId(userCourse.getCourse().getCourseName());
@@ -282,7 +292,7 @@ public class CourseService {
 
 		return pojos;
 	}
-	
+
 	public PojoDeleteRes deleteUserEvent(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		ConnHandler.begin();
@@ -291,9 +301,7 @@ public class CourseService {
 		res.setMessage("Berhasil Dihapus");
 		return res;
 	}
-	
-	
-	public PojoCourseGetAllRes getCourseById(final String id) {
+  public PojoCourseGetAllRes getCourseById(final String id) {
 		final Optional<Course> course = getById(id);
 		final PojoCourseGetAllRes pojoCourseResGetAll = new PojoCourseGetAllRes();
 		pojoCourseResGetAll.setId(course.get().getId());

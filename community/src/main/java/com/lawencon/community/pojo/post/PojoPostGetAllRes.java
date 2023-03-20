@@ -1,5 +1,8 @@
 package com.lawencon.community.pojo.post;
 
+import com.lawencon.community.pojo.userbookmark.PojoPostBookmarkRes;
+import com.lawencon.community.pojo.userlike.PojoPostLikeRes;
+
 public class PojoPostGetAllRes {
 	private String id;
 	private String userId;
@@ -10,7 +13,9 @@ public class PojoPostGetAllRes {
 	private String typeName;
 	private String categoryId;
 	private String categoryName;
-	private Integer ver;
+  private Integer ver;
+	private PojoPostLikeRes isLiked;
+	private PojoPostBookmarkRes isBookmarked;
 	
 	public String getPostTitle() {
 		return postTitle;
@@ -66,12 +71,22 @@ public class PojoPostGetAllRes {
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-	public Integer getVer() {
+  public Integer getVer() {
 		return ver;
 	}
 	public void setVer(Integer ver) {
 		this.ver = ver;
 	}
-	
-	
+	public PojoPostLikeRes getIsLiked() {
+		return isLiked;
+	}
+	public void setIsLiked(PojoPostLikeRes isLiked) {
+		this.isLiked = isLiked;
+	}
+	public PojoPostBookmarkRes getIsBookmarked() {
+		return isBookmarked;
+	}
+	public void setIsBookmarked(PojoPostBookmarkRes isBookmarked) {
+		this.isBookmarked = isBookmarked;
+	}
 }

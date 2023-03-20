@@ -45,7 +45,7 @@ public class TransactionController {
 	}
 	
 	@GetMapping
-	private ResponseEntity<List<PojoTransactionGetAllRes>> getAll(@RequestParam(required = false, value = "type") String type){
+	private ResponseEntity<List<PojoTransactionGetAllRes>> getAllTransaction(@RequestParam(required = false, value = "type") String type){
 		final List<PojoTransactionGetAllRes> res = transactionService.getAllTransaction(type);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}

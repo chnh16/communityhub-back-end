@@ -26,6 +26,7 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.user.PojoLoginReq;
 import com.lawencon.community.pojo.user.PojoLoginRes;
 import com.lawencon.community.pojo.user.PojoProfileUpdateReq;
+import com.lawencon.community.pojo.user.PojoUserChangePasswordReq;
 import com.lawencon.community.pojo.user.PojoUserGetUserProfileRes;
 import com.lawencon.community.pojo.user.PojoUserRegisterReq;
 import com.lawencon.community.pojo.user.PojoVerificationCodeUpdateReq;
@@ -108,6 +109,15 @@ public class UserController {
 		final PojoUpdateRes res = userService.updateProfile(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
+	
+
+	@PutMapping("change-password")
+	public ResponseEntity<PojoUpdateRes> changePass(@RequestBody PojoUserChangePasswordReq data) {
+		final PojoUpdateRes res = userService.changePass(data);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	
 	
 
 }

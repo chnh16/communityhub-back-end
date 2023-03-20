@@ -28,7 +28,7 @@ public class EventDao extends MasterDao<Event>{
 	public List<Event> getAll() {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_event")
-		.append(" WHERE is_active = true");
+		.append(" WHERE is_active = TRUE");
 		final List<Event> res = em().createNativeQuery(toStr(str), Event.class).getResultList();
 		return res;
 	}
@@ -51,11 +51,32 @@ public class EventDao extends MasterDao<Event>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Event> getByCategoryId (final String categoryId){
+	public List<Event> getByCategoryId (String id){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_event e ")
-		.append("WHERE e.category_id = :categoryId");
-		final List<Event> res = em().createNativeQuery(toStr(str), Event.class).setParameter("categoryId", categoryId).getResultList();
+		.append("WHERE e.category_id = :id")
+		.append(" AND e.is_active = TRUE");
+		final List<Event> res = em().createNativeQuery(toStr(str), Event.class).setParameter("id", id).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Event> getByPriceAsc(){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM t_event")
+		.append(" WHERE is_active = TRUE")
+		.append(" ORDER BY price ASC");
+		final List<Event> res = em().createNativeQuery(toStr(str), Event.class).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Event> getByPriceDesc(){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM t_event")
+		.append(" WHERE is_active = TRUE")
+		.append(" ORDER BY price DESC");
+		final List<Event> res = em().createNativeQuery(toStr(str), Event.class).getResultList();
 		return res;
 	}
 	
