@@ -33,17 +33,17 @@ public class PollingController {
 		this.pollingService = pollingService;
 	}
 	
-	@PostMapping("/add")
-	public ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoPollingDetailInsertReq data) {
-		final PojoInsertRes res = pollingService.insertPollingDetail(data);
-		return new ResponseEntity<>(res, HttpStatus.CREATED);
-	}
+//	@PostMapping("/add")
+//	public ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoPollingDetailInsertReq data) {
+//		final PojoInsertRes res = pollingService.insertPollingDetail(data);
+//		return new ResponseEntity<>(res, HttpStatus.CREATED);
+//	}
 	
-	@PutMapping
-	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoPollingDetailUpdateReq data){
-		final PojoUpdateRes res = pollingService.updatePollingDetail(data);
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
+//	@PutMapping
+//	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoPollingDetailUpdateReq data){
+//		final PojoUpdateRes res = pollingService.updatePollingDetail(data);
+//		return new ResponseEntity<>(res, HttpStatus.OK);
+//	}
 	
 	@GetMapping("{postId}")
 	public ResponseEntity<List<PojoPollingChoiceGetAllRes>> getAll(@PathVariable("postId") String postId) {
