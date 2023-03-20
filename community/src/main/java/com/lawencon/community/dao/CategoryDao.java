@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Category;
 
 @Repository
@@ -26,7 +27,8 @@ public class CategoryDao extends MasterDao<Category>{
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM category")
 			.append(" WHERE is_active = true");
-		final List<Category> res = em().createNativeQuery(toStr(str), Category.class).getResultList();
+		final List<Category> res = em().createNativeQuery(toStr(str), Category.class)
+				.getResultList();
 		return res;
 	}
 	
@@ -39,6 +41,29 @@ public class CategoryDao extends MasterDao<Category>{
 				.setParameter("id", id)
 				.getResultList();
 		return Optional.ofNullable(res.get(0));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Category> getAllCategory(final Integer limit, final Integer offset) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM category c ")
+			.append(" WHERE c.is_active = true");
+		final List<Category> res = em().createNativeQuery(toStr(str).toString(), Category.class)
+				.setMaxResults(limit)
+				.setFirstResult(offset)
+				.getResultList();
+		return res;
+	}
+	
+	public int getTotalCategory() {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT COUNT(c.id) FROM category c ")
+			.append(" WHERE is_active = true");
+		
+		final int totalCategory = Integer.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str)
+				.toString())
+				.getSingleResult().toString());
+		return totalCategory;
 	}
 
 	public Category update(final Category data) {

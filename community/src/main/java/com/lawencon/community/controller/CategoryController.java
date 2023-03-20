@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.category.PojoCategoryGetAllRes;
+import com.lawencon.community.pojo.category.PojoCategoryGetAllResData;
 import com.lawencon.community.pojo.category.PojoCategoryInsertReq;
 import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
 import com.lawencon.community.service.CategoryService;
@@ -44,8 +46,15 @@ public class CategoryController {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<PojoCategoryGetAllRes> getCategoryById(@PathVariable("id") String id) {
-		final PojoCategoryGetAllRes res = categoryService.getCategoryById(id);
+	public ResponseEntity<PojoCategoryGetAllResData> getCategoryById(@PathVariable("id") String id) {
+		final PojoCategoryGetAllResData res = categoryService.getCategoryById(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("/page")
+	public ResponseEntity<PojoCategoryGetAllRes> getCategory(@RequestParam("size") int size, @RequestParam("page") int page) {
+		int offset = (page - 1)*size;
+		final PojoCategoryGetAllRes res = categoryService.getCategory(size, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 

@@ -8,8 +8,6 @@ public class PojoArticleResGetAll {
 	private String photoId;
 	private Integer ver;
 	
-	
-
 	public String getId() {
 		return id;
 	}

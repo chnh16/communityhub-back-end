@@ -32,6 +32,7 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.file.PojoFileInsertReq;
 import com.lawencon.community.pojo.pollingchoice.PojoPollingChoiceInsertReq;
 import com.lawencon.community.pojo.post.PojoPostGetAllRes;
+import com.lawencon.community.pojo.post.PojoPostGetAllResData;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetAllRes;
@@ -61,11 +62,12 @@ public class PostService {
 	private final FileDao fileDao;
 	private final PollingService pollingService;
 	private final PrincipalService principalService;
-
-	public PostService(final PostDao postDao, final PostFileDao postFileDao, final UserLikeDao userLikeDao,
+  
+		public PostService(final PostDao postDao, final PostFileDao postFileDao, final UserLikeDao userLikeDao,
 			final UserDao userDao, final PostTypeDao postTypeDao, final CategoryDao categoryDao,
 			final UserBookmarkDao userBookmarkDao, final PostDetailDao postDetailDao, final FileDao fileDao,
 			final PrincipalService principalService, final PollingService pollingService) {
+
 		this.postDao = postDao;
 		this.userDao = userDao;
 		this.postTypeDao = postTypeDao;
@@ -262,6 +264,10 @@ public class PostService {
 		return postDao.getAll();
 	}
 
+	public int getTotalPost() {
+		return postDao.getTotalPost();
+	}
+  
 	public List<PojoPostGetAllRes> getAllPost() {
 		final List<PojoPostGetAllRes> listPojoPost = new ArrayList<>();
 
@@ -294,6 +300,7 @@ public class PostService {
 			pojoPost.setCategoryName(listPost.get(i).getCategory().getCategoryName());
 			pojoPost.setPostTypeId(listPost.get(i).getPostType().getId());
 			pojoPost.setTypeName(listPost.get(i).getPostType().getTypeName());
+      pojoPost.setVer(listPost.get(i).getVersion());
 			pojoPost.setIsLiked(pojoLike);
 			pojoPost.setIsBookmarked(pojoBookmark);
 
@@ -301,6 +308,54 @@ public class PostService {
 		}
 
 		return listPojoPost;
+	}
+
+	public PojoPostGetAllRes getPostById(final String id) {
+
+		final Optional<Post> post = postDao.getById(id);
+
+		final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
+		pojoPost.setId(post.get().getId());
+		pojoPost.setUserId(post.get().getUser().getId());
+		pojoPost.setFullName(post.get().getUser().getProfile().getFullName());
+		pojoPost.setPostTitle(post.get().getPostTitle());
+		pojoPost.setPostContent(post.get().getPostContent());
+		pojoPost.setCategoryId(post.get().getCategory().getId());
+		pojoPost.setCategoryName(post.get().getCategory().getCategoryName());
+		pojoPost.setPostTypeId(post.get().getPostType().getId());
+		pojoPost.setTypeName(post.get().getPostType().getTypeName());
+		pojoPost.setVer(post.get().getVersion());
+
+		return pojoPost;
+	}
+
+	public PojoPostGetAllResData getPost(final int limit, final int offset) {
+		final List<PojoPostGetAllRes> listPojoPost = new ArrayList<>();
+
+		final List<Post> listPost = postDao.getAllPost(limit, offset);
+
+		for (int i = 0; i < listPost.size(); i++) {
+			final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
+
+			pojoPost.setId(listPost.get(i).getId());
+			pojoPost.setUserId(listPost.get(i).getUser().getId());
+			pojoPost.setFullName(listPost.get(i).getUser().getProfile().getFullName());
+			pojoPost.setPostTitle(listPost.get(i).getPostTitle());
+			pojoPost.setPostContent(listPost.get(i).getPostContent());
+			pojoPost.setCategoryId(listPost.get(i).getCategory().getId());
+			pojoPost.setCategoryName(listPost.get(i).getCategory().getCategoryName());
+			pojoPost.setPostTypeId(listPost.get(i).getPostType().getId());
+			pojoPost.setTypeName(listPost.get(i).getPostType().getTypeName());
+			pojoPost.setVer(listPost.get(i).getVersion());
+
+			listPojoPost.add(pojoPost);
+		}
+		
+		final PojoPostGetAllResData pojoPostData = new PojoPostGetAllResData();
+		pojoPostData.setData(listPojoPost);
+		pojoPostData.setTotal(getTotalPost());
+		
+		return pojoPostData;
 	}
 
 	private void valIdNull(final PostFile data) {

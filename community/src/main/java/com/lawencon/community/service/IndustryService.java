@@ -16,6 +16,7 @@ import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.industry.PojoIndustryGetAllRes;
+import com.lawencon.community.pojo.industry.PojoIndustryGetAllResData;
 import com.lawencon.community.pojo.industry.PojoIndustryInsertReq;
 import com.lawencon.community.pojo.industry.PojoIndustryUpdateReq;
 
@@ -87,7 +88,6 @@ public class IndustryService{
 		valIdNotNull(data);
 		
 		try {
-			ConnHandler.getManager().detach(industryUpdate);
 			ConnHandler.begin();
 			industryUpdate = industryDao.update(data);
 			ConnHandler.commit();
@@ -168,7 +168,7 @@ public class IndustryService{
 			pojoIndustry.setId(listIndustry.get(i).getId());
 			pojoIndustry.setIndustryCode(listIndustry.get(i).getIndustryCode());
 			pojoIndustry.setIndustryName(listIndustry.get(i).getIndustryName());
-			
+			pojoIndustry.setVer(listIndustry.get(i).getVersion());
 			listPojoIndustry.add(pojoIndustry);
 		}
 		return listPojoIndustry;
@@ -184,5 +184,24 @@ public class IndustryService{
 		pojoIndustry.setVer(industry.get().getVersion());
 		
 		return pojoIndustry;
+	}
+	
+	public PojoIndustryGetAllResData getIndustry(final Integer limit, final Integer offset){
+		final List<PojoIndustryGetAllRes> listPojoIndustry = new ArrayList<>();
+		final List<Industry> listIndustry = industryDao.getIndustry(limit, offset);
+		for(int i = 0; i < listIndustry.size(); i++) {
+			final PojoIndustryGetAllRes pojoIndustryGetAll = new PojoIndustryGetAllRes();
+			pojoIndustryGetAll.setId(listIndustry.get(i).getId());
+			pojoIndustryGetAll.setIndustryCode(listIndustry.get(i).getIndustryCode());
+			pojoIndustryGetAll.setIndustryName(listIndustry.get(i).getIndustryName());
+			pojoIndustryGetAll.setVer(listIndustry.get(i).getVersion());
+			listPojoIndustry.add(pojoIndustryGetAll); 
+		}
+		
+		final PojoIndustryGetAllResData pojoIndustryData = new PojoIndustryGetAllResData();
+		pojoIndustryData.setData(listPojoIndustry);
+		pojoIndustryData.setTotal(industryDao.getTotalIndustry());	
+		
+		return pojoIndustryData;
 	}
 }

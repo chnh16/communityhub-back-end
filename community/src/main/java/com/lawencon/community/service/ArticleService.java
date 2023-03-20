@@ -15,6 +15,7 @@ import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.article.PojoArticleGetAllResData;
 import com.lawencon.community.pojo.article.PojoArticleInsertReq;
 import com.lawencon.community.pojo.article.PojoArticleResGetAll;
 import com.lawencon.community.pojo.article.PojoArticleUpdateReq;
@@ -70,6 +71,10 @@ private final FileDao fileDao;
 
 	public List<Article> getAll() {
 		return articleDao.getAll();
+	}
+	
+	public int getTotalArticle() {
+		return articleDao.getTotalArticle();
 	}
 
 	public boolean deleteById(final String id) {
@@ -182,6 +187,43 @@ private final FileDao fileDao;
 	
 	
 	
-	
+	public PojoArticleGetAllResData getArticle(final Integer limit, final Integer offset) {
+		final List<PojoArticleResGetAll> pojos = new ArrayList<>();
+		final List<Article> res = articleDao.getAllArticle(limit, offset);
 
+		for (int i = 0; i < res.size(); i++) {
+			final PojoArticleResGetAll pojo = new PojoArticleResGetAll();
+			final Article article = res.get(i);
+
+			ConnHandler.getManager().detach(article);
+			
+			pojo.setId(article.getId());
+			pojo.setPhotoId(article.getPhoto().getId());
+			pojo.setArticleTitle(article.getArticleTitle());
+			pojo.setArticleContent(article.getArticleContent());
+			pojo.setVer(article.getVersion());
+
+			pojos.add(pojo);
+		}
+		
+		final PojoArticleGetAllResData pojoArticleData = new PojoArticleGetAllResData();
+		pojoArticleData.setData(pojos);
+		pojoArticleData.setTotal(articleDao.getTotalArticle());
+		
+		return pojoArticleData;
+	}
+
+	public PojoArticleResGetAll getAllArticle(final String id) {
+		final Optional<Article> article = getById(id);
+		final PojoArticleResGetAll pojoArticle = new PojoArticleResGetAll();
+		
+		pojoArticle.setId(article.get().getId());
+		pojoArticle.setArticleTitle(article.get().getArticleTitle());
+		pojoArticle.setArticleContent(article.get().getArticleContent());
+		pojoArticle.setPhotoId(article.get().getPhoto().getId());
+		pojoArticle.setVer(article.get().getVersion());
+		
+		
+		return pojoArticle;
+	}
 }

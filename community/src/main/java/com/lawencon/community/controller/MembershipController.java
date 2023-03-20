@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.membership.PojoMembershipGetAllRes;
+import com.lawencon.community.pojo.membership.PojoMembershipGetAllResData;
 import com.lawencon.community.pojo.membership.PojoMembershipInsertReq;
 import com.lawencon.community.pojo.membership.PojoMembershipUpdateReq;
 import com.lawencon.community.service.MembershipService;
@@ -54,6 +56,13 @@ public class MembershipController {
 	@GetMapping("{id}")
 	public ResponseEntity<PojoMembershipGetAllRes> getMembershipById(@PathVariable("id") String id) {
 		final PojoMembershipGetAllRes res = membershipService.getMembershipById(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("/page")
+	public ResponseEntity<PojoMembershipGetAllResData> getMembership(@RequestParam("size") int size, @RequestParam("page") int page) {
+		int offset = (page - 1)*size;
+		final PojoMembershipGetAllResData res = membershipService.getMembership(size, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

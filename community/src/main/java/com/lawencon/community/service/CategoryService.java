@@ -12,6 +12,7 @@ import com.lawencon.community.model.Category;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.category.PojoCategoryGetAllResData;
 import com.lawencon.community.pojo.category.PojoCategoryGetAllRes;
 import com.lawencon.community.pojo.category.PojoCategoryInsertReq;
 import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
@@ -152,12 +153,16 @@ public class CategoryService {
 		return categoryDao.getAll();
 	}
 	
-	public List<PojoCategoryGetAllRes> getAllCategory(){
-		final List<PojoCategoryGetAllRes> listPojoCategory = new ArrayList<>();
+	public int getTotalCategory() {
+		return categoryDao.getTotalCategory();
+	}
+	
+	public List<PojoCategoryGetAllResData> getAllCategory(){
+		final List<PojoCategoryGetAllResData> listPojoCategory = new ArrayList<>();
 		
 		final List<Category> listCategory = getAll();
 		for(int i = 0; i < listCategory.size(); i++) {
-			final PojoCategoryGetAllRes pojoCategoryGetAll = new PojoCategoryGetAllRes();
+			final PojoCategoryGetAllResData pojoCategoryGetAll = new PojoCategoryGetAllResData();
 			pojoCategoryGetAll.setId(listCategory.get(i).getId());
 			pojoCategoryGetAll.setCategoryCode(listCategory.get(i).getCategoryCode());
 			pojoCategoryGetAll.setCategoryName(listCategory.get(i).getCategoryName());
@@ -167,10 +172,30 @@ public class CategoryService {
 		return listPojoCategory;
 	}
 	
-	public PojoCategoryGetAllRes getCategoryById(final String id){
+	public PojoCategoryGetAllRes getCategory(final Integer limit, final Integer offset){
+		final List<PojoCategoryGetAllResData> listPojoCategory = new ArrayList<>();
+		final List<Category> listCategory = categoryDao.getAllCategory(limit, offset);
+		for(int i = 0; i < listCategory.size(); i++) {
+			final PojoCategoryGetAllResData pojoCategoryGetAll = new PojoCategoryGetAllResData();
+			pojoCategoryGetAll.setId(listCategory.get(i).getId());
+			pojoCategoryGetAll.setCategoryCode(listCategory.get(i).getCategoryCode());
+			pojoCategoryGetAll.setCategoryName(listCategory.get(i).getCategoryName());
+			pojoCategoryGetAll.setVer(listCategory.get(i).getVersion());
+			listPojoCategory.add(pojoCategoryGetAll); 
+		}
+		 
+		
+		final PojoCategoryGetAllRes pojoCategoryData = new PojoCategoryGetAllRes();
+		pojoCategoryData.setData(listPojoCategory);
+		pojoCategoryData.setTotal(categoryDao.getTotalCategory());	
+		
+		return pojoCategoryData;
+	}
+	
+	public PojoCategoryGetAllResData getCategoryById(final String id){
 		
 		final Optional<Category> listCategory = categoryDao.getCategoryById(id);
-		final PojoCategoryGetAllRes pojoCategoryGetAll = new PojoCategoryGetAllRes();
+		final PojoCategoryGetAllResData pojoCategoryGetAll = new PojoCategoryGetAllResData();
 		pojoCategoryGetAll.setId(listCategory.get().getId());
 		pojoCategoryGetAll.setCategoryCode(listCategory.get().getCategoryCode());
 		pojoCategoryGetAll.setCategoryName(listCategory.get().getCategoryName());
