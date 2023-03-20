@@ -50,6 +50,12 @@ public class TransactionController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
+	@GetMapping("{id}")
+	private ResponseEntity<PojoTransactionGetAllRes> getTransactionById(@PathVariable("id") String id){
+		final PojoTransactionGetAllRes res = transactionService.getTransactionById(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
 	@GetMapping("page")
 	private ResponseEntity<PojoTransactionGetAllResData> getAllTransaction(@RequestParam("size") int size, @RequestParam("page") int page, @RequestParam(required = false, value = "type") String type){
 		int offset = (page - 1)*size;
