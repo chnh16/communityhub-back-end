@@ -38,7 +38,7 @@ public class CategoryController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<PojoCategoryGetAllRes>> getAllIndustry() {
+	public ResponseEntity<List<PojoCategoryGetAllRes>> getAllCategory() {
 		final List<PojoCategoryGetAllRes> res = categoryService.getAllCategory();
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}

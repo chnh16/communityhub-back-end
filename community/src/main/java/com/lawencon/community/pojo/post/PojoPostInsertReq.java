@@ -1,19 +1,23 @@
 package com.lawencon.community.pojo.post;
 
+import java.util.List;
+
+import com.lawencon.community.pojo.file.PojoFileInsertReq;
+import com.lawencon.community.pojo.pollingchoice.PojoPollingChoiceInsertReq;
+
 public class PojoPostInsertReq {
-//	private String userId;
 	private String postTitle;
 	private String postContent;
-	private String postTypeId;
 	private String categoryId;
+	private Boolean isPremium;
+	private List<PojoFileInsertReq> file;
+	private List<PojoPollingChoiceInsertReq> polling;
+	
 	public String getPostTitle() {
 		return postTitle;
 	}
 	public String getPostContent() {
 		return postContent;
-	}
-	public String getPostTypeId() {
-		return postTypeId;
 	}
 	public String getCategoryId() {
 		return categoryId;
@@ -24,18 +28,26 @@ public class PojoPostInsertReq {
 	public void setPostContent(String postContent) {
 		this.postContent = postContent;
 	}
-	public void setPostTypeId(String postTypeId) {
-		this.postTypeId = postTypeId;
-	}
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
 	}
-//	public String getUserId() {
-//		return userId;
-//	}
-//	public void setUserId(String userId) {
-//		this.userId = userId;
-//	}
-//	
+	public List<PojoFileInsertReq> getFile() {
+		return file;
+	}
+	public void setFile(List<PojoFileInsertReq> file) {
+		this.file = file;
+	}
+	public List<PojoPollingChoiceInsertReq> getPolling() {
+		return polling;
+	}
+	public void setPolling(List<PojoPollingChoiceInsertReq> polling) {
+		this.polling = polling;
+	}
+	public Boolean getIsPremium() {
+		return isPremium;
+	}
+	public void setIsPremium(Boolean isPremium) {
+		this.isPremium = isPremium;
+	}
 	
 }

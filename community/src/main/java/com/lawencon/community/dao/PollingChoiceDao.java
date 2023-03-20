@@ -33,12 +33,12 @@ public class PollingChoiceDao extends MasterDao<PollingChoice>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PollingChoice> getChoiceByDetail(final String detailId) {
+	public List<PollingChoice> getChoiceByPost(final String postId) {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM polling_choice pc ")
-		.append(" WHERE pc.polling_detail_id = :detailId AND pc.is_active = true");
+		.append(" WHERE pc.post_id = :postId AND pc.is_active = true");
 		final List<PollingChoice> res = em().createNativeQuery(toStr(str), PollingChoice.class)
-				.setParameter("detailId", detailId)
+				.setParameter("postId", postId)
 				.getResultList();
 		return res;
 	}

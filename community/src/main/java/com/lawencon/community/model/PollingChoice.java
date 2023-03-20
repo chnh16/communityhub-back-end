@@ -14,8 +14,8 @@ public class PollingChoice extends BaseEntity{
 	private String choiceContent;
 	
 	@OneToOne
-	@JoinColumn(name = "polling_detail_id", nullable = false)
-	private PollingDetail pollingDetail;
+	@JoinColumn(name = "post_id", nullable = false)
+	private Post post;
 
 	public String getChoiceContent() {
 		return choiceContent;
@@ -25,12 +25,12 @@ public class PollingChoice extends BaseEntity{
 		this.choiceContent = choiceContent;
 	}
 
-	public PollingDetail getPollingDetail() {
-		return pollingDetail;
+	public Post getPost() {
+		return post;
 	}
 
-	public void setPollingDetail(PollingDetail pollingDetail) {
-		this.pollingDetail = pollingDetail;
+	public void setPost(Post post) {
+		this.post = post;
 	}
-
+	
 }

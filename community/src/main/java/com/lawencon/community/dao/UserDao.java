@@ -115,7 +115,7 @@ public class UserDao extends MasterDao<User> {
 		return super.getByIdAndDetach(User.class, id);
 	}
 
-	public Optional<User> getUserSystem(String roleCode) {
+	public Optional<User> getUserSystem(final String roleCode) {
 		User user = null;
 
 		try {
