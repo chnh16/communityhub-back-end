@@ -25,6 +25,7 @@ import com.lawencon.community.pojo.course.PojoCourseGetAllRes;
 import com.lawencon.community.pojo.course.PojoCourseInsertReq;
 import com.lawencon.community.pojo.course.PojoCourseResGetByCategoryId;
 import com.lawencon.community.pojo.course.PojoCourseUpdateReq;
+import com.lawencon.community.pojo.course.PojoCourserGetAllResData;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseGetByUserIdRes;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseInsertReq;
 import com.lawencon.community.util.Generate;
@@ -291,4 +292,52 @@ public class CourseService {
 		return res;
 	}
 	
+	
+	public PojoCourseGetAllRes getCourseById(final String id) {
+		final Optional<Course> course = getById(id);
+		final PojoCourseGetAllRes pojoCourseResGetAll = new PojoCourseGetAllRes();
+		pojoCourseResGetAll.setId(course.get().getId());
+		pojoCourseResGetAll.setCourseName(course.get().getCourseName());
+		pojoCourseResGetAll.setProvider(course.get().getProvider());
+		pojoCourseResGetAll.setLocationName(course.get().getLocationName());
+		pojoCourseResGetAll.setStartDate(course.get().getStartDate());
+		pojoCourseResGetAll.setEndDate(course.get().getEndDate());
+		pojoCourseResGetAll.setPrice(course.get().getPrice());
+		pojoCourseResGetAll.setCategoryId(course.get().getCategory().getId());
+		pojoCourseResGetAll.setFile(course.get().getFile().getId());
+		pojoCourseResGetAll.setVer(course.get().getVersion());
+		return pojoCourseResGetAll;
+	}
+	
+	
+	public PojoCourserGetAllResData getCoursePage(final Integer limit, final Integer offset) {
+		final List<PojoCourseGetAllRes> pojos = new ArrayList<>();
+		final List<Course> res = courseDao.getCoursePage(limit, offset);
+
+		for (int i = 0; i < res.size(); i++) {
+			final PojoCourseGetAllRes pojo = new PojoCourseGetAllRes();
+			final Course course = res.get(i);
+
+			ConnHandler.getManager().detach(course);
+			pojo.setFile(course.getFile().getFileName());
+			pojo.setId(course.getId());
+			pojo.setCourseName(course.getCourseName());
+			pojo.setTrainer(course.getTrainer());
+			pojo.setProvider(course.getProvider());
+			pojo.setLocationName(course.getLocationName());
+			pojo.setCategoryId(course.getCategory().getCategoryName());
+			pojo.setStartDate(course.getStartDate());
+			pojo.setEndDate(course.getEndDate());
+			pojo.setPrice(course.getPrice());
+			pojo.setVer(course.getVersion());
+			
+			pojos.add(pojo);
+		} 
+		
+		final PojoCourserGetAllResData pojoCourseData = new PojoCourserGetAllResData();
+		pojoCourseData.setData(pojos);
+		pojoCourseData.setTotal(courseDao.getTotalCourse());
+		
+		return pojoCourseData;
+	}
 }

@@ -10,6 +10,8 @@ public class PojoPostGetAllRes {
 	private String typeName;
 	private String categoryId;
 	private String categoryName;
+	private Integer ver;
+	
 	public String getPostTitle() {
 		return postTitle;
 	}
@@ -63,6 +65,12 @@ public class PojoPostGetAllRes {
 	}
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 	
 	

@@ -21,6 +21,7 @@ import com.lawencon.community.model.UserEvent;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.event.PojoEventGetAllResData;
 import com.lawencon.community.pojo.event.PojoEventReqInsert;
 import com.lawencon.community.pojo.event.PojoEventReqUpdate;
 import com.lawencon.community.pojo.event.PojoEventResGetAll;
@@ -303,6 +304,52 @@ public class EventService {
 		return res;
 	}
 	
+	public PojoEventResGetAll getEvent(final String id) {
+		final Optional<Event> event = getById(id);
+		final PojoEventResGetAll pojoEventResGetAll = new PojoEventResGetAll();
+		pojoEventResGetAll.setId(event.get().getId());
+		pojoEventResGetAll.setEventName(event.get().getEventName());
+		pojoEventResGetAll.setEventCode(event.get().getEventCode());
+		pojoEventResGetAll.setProvider(event.get().getProvider());
+		pojoEventResGetAll.setLocationName(event.get().getLocationName());
+		pojoEventResGetAll.setStartDate(event.get().getStartDate());
+		pojoEventResGetAll.setEndDate(event.get().getEndDate());
+		pojoEventResGetAll.setPrice(event.get().getPrice());
+		pojoEventResGetAll.setCategoryId(event.get().getCategory().getId());
+		pojoEventResGetAll.setFileId(event.get().getFile().getId());
+		pojoEventResGetAll.setVer(event.get().getVersion());
+		return pojoEventResGetAll;
+	}
 	
+	public PojoEventGetAllResData getEventPage(final Integer limit, final Integer offset) {
+		final List<PojoEventResGetAll> pojos = new ArrayList<>();
+		final List<Event> res = eventDao.getEvent(limit, offset);
+
+		for (int i = 0; i < res.size(); i++) {
+			final PojoEventResGetAll pojo = new PojoEventResGetAll();
+			final Event event = res.get(i);
+
+			ConnHandler.getManager().detach(event);
+			pojo.setFileId(event.getFile().getFileName());
+			pojo.setId(event.getId());
+			pojo.setEventCode(event.getEventCode());
+			pojo.setEventName(event.getEventName());
+			pojo.setProvider(event.getProvider());
+			pojo.setLocationName(event.getLocationName());
+			pojo.setCategoryId(event.getCategory().getCategoryName());
+			pojo.setStartDate(event.getStartDate());
+			pojo.setEndDate(event.getEndDate());
+			pojo.setPrice(event.getPrice());
+			pojo.setVer(event.getVersion());
+
+			pojos.add(pojo);
+		}
+		
+		final PojoEventGetAllResData pojoEventData = new PojoEventGetAllResData();
+		pojoEventData.setData(pojos);
+		pojoEventData.setTotal(eventDao.getTotalEvent());
+		
+		return pojoEventData;
+	}
 
 }

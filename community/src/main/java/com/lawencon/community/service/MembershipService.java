@@ -13,6 +13,7 @@ import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.membership.PojoMembershipGetAllRes;
+import com.lawencon.community.pojo.membership.PojoMembershipGetAllResData;
 import com.lawencon.community.pojo.membership.PojoMembershipInsertReq;
 import com.lawencon.community.pojo.membership.PojoMembershipUpdateReq;
 import com.lawencon.community.util.Generate;
@@ -143,6 +144,7 @@ public class MembershipService {
 			pojo.setMembershipName(membership.getMembershipName());
 			pojo.setDuration(membership.getDuration());
 			pojo.setAmount(membership.getAmount());
+			pojo.setVer(membership.getVersion());
 			pojos.add(pojo);
 		}
 		return pojos;
@@ -168,5 +170,28 @@ public class MembershipService {
 		
 		return pojoMembership;
 	}
+	
+	public PojoMembershipGetAllResData getMembership(final Integer limit, final Integer offset) {
+		final List<PojoMembershipGetAllRes> pojos = new ArrayList<>();
+		final List<Membership> res = membershipDao.getMembership(limit, offset);
 
+		for (int i = 0; i < res.size(); i++) {
+			final PojoMembershipGetAllRes pojo = new PojoMembershipGetAllRes();
+			final Membership membership = res.get(i);
+
+			ConnHandler.getManager().detach(membership);
+			pojo.setId(membership.getId());
+			pojo.setMembershipCode(membership.getMembershipCode());
+			pojo.setMembershipName(membership.getMembershipName());
+			pojo.setDuration(membership.getDuration());
+			pojo.setAmount(membership.getAmount());
+			pojo.setVer(membership.getVersion());
+			pojos.add(pojo);
+		}
+		
+		final PojoMembershipGetAllResData pojoMembershipData = new PojoMembershipGetAllResData();
+		pojoMembershipData.setData(pojos);
+		pojoMembershipData.setTotal(membershipDao.getTotalMembership());
+		return pojoMembershipData;
+	}
 }

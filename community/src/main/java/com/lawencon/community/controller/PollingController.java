@@ -29,7 +29,7 @@ public class PollingController {
 
 	private PollingService pollingService;
 	
-	public PollingController(PollingService pollingService) {
+	public PollingController(final PollingService pollingService) {
 		this.pollingService = pollingService;
 	}
 	
@@ -63,12 +63,6 @@ public class PollingController {
 		final PojoInsertRes res = pollingService.insertPollingAnswer(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
-	
-//	@GetMapping("count/{detailId}")
-//	public ResponseEntity<PojoPollingAnswerGetCountRes> getCount(@PathVariable("detailId") String detailId) {
-//		final PojoPollingAnswerGetCountRes res = pollingService.getCountAnswer(detailId);
-//		return new ResponseEntity<>(res, HttpStatus.OK);
-//	}
 	
 	@GetMapping("count/{detailId}")
 	public ResponseEntity<List<PojoPollingAnswerGetCountRes>> getTotalAnswerByChoiceId(@PathVariable("detailId") String detailId) {

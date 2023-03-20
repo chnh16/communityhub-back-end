@@ -12,6 +12,7 @@ import com.lawencon.community.model.Position;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.position.PojoPosistionGetAllResData;
 import com.lawencon.community.pojo.position.PojoPositionGetAllRes;
 import com.lawencon.community.pojo.position.PojoPositionInsertReq;
 import com.lawencon.community.pojo.position.PojoPositionUpdateReq;
@@ -123,6 +124,7 @@ public class PositionService extends ValidationService<Position> {
 			ConnHandler.getManager().detach(position);
 			pojo.setId(position.getId());
 			pojo.setPositionName(res.get(i).getPositionName());
+			pojo.setVer(position.getVersion());
 			pojos.add(pojo);
 		}
 		return pojos;
@@ -145,6 +147,29 @@ public class PositionService extends ValidationService<Position> {
 		return pojoPosition;
 	}
 
+	public PojoPosistionGetAllResData getPositioAllResData(final Integer limit, final Integer offset) {
+		final List<PojoPositionGetAllRes> pojos = new ArrayList<>();
+		final List<Position> res = positionDao.getPosition(limit, offset);
+		
+		for(int i = 0; i < res.size(); i++) {
+			final PojoPositionGetAllRes pojo = new PojoPositionGetAllRes();
+			final Position position = res.get(i);
+			
+			ConnHandler.getManager().detach(position);
+			pojo.setId(position.getId());
+			pojo.setPositionName(res.get(i).getPositionName());
+			pojo.setVer(position.getVersion());
+			pojos.add(pojo);
+		}
+		
+		
+		final PojoPosistionGetAllResData pojoPositionData = new PojoPosistionGetAllResData();
+		pojoPositionData.setData(pojos);
+		pojoPositionData.setTotal(positionDao.getTotalPosition());
+		
+		return pojoPositionData;
+	}
+	
 	@Override
 	void valId(Position data) {
 		// TODO Auto-generated method stub

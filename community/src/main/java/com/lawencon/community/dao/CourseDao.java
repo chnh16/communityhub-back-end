@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Course;
 
 @Repository
@@ -55,6 +56,40 @@ public class CourseDao extends MasterDao<Course>{
 		.append("WHERE c.category_id = :categoryId");
 		final List<Course> res = em().createNativeQuery(toStr(str), Course.class).setParameter("categoryId", categoryId).getResultList();
 		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Course> getCoursePage(final Integer limit, final Integer offset) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM course c ")
+			.append(" WHERE c.is_active = true");
+		final List<Course> res = em().createNativeQuery(toStr(str).toString(), Course.class)
+				.setMaxResults(limit)
+				.setFirstResult(offset)
+				.getResultList();
+		return res;
+	}
+	
+	public int getTotalCourse() {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT COUNT(c.id) FROM course c ")
+			.append(" WHERE c.is_active = true");
+		
+		final int totalCourse = Integer.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str)
+				.toString())
+				.getSingleResult().toString());
+		return totalCourse;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Optional<Course> getCourseById(final String id) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM course c ")
+			.append(" WHERE c.id = :id AND c.is_active = true");
+		final List<Course> res = em().createNativeQuery(toStr(str), Course.class)
+				.setParameter("id", id)
+				.getResultList();
+		return Optional.ofNullable(res.get(0));
 	}
 
 	@Override

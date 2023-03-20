@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.position.PojoPosistionGetAllResData;
 import com.lawencon.community.pojo.position.PojoPositionGetAllRes;
 import com.lawencon.community.pojo.position.PojoPositionInsertReq;
 import com.lawencon.community.pojo.position.PojoPositionUpdateReq;
@@ -52,6 +54,13 @@ public class PositionController {
 	@GetMapping("{id}")
 	public ResponseEntity<PojoPositionGetAllRes> getAllRes(@PathVariable("id") String id) {
 		final PojoPositionGetAllRes res = positionService.getPositionById(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("/page")
+	public ResponseEntity<PojoPosistionGetAllResData> getPosition(@RequestParam("size") int size, @RequestParam("page") int page) {
+		int offset = (page - 1)*size;
+		final PojoPosistionGetAllResData res = positionService.getPositioAllResData(size, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 

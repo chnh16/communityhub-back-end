@@ -13,6 +13,7 @@ public class PojoUserGetUserProfileRes {
 	private String industryId;
 	private String company;
 	private String file;
+	private Integer ver;
 
 	public String getEmail() {
 		return email;
@@ -100,6 +101,14 @@ public class PojoUserGetUserProfileRes {
 
 	public void setFile(String file) {
 		this.file = file;
+	}
+
+	public Integer getVer() {
+		return ver;
+	}
+
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 
 }

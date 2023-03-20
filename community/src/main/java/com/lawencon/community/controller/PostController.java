@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.post.PojoPostGetAllRes;
+import com.lawencon.community.pojo.post.PojoPostGetAllResData;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetAllRes;
@@ -55,6 +57,19 @@ public class PostController {
 	@GetMapping("list-post")
 	public ResponseEntity<List<PojoPostGetAllRes>> getAllPost(){
 		final List<PojoPostGetAllRes> res = postService.getAllPost();
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("{id}")
+	public ResponseEntity<PojoPostGetAllRes> getPostById(@PathVariable("id") String id){
+		final PojoPostGetAllRes res = postService.getPostById(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("page")
+	public ResponseEntity<PojoPostGetAllResData> getPost(@RequestParam("size") int size, @RequestParam("page") int page){
+		int offset = (page - 1)*size;
+		final PojoPostGetAllResData res = postService.getPost(size, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

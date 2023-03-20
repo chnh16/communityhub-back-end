@@ -10,6 +10,7 @@ public class PojoTransactionGetByCourseIdRes {
 	private String itemName;
 	private BigDecimal grandTotal;
 	private Boolean isApproved;
+	private Integer ver;
 
 	public String getId() {
 		return id;
@@ -57,6 +58,14 @@ public class PojoTransactionGetByCourseIdRes {
 
 	public void setIsApproved(Boolean isApproved) {
 		this.isApproved = isApproved;
+	}
+
+	public Integer getVer() {
+		return ver;
+	}
+
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 
 }

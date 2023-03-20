@@ -19,6 +19,7 @@ import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.transaction.PojoInsertTransactionReq;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetAllRes;
+import com.lawencon.community.pojo.transaction.PojoTransactionGetAllResData;
 import com.lawencon.community.pojo.transaction.PojoUpdateTransactionReq;
 import com.lawencon.community.service.TransactionService;
 
@@ -46,6 +47,13 @@ public class TransactionController {
 	@GetMapping
 	private ResponseEntity<List<PojoTransactionGetAllRes>> getAll(@RequestParam(required = false, value = "type") String type){
 		final List<PojoTransactionGetAllRes> res = transactionService.getAllTransaction(type);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("page")
+	private ResponseEntity<PojoTransactionGetAllResData> getAllTransaction(@RequestParam("size") int size, @RequestParam("page") int page, @RequestParam(required = false, value = "type") String type){
+		int offset = (page - 1)*size;
+		final PojoTransactionGetAllResData res = transactionService.getTransactionPage(size, offset, type);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

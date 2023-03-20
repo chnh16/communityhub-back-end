@@ -14,6 +14,7 @@ import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.voucher.PojoVoucherGetAllRes;
+import com.lawencon.community.pojo.voucher.PojoVoucherGetAllResData;
 import com.lawencon.community.pojo.voucher.PojoVoucherInsertReq;
 import com.lawencon.community.pojo.voucher.PojoVoucherUpdateReq;
 
@@ -129,6 +130,7 @@ public class VoucherService {
 			pojo.setVoucherCode(vcr.getVoucherCode());
 			pojo.setAmount(vcr.getAmount());
 			pojo.setExpiredDate(vcr.getExpiredDate());
+			pojo.setVer(vcr.getVersion());
 			pojos.add(pojo);
 		}
 		return pojos;
@@ -191,6 +193,28 @@ public class VoucherService {
 		pojoVoucher.setExpiredDate(voucher.get().getExpiredDate());
 		pojoVoucher.setAmount(voucher.get().getAmount());
 		pojoVoucher.setVer(voucher.get().getVersion());
+		
+		return pojoVoucher;
+	}
+	
+	public PojoVoucherGetAllResData getVoucherGetAllResData(final Integer limit, final Integer offset) {
+		final List<PojoVoucherGetAllRes> pojos = new ArrayList<>();
+		final List<Voucher> res = voucherDao.getVoucher(limit, offset);
+		for (int i = 0; i < res.size(); i++) {
+			final PojoVoucherGetAllRes pojo = new PojoVoucherGetAllRes();
+			final Voucher vcr = res.get(i);
+			ConnHandler.getManager().detach(vcr);
+			pojo.setId(vcr.getId());
+			pojo.setVoucherCode(vcr.getVoucherCode());
+			pojo.setAmount(vcr.getAmount());
+			pojo.setExpiredDate(vcr.getExpiredDate());
+			pojo.setVer(vcr.getVersion());;
+			pojos.add(pojo);
+		}
+		
+		final PojoVoucherGetAllResData pojoVoucher = new PojoVoucherGetAllResData();
+		pojoVoucher.setData(pojos);
+		pojoVoucher.setTotal(voucherDao.getTotalVoucher());
 		
 		return pojoVoucher;
 	}

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Event;
 
 @Repository
@@ -56,6 +57,40 @@ public class EventDao extends MasterDao<Event>{
 		.append("WHERE e.category_id = :categoryId");
 		final List<Event> res = em().createNativeQuery(toStr(str), Event.class).setParameter("categoryId", categoryId).getResultList();
 		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Event> getEvent(final Integer limit, final Integer offset) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM event e ")
+			.append(" WHERE c.is_active = true");
+		final List<Event> res = em().createNativeQuery(toStr(str).toString(), Event.class)
+				.setMaxResults(limit)
+				.setFirstResult(offset)
+				.getResultList();
+		return res;
+	}
+	
+	public int getTotalEvent() {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT COUNT(e.id) FROM event e ")
+			.append(" WHERE e.is_active = true");
+		
+		final int totalEvent = Integer.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str)
+				.toString())
+				.getSingleResult().toString());
+		return totalEvent;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Optional<Event> getArticleById(final String id) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM t_event e ")
+			.append(" WHERE e.id = :id AND e.is_active = true");
+		final List<Event> res = em().createNativeQuery(toStr(str), Event.class)
+				.setParameter("id", id)
+				.getResultList();
+		return Optional.ofNullable(res.get(0));
 	}
 
 	@Override
