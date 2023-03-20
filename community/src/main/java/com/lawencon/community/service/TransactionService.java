@@ -192,7 +192,7 @@ public class TransactionService {
 
 	public PojoUpdateRes updateRes(final PojoUpdateTransactionReq data) {
 		Transaction transactionUpdate = null;
-		transactionUpdate = getByIdAndDetach(data.getTransactionId());
+		transactionUpdate = getByIdAndDetach(data.getId());
 		final Transaction transaction = transactionUpdate;
 		transaction.setIsApproved(data.getIsApproved());
 		transaction.setVersion(data.getVer());

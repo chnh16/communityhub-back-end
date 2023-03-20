@@ -1,16 +1,16 @@
 package com.lawencon.community.pojo.transaction;
 
 public class PojoUpdateTransactionReq {
-	private String transactionId;
+	private String id;
 	private Boolean isApproved;
 	private Integer ver;
 
-	public String getTransactionId() {
-		return transactionId;
+	public String getId() {
+		return id;
 	}
 
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public Boolean getIsApproved() {
