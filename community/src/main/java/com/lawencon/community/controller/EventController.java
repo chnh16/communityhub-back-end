@@ -47,18 +47,18 @@ private final EventService eventService;
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping
+	@GetMapping("page")
 	public ResponseEntity<PojoEventGetAllResData> getByUserId(@RequestParam("size") Integer size, @RequestParam("page") Integer page) {
 		int offset = (page - 1)* size;
 		final PojoEventGetAllResData res = eventService.getEventPage(size, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<List<PojoEventResGetByCategoryId>> getByCategoryId(@PathVariable("id") final String id) {
-		final List<PojoEventResGetByCategoryId> res = eventService.getByCategoryId(id);
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
+//	@GetMapping("/{id}")
+//	public ResponseEntity<List<PojoEventResGetByCategoryId>> getByCategoryId(@PathVariable("id") final String id) {
+//		final List<PojoEventResGetByCategoryId> res = eventService.getByCategoryId(id);
+//		return new ResponseEntity<>(res, HttpStatus.OK);
+//	}
 	
 	@PutMapping
 	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoEventReqUpdate data){

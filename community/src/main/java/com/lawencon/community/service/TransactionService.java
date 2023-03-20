@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -52,7 +50,8 @@ public class TransactionService {
 	public TransactionService(final TransactionDao transactionDao, final UserService userService,
 			final EventService eventService, final MembershipService membershipService,
 			final CourseService courseService, final PrincipalService principalService,
-			final VoucherService voucherService, final FileDao fileDao, final VoucherDao voucherDao, final ProfileDao profileDao) {
+			final VoucherService voucherService, final FileDao fileDao, final VoucherDao voucherDao,
+			final ProfileDao profileDao) {
 		this.transactionDao = transactionDao;
 		this.userService = userService;
 		this.eventService = eventService;
@@ -67,7 +66,7 @@ public class TransactionService {
 
 	private Transaction insert(final Transaction data) {
 		Transaction transInsert = null;
-		
+
 		try {
 			final Transaction trans = new Transaction();
 			ConnHandler.begin();
@@ -110,7 +109,7 @@ public class TransactionService {
 
 		return transactionUpdate;
 	}
-	
+
 	public Transaction getRefById(final String id) {
 		return transactionDao.getRefById(id);
 	}
@@ -199,23 +198,23 @@ public class TransactionService {
 		transaction.setVersion(data.getVer());
 		transactionUpdate = update(transaction);
 		if (transactionUpdate.getIsApproved() == true) {
-			if(transactionUpdate.getMembership() != null) {
+			if (transactionUpdate.getMembership() != null) {
 				addSystemBalance(transactionUpdate);
 				final User user = userService.getByRefId(principalService.getAuthPrincipal());
-				
+
 				Profile profileUpdate = null;
 				Profile profile = profileDao.getByIdAndDetach(user.getProfile().getId());
-			
+
 				profile.setPremiumUntil(LocalDateTime.now().plusDays(transactionUpdate.getMembership().getDuration()));
-				
+
 				ConnHandler.begin();
 				profileUpdate = profileDao.update(profile);
 				ConnHandler.commit();
-			} else if (transactionUpdate.getEvent() != null || transactionUpdate.getCourse() != null){
+			} else if (transactionUpdate.getEvent() != null || transactionUpdate.getCourse() != null) {
 				profitSharing(transactionUpdate);
 			}
 		}
-		
+
 		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
 		pojoUpdate.setVer(data.getVer());
 		pojoUpdate.setMessage("Updated");
@@ -229,20 +228,20 @@ public class TransactionService {
 		res.setMessage("Berhasil Dihapus");
 		return res;
 	}
-	
-	public List<PojoTransactionGetAllRes> getAllTransaction(final String type){
+
+	public List<PojoTransactionGetAllRes> getAllTransaction(final String type) {
 		final List<PojoTransactionGetAllRes> pojos = new ArrayList<>();
 		List<Transaction> res = new ArrayList<>();
-		if(type.isEmpty()) {
+		if (type.isEmpty()) {
 			res = transactionDao.getAll();
 		}
-		if(type.equals(TransactionType.EVENT.getTypeName())) {
+		if (type.equals(TransactionType.EVENT.getTypeName())) {
 			res = transactionDao.getByEvent();
 		}
-		if(type.equals(TransactionType.COURSE.getTypeName())) {
+		if (type.equals(TransactionType.COURSE.getTypeName())) {
 			res = transactionDao.getByCourse();
 		}
-		if(type.equals(TransactionType.MEMBERSHIP.getTypeName())) {
+		if (type.equals(TransactionType.MEMBERSHIP.getTypeName())) {
 			res = transactionDao.getByMembership();
 		}
 		for (int i = 0; i < res.size(); i++) {
@@ -271,20 +270,36 @@ public class TransactionService {
 		}
 		return pojos;
 	}
-	
-	public PojoTransactionGetAllResData getTransactionPage(final Integer limit, final Integer offset, final String type) {
+
+	public PojoTransactionGetAllRes getTransactionById(final String id) {
+
+		final Transaction listTransaction = getRefById(id);
+		final PojoTransactionGetAllRes pojoTransactionGetAll = new PojoTransactionGetAllRes();
+		pojoTransactionGetAll.setId(listTransaction.getId());
+		pojoTransactionGetAll.setFullName(listTransaction.getUser().getProfile().getFullName());;
+		pojoTransactionGetAll.setItemName(listTransaction.getCourse().getCourseName());
+		pojoTransactionGetAll.setFileId(listTransaction.getFile().getId());
+		pojoTransactionGetAll.setGrandTotal(listTransaction.getGrandTotal());
+		pojoTransactionGetAll.setIsApproved(listTransaction.getIsApproved());
+		pojoTransactionGetAll.setVer(listTransaction.getVersion());
+
+		return pojoTransactionGetAll;
+	}
+
+	public PojoTransactionGetAllResData getTransactionPage(final Integer limit, final Integer offset,
+			final String type) {
 		final List<PojoTransactionGetAllRes> pojos = new ArrayList<>();
 		List<Transaction> res = transactionDao.getAllTransaction(limit, offset);
-		if(type.isEmpty()) {
+		if (type.isEmpty()) {
 			res = transactionDao.getAll();
 		}
-		if(type.equals(TransactionType.EVENT.getTypeName())) {
-			res = transactionDao.getByEventPage(limit,offset);
+		if (type.equals(TransactionType.EVENT.getTypeName())) {
+			res = transactionDao.getByEventPage(limit, offset);
 		}
-		if(type.equals(TransactionType.COURSE.getTypeName())) {
+		if (type.equals(TransactionType.COURSE.getTypeName())) {
 			res = transactionDao.getByCoursePage(limit, offset);
 		}
-		if(type.equals(TransactionType.MEMBERSHIP.getTypeName())) {
+		if (type.equals(TransactionType.MEMBERSHIP.getTypeName())) {
 			res = transactionDao.getByMembershipPage(limit, offset);
 		}
 		for (int i = 0; i < res.size(); i++) {
@@ -433,19 +448,19 @@ public class TransactionService {
 //
 //		return pojos;
 //	}
-	
+
 	private void addSystemBalance(final Transaction data) {
 		final Optional<User> system = userService.getUserSystem(RoleList.SYSTEM.getRoleCode());
 		final User userSystem = userService.getByRefId(system.get().getId());
 		final Profile systemProfile = profileDao.getRefById(userSystem.getProfile().getId());
 		Voucher voucher = null;
 		BigDecimal value = null;
-		
-		if(data.getMembership() != null) {
+
+		if (data.getMembership() != null) {
 			final Membership membership = membershipService.getRefById(data.getMembership().getId());
 			value = membership.getAmount();
 		}
-		if(data.getVoucher() != null) {
+		if (data.getVoucher() != null) {
 			voucher = voucherService.getRefById(data.getVoucher().getId());
 			value.subtract(voucher.getAmount());
 		}
@@ -456,7 +471,7 @@ public class TransactionService {
 		profileDao.update(systemProfile);
 		ConnHandler.commit();
 	}
-	
+
 	private void profitSharing(final Transaction data) {
 		final Optional<User> system = userService.getUserSystem(RoleList.SYSTEM.getRoleCode());
 		final User userSystem = userService.getByRefId(system.get().getId());
@@ -465,19 +480,19 @@ public class TransactionService {
 		Profile organizerProfile = null;
 		BigDecimal value = null;
 		Voucher voucher = null;
-		if(data.getEvent() != null) {
+		if (data.getEvent() != null) {
 			final Event event = eventService.getRefById(data.getEvent().getId());
 			organizer = userService.getByRefId(event.getUser().getId());
 			organizerProfile = profileDao.getRefById(organizer.getProfile().getId());
 			value = event.getPrice();
 		}
-		if(data.getCourse() != null) {
+		if (data.getCourse() != null) {
 			final Course course = courseService.getRefById(data.getCourse().getId());
 			organizer = userService.getByRefId(course.getUser().getId());
 			organizerProfile = profileDao.getRefById(organizer.getProfile().getId());
 			value = course.getPrice();
 		}
-		if(data.getVoucher() != null) {
+		if (data.getVoucher() != null) {
 			voucher = voucherService.getRefById(data.getVoucher().getId());
 			value.subtract(voucher.getAmount());
 		}
