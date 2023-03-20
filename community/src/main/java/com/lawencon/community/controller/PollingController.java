@@ -18,7 +18,7 @@ import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.pollinganswer.PojoPollingAnswerGetCountRes;
 import com.lawencon.community.pojo.pollinganswer.PojoPollingAnswerInsertReq;
-import com.lawencon.community.pojo.pollingdetail.PojoPollingDetailGetAllRes;
+import com.lawencon.community.pojo.pollingchoice.PojoPollingChoiceGetAllRes;
 import com.lawencon.community.pojo.pollingdetail.PojoPollingDetailInsertReq;
 import com.lawencon.community.pojo.pollingdetail.PojoPollingDetailUpdateReq;
 import com.lawencon.community.service.PollingService;
@@ -45,9 +45,9 @@ public class PollingController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping("{postId}/{detailId}")
-	public ResponseEntity<List<PojoPollingDetailGetAllRes>> getAll(@PathVariable("postId") String postId, @PathVariable("detailId") String detailId) {
-		final List<PojoPollingDetailGetAllRes> res = pollingService.getAllDetail(postId, detailId);
+	@GetMapping("{postId}")
+	public ResponseEntity<List<PojoPollingChoiceGetAllRes>> getAll(@PathVariable("postId") String postId) {
+		final List<PojoPollingChoiceGetAllRes> res = pollingService.getAllChoice(postId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

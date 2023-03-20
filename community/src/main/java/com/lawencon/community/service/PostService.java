@@ -18,6 +18,7 @@ import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.dao.UserLikeDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.File;
+import com.lawencon.community.model.PollingChoice;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostDetail;
 import com.lawencon.community.model.PostFile;
@@ -28,6 +29,8 @@ import com.lawencon.community.model.UserLike;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.file.PojoFileInsertReq;
+import com.lawencon.community.pojo.pollingchoice.PojoPollingChoiceInsertReq;
 import com.lawencon.community.pojo.post.PojoPostGetAllRes;
 import com.lawencon.community.pojo.post.PojoPostGetAllResData;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
@@ -48,7 +51,6 @@ import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class PostService {
-
 	private final PostDao postDao;
 	private final UserDao userDao;
 	private final PostTypeDao postTypeDao;
@@ -58,12 +60,13 @@ public class PostService {
 	private final UserBookmarkDao userBookmarkDao;
 	private final PostDetailDao postDetailDao;
 	private final FileDao fileDao;
+	private final PollingService pollingService;
 	private final PrincipalService principalService;
-	
+  
 		public PostService(final PostDao postDao, final PostFileDao postFileDao, final UserLikeDao userLikeDao,
 			final UserDao userDao, final PostTypeDao postTypeDao, final CategoryDao categoryDao,
-			UserBookmarkDao userBookmarkDao, PostDetailDao postDetailDao, FileDao fileDao,
-			PrincipalService principalService) {
+			final UserBookmarkDao userBookmarkDao, final PostDetailDao postDetailDao, final FileDao fileDao,
+			final PrincipalService principalService, final PollingService pollingService) {
 
 		this.postDao = postDao;
 		this.userDao = userDao;
@@ -75,6 +78,7 @@ public class PostService {
 		this.principalService = principalService;
 		this.userBookmarkDao = userBookmarkDao;
 		this.postDetailDao = postDetailDao;
+		this.pollingService = pollingService;
 	}
 
 	private void valIdNull(final Post data) {
@@ -122,12 +126,20 @@ public class PostService {
 
 	public PojoInsertRes insertPost(final PojoPostInsertReq data) {
 		final Post post = new Post();
+		PostType type = postTypeDao.getByPostTypeCode(com.lawencon.community.constant.PostType.NORMAL.getTypeCode()).get();
+		if (data.getPolling() != null) {
+			type = postTypeDao.getByPostTypeCode(com.lawencon.community.constant.PostType.POLLING.getTypeCode()).get();
+			
+		}
+		if(data.getIsPremium()) {
+			type = postTypeDao.getByPostTypeCode(com.lawencon.community.constant.PostType.PREMIUM.getTypeCode()).get();
+		}
 		Post postInsert = null;
 
 		post.setPostTitle(data.getPostTitle());
 		post.setPostContent(data.getPostContent());
 
-		final PostType postType = postTypeDao.getRefById(data.getPostTypeId());
+		final PostType postType = postTypeDao.getRefById(type.getId());
 		post.setPostType(postType);
 
 		final Category category = categoryDao.getRefById(data.getCategoryId());
@@ -136,6 +148,30 @@ public class PostService {
 		post.setIsActive(true);
 
 		postInsert = insertPost(post);
+		
+		if(data.getPolling() != null) {
+			for(int i = 0; i < data.getPolling().size(); i++) {
+				final PollingChoice pollingChoice = new PollingChoice();
+				final PojoPollingChoiceInsertReq choice = data.getPolling().get(i);
+				pollingChoice.setChoiceContent(choice.getChoiceContent());
+				pollingChoice.setPost(postInsert);
+				pollingService.insertPollingChoice(pollingChoice);
+			}
+		}
+		
+		if(data.getFile() != null) {
+			for(int i = 0; i < data.getFile().size(); i++) {
+				final PojoFileInsertReq pojo = data.getFile().get(i);
+				final PostFile postFile = new PostFile();
+				final File file = new File();
+				file.setFileName(pojo.getFileName());
+				file.setFileContent(pojo.getFileContent());
+				file.setFileExtension(pojo.getFileExtension());
+				postFile.setPost(postInsert);
+				postFile.setFile(file);
+				insertPostFile(postFile);
+			}
+		}
 
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
 		pojoInsertRes.setId(postInsert.getId());
@@ -231,7 +267,7 @@ public class PostService {
 	public int getTotalPost() {
 		return postDao.getTotalPost();
 	}
-
+  
 	public List<PojoPostGetAllRes> getAllPost() {
 		final List<PojoPostGetAllRes> listPojoPost = new ArrayList<>();
 
@@ -241,14 +277,16 @@ public class PostService {
 			final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
 			PojoPostLikeRes pojoLike = null;
 			PojoPostBookmarkRes pojoBookmark = null;
-			final Optional<UserLike> postLike = userLikeDao.getLikeByPostId(listPost.get(i).getId(), principalService.getAuthPrincipal());
-			final Optional<UserBookmark> postBookmark = userBookmarkDao.getBookmarkByPostId(listPost.get(i).getId(), principalService.getAuthPrincipal());
-			if(postLike.isPresent()) {
+			final Optional<UserLike> postLike = userLikeDao.getLikeByPostId(listPost.get(i).getId(),
+					principalService.getAuthPrincipal());
+			final Optional<UserBookmark> postBookmark = userBookmarkDao.getBookmarkByPostId(listPost.get(i).getId(),
+					principalService.getAuthPrincipal());
+			if (postLike.isPresent()) {
 				pojoLike = new PojoPostLikeRes();
 				pojoLike.setId(postLike.get().getId());
 				pojoLike.setStatus(true);
 			}
-			if(postBookmark.isPresent()) {
+			if (postBookmark.isPresent()) {
 				pojoBookmark = new PojoPostBookmarkRes();
 				pojoBookmark.setId(postBookmark.get().getId());
 				pojoBookmark.setStatus(true);
@@ -265,7 +303,7 @@ public class PostService {
       pojoPost.setVer(listPost.get(i).getVersion());
 			pojoPost.setIsLiked(pojoLike);
 			pojoPost.setIsBookmarked(pojoBookmark);
-			
+
 			listPojoPost.add(pojoPost);
 		}
 
@@ -337,18 +375,14 @@ public class PostService {
 
 	public PostFile insertPostFile(final PostFile data) {
 		PostFile postFileInsert = null;
-		try {
-			ConnHandler.begin();
-			valIdNull(data);
-			valNotNullable(data);
-			final File file = fileDao.insert(data.getFile());
-			postFileInsert = data;
-			postFileInsert.setFile(file);
-			postFileInsert = postFileDao.insert(postFileInsert);
-			ConnHandler.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		valIdNull(data);
+		valNotNullable(data);
+		ConnHandler.begin();
+		final File file = fileDao.insert(data.getFile());
+		postFileInsert = data;
+		postFileInsert.setFile(file);
+		postFileInsert = postFileDao.insert(postFileInsert);
+		ConnHandler.commit();
 		return postFileInsert;
 	}
 

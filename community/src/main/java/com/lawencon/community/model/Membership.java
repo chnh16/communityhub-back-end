@@ -1,7 +1,6 @@
 package com.lawencon.community.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
