@@ -30,6 +30,7 @@ import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.transaction.PojoInsertTransactionReq;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetAllRes;
+import com.lawencon.community.pojo.transaction.PojoTransactionGetAllResData;
 import com.lawencon.community.pojo.transaction.PojoUpdateTransactionReq;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -265,9 +266,55 @@ public class TransactionService {
 			pojo.setFileId(transaction.getFile().getId());
 			pojo.setFullName(user.getProfile().getFullName());
 			pojo.setIsApproved(transaction.getIsApproved());
+			pojo.setVer(transaction.getVersion());
 			pojos.add(pojo);
 		}
 		return pojos;
+	}
+	
+	public PojoTransactionGetAllResData getTransactionPage(final Integer limit, final Integer offset, final String type) {
+		final List<PojoTransactionGetAllRes> pojos = new ArrayList<>();
+		List<Transaction> res = transactionDao.getAllTransaction(limit, offset);
+		if(type.isEmpty()) {
+			res = transactionDao.getAll();
+		}
+		if(type.equals(TransactionType.EVENT.getTypeName())) {
+			res = transactionDao.getByEventPage(limit,offset);
+		}
+		if(type.equals(TransactionType.COURSE.getTypeName())) {
+			res = transactionDao.getByCoursePage(limit, offset);
+		}
+		if(type.equals(TransactionType.MEMBERSHIP.getTypeName())) {
+			res = transactionDao.getByMembershipPage(limit, offset);
+		}
+		for (int i = 0; i < res.size(); i++) {
+			final PojoTransactionGetAllRes pojo = new PojoTransactionGetAllRes();
+			final Transaction transaction = res.get(i);
+			final User user = userService.getByRefId(transaction.getUser().getId());
+			if (transaction.getEvent() != null) {
+				final Event event = eventService.getRefById(transaction.getEvent().getId());
+				pojo.setItemName(event.getEventName());
+			}
+			if (transaction.getCourse() != null) {
+				final Course course = courseService.getRefById(transaction.getCourse().getId());
+				pojo.setItemName(course.getCourseName());
+			}
+			if (transaction.getMembership() != null) {
+				final Membership membership = membershipService.getRefById(transaction.getMembership().getId());
+				pojo.setItemName(membership.getMembershipName());
+			}
+			pojo.setId(transaction.getId());
+			pojo.setGrandTotal(transaction.getGrandTotal());
+			pojo.setFileId(transaction.getFile().getId());
+			pojo.setFullName(user.getProfile().getFullName());
+			pojo.setIsApproved(transaction.getIsApproved());
+			pojo.setVer(transaction.getVersion());
+			pojos.add(pojo);
+		}
+		final PojoTransactionGetAllResData pojoTransactionData = new PojoTransactionGetAllResData();
+		pojoTransactionData.setData(pojos);
+		pojoTransactionData.setTotal(transactionDao.getTotalTransaction(type));
+		return pojoTransactionData;
 	}
 
 //	public List<PojoTransactionGetAllRes> getAllRes(final String type) {

@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.industry.PojoIndustryGetAllRes;
+import com.lawencon.community.pojo.industry.PojoIndustryGetAllResData;
 import com.lawencon.community.pojo.industry.PojoIndustryInsertReq;
 import com.lawencon.community.pojo.industry.PojoIndustryUpdateReq;
 import com.lawencon.community.service.IndustryService;
@@ -46,6 +48,13 @@ public class IndustryController {
 	@GetMapping("{id}")
 	public ResponseEntity<PojoIndustryGetAllRes> getIndustryById(@PathVariable("id") String id) {
 		final PojoIndustryGetAllRes res = industryService.getIndustryById(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("/page")
+	public ResponseEntity<PojoIndustryGetAllResData> getIndustry(@RequestParam("size") int size, @RequestParam("page") int page) {
+		int offset = (page - 1)*size;
+		final PojoIndustryGetAllResData res = industryService.getIndustry(size, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

@@ -1,33 +1,22 @@
 package com.lawencon.community.pojo.category;
 
+import java.util.List;
+
 public class PojoCategoryGetAllRes {
-	private String id;
-	private String categoryCode;
-	private String categoryName;
-	private Integer ver;
-	public String getId() {
-		return id;
+	private List<PojoCategoryGetAllResData> data;
+	private Integer total;
+	
+	public List<PojoCategoryGetAllResData> getData() {
+		return data;
 	}
-	public String getCategoryCode() {
-		return categoryCode;
+	public Integer getTotal() {
+		return total;
 	}
-	public String getCategoryName() {
-		return categoryName;
+	public void setData(List<PojoCategoryGetAllResData> data) {
+		this.data = data;
 	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public void setCategoryCode(String categoryCode) {
-		this.categoryCode = categoryCode;
-	}
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
-	public Integer getVer() {
-		return ver;
-	}
-	public void setVer(Integer ver) {
-		this.ver = ver;
+	public void setTotal(Integer total) {
+		this.total = total;
 	}
 	
 	

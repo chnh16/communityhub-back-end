@@ -13,6 +13,7 @@ public class PojoPostGetAllRes {
 	private String typeName;
 	private String categoryId;
 	private String categoryName;
+  private Integer ver;
 	private PojoPostLikeRes isLiked;
 	private PojoPostBookmarkRes isBookmarked;
 	
@@ -69,6 +70,12 @@ public class PojoPostGetAllRes {
 	}
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+  public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 	public PojoPostLikeRes getIsLiked() {
 		return isLiked;

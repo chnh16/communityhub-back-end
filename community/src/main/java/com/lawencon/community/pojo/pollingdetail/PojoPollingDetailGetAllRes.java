@@ -9,6 +9,7 @@ public class PojoPollingDetailGetAllRes {
 	private String postId;
 	private String pollingQuestion;
 	private List<PojoPollingChoiceGetAllRes> listChoice;
+	private Integer ver;
 	
 	public String getId() {
 		return id;
@@ -33,5 +34,11 @@ public class PojoPollingDetailGetAllRes {
 	}
 	public void setListChoice(List<PojoPollingChoiceGetAllRes> listChoice) {
 		this.listChoice = listChoice;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 }

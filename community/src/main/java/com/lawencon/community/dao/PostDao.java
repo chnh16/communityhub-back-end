@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Post;
 
 @Repository
@@ -32,6 +33,40 @@ public class PostDao extends MasterDao<Post> {
 
 		final List<Post> res = em().createNativeQuery(toStr(str), Post.class).getResultList();
 		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Optional<Post> getPostById(final String id) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM post p ")
+			.append(" WHERE p.id = :id AND p.is_active = true");
+		final List<Post> res = em().createNativeQuery(toStr(str), Post.class)
+				.setParameter("id", id)
+				.getResultList();
+		return Optional.ofNullable(res.get(0));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Post> getAllPost(final Integer limit, final Integer offset) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM post p ")
+			.append(" WHERE p.is_active = true");
+		final List<Post> res = em().createNativeQuery(toStr(str).toString(), Post.class)
+				.setMaxResults(limit)
+				.setFirstResult((offset-1)*limit)
+				.getResultList();
+		return res;
+	}
+	
+	public int getTotalPost() {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT COUNT(p.id) FROM post p ")
+			.append(" WHERE p.is_active = true");
+		
+		final int totalPost = Integer.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str)
+				.toString())
+				.getSingleResult().toString());
+		return totalPost;
 	}
 
 	@Override

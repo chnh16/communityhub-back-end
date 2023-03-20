@@ -4,6 +4,7 @@ public class PojoPollingChoiceGetAllRes {
 	private String pollingChoiceId;
 	private String pollingDetailId;
 	private String choiceContent;
+	private Integer ver;
 	
 	public String getPollingChoiceId() {
 		return pollingChoiceId;
@@ -22,6 +23,12 @@ public class PojoPollingChoiceGetAllRes {
 	}
 	public void setChoiceContent(String choiceContent) {
 		this.choiceContent = choiceContent;
+	}
+	public Integer getVer() {
+		return ver;
+	}
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 	
 	

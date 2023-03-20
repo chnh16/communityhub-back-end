@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Membership;
 
 @Repository
@@ -42,7 +43,29 @@ public class MembershipDao extends MasterDao<Membership>{
 		return Optional.ofNullable(res.get(0));
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Membership> getMembership(final Integer limit, final Integer offset){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM membership m ")
+			.append(" WHERE m.is_active = true");
+		final List<Membership> res = em().createNativeQuery(toStr(str).toString(), Membership.class)
+				.setMaxResults(limit)
+				.setFirstResult(offset)
+				.getResultList();
+		return res;
+	}
 
+	public int getTotalMembership() {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT COUNT(m.id) FROM membership m ")
+			.append(" WHERE m.is_active = true");
+		
+		final int totalMembership = Integer.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str)
+				.toString())
+				.getSingleResult().toString());
+		return totalMembership;
+	}
+	
 	@Override
 	public Membership update(final Membership data) {
 		final Membership res = saveAndFlush(data);

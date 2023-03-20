@@ -7,6 +7,7 @@ public class PojoPostDetailGetByPostIdRes {
 	private String fileId;
 	private String detailContent;
 	private Long countedCommentar;
+	private Integer ver;
 
 	public String getId() {
 		return id;
@@ -46,6 +47,14 @@ public class PojoPostDetailGetByPostIdRes {
 
 	public void setCountedCommentar(Long countedCommentar) {
 		this.countedCommentar = countedCommentar;
+	}
+
+	public Integer getVer() {
+		return ver;
+	}
+
+	public void setVer(Integer ver) {
+		this.ver = ver;
 	}
 
 }

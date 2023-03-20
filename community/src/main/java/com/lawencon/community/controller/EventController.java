@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.event.PojoEventGetAllResData;
 import com.lawencon.community.pojo.event.PojoEventReqInsert;
 import com.lawencon.community.pojo.event.PojoEventReqUpdate;
 import com.lawencon.community.pojo.event.PojoEventResGetAll;
@@ -46,11 +47,18 @@ private final EventService eventService;
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-//	@GetMapping("/{id}")
-//	public ResponseEntity<List<PojoEventResGetByCategoryId>> getByCategoryId(@PathVariable("id") final String id) {
-//		final List<PojoEventResGetByCategoryId> res = eventService.getByCategoryId(id);
-//		return new ResponseEntity<>(res, HttpStatus.OK);
-//	}
+	@GetMapping
+	public ResponseEntity<PojoEventGetAllResData> getByUserId(@RequestParam("size") Integer size, @RequestParam("page") Integer page) {
+		int offset = (page - 1)* size;
+		final PojoEventGetAllResData res = eventService.getEventPage(size, offset);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<List<PojoEventResGetByCategoryId>> getByCategoryId(@PathVariable("id") final String id) {
+		final List<PojoEventResGetByCategoryId> res = eventService.getByCategoryId(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
 	
 	@PutMapping
 	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoEventReqUpdate data){
