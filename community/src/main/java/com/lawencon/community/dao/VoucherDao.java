@@ -99,7 +99,7 @@ public class VoucherDao extends MasterDao<Voucher> {
 			 str.append("SELECT v.id, voucher_code, expired_date, amount, v.created_by, v.updated_by, v.created_at, v.updated_at, v.ver, v.is_active ")
 			.append("FROM voucher v")
 			.append(" WHERE v.id = (SELECT id FROM voucher WHERE voucher_code = :voucherCode) ")
-			.append("AND expired_date => NOW() ")
+			.append("AND expired_date >= NOW() ")
 			.append("AND v.is_active = true");
 			
 			

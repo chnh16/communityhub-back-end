@@ -327,7 +327,7 @@ public class EventService {
 		pojoEventResGetAll.setStartDate(event.get().getStartDate());
 		pojoEventResGetAll.setEndDate(event.get().getEndDate());
 		pojoEventResGetAll.setPrice(event.get().getPrice());
-		pojoEventResGetAll.setCategoryId(event.get().getCategory().getId());
+		pojoEventResGetAll.setCategoryId(event.get().getCategory().getCategoryName());
 		pojoEventResGetAll.setFileId(event.get().getFile().getId());
 		pojoEventResGetAll.setVer(event.get().getVersion());
 		return pojoEventResGetAll;

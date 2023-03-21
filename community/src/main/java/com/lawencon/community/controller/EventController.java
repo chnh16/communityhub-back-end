@@ -23,7 +23,6 @@ import com.lawencon.community.pojo.event.PojoEventReqUpdate;
 import com.lawencon.community.pojo.event.PojoEventResGetAll;
 import com.lawencon.community.pojo.userevent.PojoUserEventGetByUserIdRes;
 import com.lawencon.community.pojo.userevent.PojoUserEventInsertReq;
-import com.lawencon.community.pojo.voucher.PojoVoucherGetAllRes;
 import com.lawencon.community.service.EventService;
 
 @RestController
@@ -60,7 +59,6 @@ private final EventService eventService;
 		final PojoEventResGetAll res = eventService.getByEventId(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
 	
 	@PutMapping
 	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoEventReqUpdate data){
