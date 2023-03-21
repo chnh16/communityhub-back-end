@@ -2,6 +2,7 @@ package com.lawencon.community.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -31,6 +32,11 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	public Transaction getRefById(final String id) {
 		final Transaction res = getByIdRef(Transaction.class, id);
 		return res;
+	}
+	
+	public Optional<Transaction> getById(final String id){
+		final Transaction transaction = em().find(Transaction.class, id);
+		return Optional.ofNullable(transaction);
 	}
 	
 	@SuppressWarnings("unchecked")

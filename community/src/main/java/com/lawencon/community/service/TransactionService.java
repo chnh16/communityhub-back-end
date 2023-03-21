@@ -273,7 +273,7 @@ public class TransactionService {
 
 	public PojoTransactionGetAllRes getTransactionById(final String id) {
 
-		final Transaction listTransaction = getRefById(id);
+		final Transaction listTransaction = transactionDao.getById(id).get();
 		final PojoTransactionGetAllRes pojoTransactionGetAll = new PojoTransactionGetAllRes();
 		pojoTransactionGetAll.setId(listTransaction.getId());
 		pojoTransactionGetAll.setFullName(listTransaction.getUser().getProfile().getFullName());;
