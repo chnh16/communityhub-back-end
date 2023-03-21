@@ -372,6 +372,8 @@ public class PostService {
 			throw new RuntimeException("File Kosong");
 		}
 	}
+	
+	
 
 	public PostFile insertPostFile(final PostFile data) {
 		PostFile postFileInsert = null;

@@ -35,7 +35,7 @@ public class PollingService {
 	public PollingChoice insertPollingChoice(final PollingChoice pollingChoice) {
 		PollingChoice insertChoice = null;
 		ConnHandler.begin();
-		insertChoice = pollingChoiceDao.insert(insertChoice);
+		insertChoice = pollingChoiceDao.insert(pollingChoice);
 		ConnHandler.commit();
 		return insertChoice;
 	}
