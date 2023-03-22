@@ -270,13 +270,25 @@ public class PostService {
   
 	public List<PojoPostGetAllRes> getAllPost() {
 		final List<PojoPostGetAllRes> listPojoPost = new ArrayList<>();
-
 		final List<Post> listPost = getAll();
+		
 
 		for (int i = 0; i < listPost.size(); i++) {
 			final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
+			final List<PojoPostDetailGetAllRes> pojoDetails = new ArrayList<>();
 			PojoPostLikeRes pojoLike = null;
 			PojoPostBookmarkRes pojoBookmark = null;
+			final List<PostDetail> postDetails = getPostDetailByPostId(listPost.get(i).getId());
+			for(int j = 0; i < postDetails.size(); j++) {
+				final PostDetail currentDetail = postDetails.get(j);
+				final PojoPostDetailGetAllRes pojoDetail = new PojoPostDetailGetAllRes();
+				pojoDetail.setId(currentDetail.getId());
+				pojoDetail.setFullName(null);
+				pojoDetail.setDetailContent(currentDetail.getDetailContent());
+				pojoDetail.setVer(currentDetail.getVersion());
+				
+				pojoDetails.add(pojoDetail);
+			}
 			final Optional<UserLike> postLike = userLikeDao.getLikeByPostId(listPost.get(i).getId(),
 					principalService.getAuthPrincipal());
 			final Optional<UserBookmark> postBookmark = userBookmarkDao.getBookmarkByPostId(listPost.get(i).getId(),
@@ -296,11 +308,10 @@ public class PostService {
 			pojoPost.setFullName(listPost.get(i).getUser().getProfile().getFullName());
 			pojoPost.setPostTitle(listPost.get(i).getPostTitle());
 			pojoPost.setPostContent(listPost.get(i).getPostContent());
-			pojoPost.setCategoryId(listPost.get(i).getCategory().getId());
 			pojoPost.setCategoryName(listPost.get(i).getCategory().getCategoryName());
 			pojoPost.setPostTypeId(listPost.get(i).getPostType().getId());
-			pojoPost.setTypeName(listPost.get(i).getPostType().getTypeName());
-      pojoPost.setVer(listPost.get(i).getVersion());
+			pojoPost.setVer(listPost.get(i).getVersion());
+			pojoPost.setPostDetail(pojoDetails);
 			pojoPost.setIsLiked(pojoLike);
 			pojoPost.setIsBookmarked(pojoBookmark);
 
@@ -320,10 +331,8 @@ public class PostService {
 		pojoPost.setFullName(post.get().getUser().getProfile().getFullName());
 		pojoPost.setPostTitle(post.get().getPostTitle());
 		pojoPost.setPostContent(post.get().getPostContent());
-		pojoPost.setCategoryId(post.get().getCategory().getId());
 		pojoPost.setCategoryName(post.get().getCategory().getCategoryName());
 		pojoPost.setPostTypeId(post.get().getPostType().getId());
-		pojoPost.setTypeName(post.get().getPostType().getTypeName());
 		pojoPost.setVer(post.get().getVersion());
 
 		return pojoPost;
@@ -342,10 +351,8 @@ public class PostService {
 			pojoPost.setFullName(listPost.get(i).getUser().getProfile().getFullName());
 			pojoPost.setPostTitle(listPost.get(i).getPostTitle());
 			pojoPost.setPostContent(listPost.get(i).getPostContent());
-			pojoPost.setCategoryId(listPost.get(i).getCategory().getId());
 			pojoPost.setCategoryName(listPost.get(i).getCategory().getCategoryName());
 			pojoPost.setPostTypeId(listPost.get(i).getPostType().getId());
-			pojoPost.setTypeName(listPost.get(i).getPostType().getTypeName());
 			pojoPost.setVer(listPost.get(i).getVersion());
 
 			listPojoPost.add(pojoPost);
@@ -708,6 +715,10 @@ public class PostService {
 	public Optional<PostDetail> getPostDetailById(final String id) {
 		return postDetailDao.getById(id);
 	}
+	
+	public List<PostDetail> getPostDetailByPostId(final String postId){
+		return postDetailDao.getByPostId(postId);
+	}
 
 	public List<PostDetail> getAllPostDetail() {
 		return postDetailDao.getAll();
@@ -804,8 +815,6 @@ public class PostService {
 			ConnHandler.getManager().detach(detail);
 			detailGetAllRes.setId(detail.getId());
 			detailGetAllRes.setDetailContent(posDetails.get(i).getDetailContent());
-			detailGetAllRes.setFileId(posDetails.get(i).getFile().getId());
-			detailGetAllRes.setPostId(posDetails.get(i).getPost().getId());
 			getAllRes.add(detailGetAllRes);
 		}
 		return getAllRes;

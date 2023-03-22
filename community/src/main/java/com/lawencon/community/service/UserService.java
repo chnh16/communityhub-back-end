@@ -39,7 +39,7 @@ import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService, Runnable {
 
 	private final UserDao userDao;
 	private final FileDao fileDao;
@@ -51,11 +51,12 @@ public class UserService implements UserDetailsService {
 	private final IndustryService industryService;
 	private final EmailService emailService;
 	private final PrincipalService principalService;
+	private EmailDetails emailDetails;
 
-	public UserService(UserDao userDao, FileDao fileDao, RoleDao roleDao, ProfileDao profileDao,
-			PositionService positionService, PasswordEncoder encoder, IndustryService industryService,
-			EmailService emailService, RegisterVerificationDao registerVerificationDao,
-			PrincipalService principalService) {
+	public UserService(final UserDao userDao, final FileDao fileDao, final RoleDao roleDao, final ProfileDao profileDao,
+			final PositionService positionService, final PasswordEncoder encoder, final IndustryService industryService,
+			final EmailService emailService, final RegisterVerificationDao registerVerificationDao,
+			final PrincipalService principalService) {
 		this.userDao = userDao;
 		this.fileDao = fileDao;
 		this.profileDao = profileDao;
@@ -66,7 +67,6 @@ public class UserService implements UserDetailsService {
 		this.industryService = industryService;
 		this.emailService = emailService;
 		this.principalService = principalService;
-
 	}
 
 	public User insert(final User data) {
@@ -317,14 +317,18 @@ public class UserService implements UserDetailsService {
 
 		ConnHandler.commit();
 
-		final EmailDetails email = new EmailDetails();
-		email.setMsgBody("Halo " + data.getProfile().getFullName() + "\nAkun anda " + " Email : " + data.getEmail()
+		emailDetails.setMsgBody("Halo " + data.getProfile().getFullName() + "\nAkun anda " + " Email : " + data.getEmail()
 				+ "\nPassword : " + data.getPasswordUser() + "\n TerimaKasih");
-		email.setRecipient(userInsert.getEmail());
-		email.setSubject("Berhasil ");
+		emailDetails.setRecipient(userInsert.getEmail());
+		emailDetails.setSubject("Berhasil ");
 
-		emailService.sendSimpleMail(email);
-
+		final Runnable runnable = () -> {
+			emailService.sendSimpleMail(emailDetails);
+		};
+		
+		final Thread thread = new Thread(runnable);
+		thread.start();
+		
 		pojo.setId(userInsert.getId());
 		pojo.setMessage("Create Akun Admin Berhasil");
 		return pojo;
@@ -342,7 +346,6 @@ public class UserService implements UserDetailsService {
 		pojo.setCity(user.getProfile().getCity());
 		pojo.setPhoneNumber(user.getProfile().getNoHandphone());
 		pojo.setPostalCode(user.getProfile().getPostalCode());
-		;
 		pojo.setCompany(user.getProfile().getCompany());
 		pojo.setPositionId(user.getProfile().getPosition().getPositionName());
 		pojo.setIndustryId(user.getProfile().getIndustry().getIndustryName());
@@ -417,6 +420,11 @@ public class UserService implements UserDetailsService {
 		pojoUpdateReq.setVer(user.getVersion());
 		pojoUpdateReq.setMessage("Succes");
 		return pojoUpdateReq;
+	}
+
+	@Override
+	public void run() {
+		emailService.sendSimpleMail(emailDetails);
 	}
 
 }

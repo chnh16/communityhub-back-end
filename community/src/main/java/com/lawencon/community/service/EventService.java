@@ -18,7 +18,6 @@ import com.lawencon.community.model.Event;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.UserEvent;
-import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -28,7 +27,6 @@ import com.lawencon.community.pojo.event.PojoEventReqUpdate;
 import com.lawencon.community.pojo.event.PojoEventResGetAll;
 import com.lawencon.community.pojo.userevent.PojoUserEventGetByUserIdRes;
 import com.lawencon.community.pojo.userevent.PojoUserEventInsertReq;
-import com.lawencon.community.pojo.voucher.PojoVoucherGetAllRes;
 import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 
