@@ -3,8 +3,7 @@ package com.lawencon.community.pojo.postdetail;
 public class PojoPostDetailGetAllRes {
 
 	private String id;
-	private String postId;
-	private String fileId;
+	private String fullName;
 	private String detailContent;
 	private Integer ver;
 
@@ -16,20 +15,12 @@ public class PojoPostDetailGetAllRes {
 		this.id = id;
 	}
 
-	public String getPostId() {
-		return postId;
+	public String getFullName() {
+		return fullName;
 	}
 
-	public void setPostId(String postId) {
-		this.postId = postId;
-	}
-
-	public String getFileId() {
-		return fileId;
-	}
-
-	public void setFileId(String fileId) {
-		this.fileId = fileId;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	public String getDetailContent() {

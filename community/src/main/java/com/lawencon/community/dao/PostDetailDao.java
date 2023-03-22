@@ -27,7 +27,7 @@ public class PostDetailDao extends MasterDao<PostDetail>{
 	@Override
 	public List<PostDetail> getAll() {
 		final StringBuilder str =  new StringBuilder();
-		str.append("SELECT * FROM post_detail ").append(" WHERE is_active = true ");
+		str.append("SELECT * FROM post_detail ").append("WHERE is_active = true ");
 		final List<PostDetail> res = em().createNativeQuery(toStr(str), PostDetail.class).getResultList();
 		return res;
 	}
@@ -35,8 +35,9 @@ public class PostDetailDao extends MasterDao<PostDetail>{
 	@SuppressWarnings("unchecked")
 	public List<PostDetail> getByPostId (final String postId){
 		final StringBuilder str = new StringBuilder();
-		str.append("SELECT * FROM post_detail pd ")
-		.append("WHERE pd.post_id = :postId");
+		str.append("SELECT * FROM post_detail pd")
+		.append(" WHERE pd.post_id = :postId")
+		.append(" AND pd.is_active = TRUE");
 		final List<PostDetail> res = em().createNativeQuery(toStr(str), PostDetail.class).setParameter("postId", postId).getResultList();
 		return res;
 	}
