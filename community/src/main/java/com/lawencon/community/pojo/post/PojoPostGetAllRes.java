@@ -17,7 +17,7 @@ public class PojoPostGetAllRes {
 	private String categoryName;
 	private LocalDateTime postedAt;
 	private Integer ver;
-	private Integer likeCount;
+	private Long likeCount;
 	private Integer detailCount;
 	private List<PojoPostDetailGetAllRes> postDetail;
 	private List<String> fileId;
@@ -84,10 +84,10 @@ public class PojoPostGetAllRes {
 	public void setIsBookmarked(PojoPostBookmarkRes isBookmarked) {
 		this.isBookmarked = isBookmarked;
 	}
-	public Integer getLikeCount() {
+	public Long getLikeCount() {
 		return likeCount;
 	}
-	public void setLikeCount(Integer likeCount) {
+	public void setLikeCount(Long likeCount) {
 		this.likeCount = likeCount;
 	}
 	public Integer getDetailCount() {

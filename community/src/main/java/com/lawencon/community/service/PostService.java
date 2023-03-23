@@ -305,8 +305,9 @@ public class PostService {
 			final Optional<UserBookmark> postBookmark = userBookmarkDao.getBookmarkByPostId(listPost.get(i).getId(),
 					principalService.getAuthPrincipal());
 			if (postLike.isPresent()) {
+				final UserLike userLike = postLike.get(); 
 				pojoLike = new PojoPostLikeRes();
-				pojoLike.setId(postLike.get().getId());
+				pojoLike.setId(userLike.getId());
 				pojoLike.setStatus(true);
 			}
 			if (postBookmark.isPresent()) {
@@ -326,6 +327,7 @@ public class PostService {
 			pojoPost.setDetailCount(pojoDetails.size());
 			pojoPost.setIsLiked(pojoLike);
 			pojoPost.setIsBookmarked(pojoBookmark);
+			pojoPost.setLikeCount(userLikeDao.getCount(listPost.get(i).getId()));
 			pojoPost.setPostedAt(listPost.get(i).getCreatedAt());
 			pojoPost.setFileId(postFileId);
 

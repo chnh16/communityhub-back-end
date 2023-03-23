@@ -105,7 +105,7 @@ public class CourseDao extends MasterDao<Course>{
 	public Optional<Course> getCourseById(final String id) {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM course c ")
-			.append(" WHERE c.id = :id AND c.is_active = true");
+			.append("WHERE c.id = :id AND c.is_active = true");
 		final List<Course> res = em().createNativeQuery(toStr(str), Course.class)
 				.setParameter("id", id)
 				.getResultList();
@@ -116,5 +116,4 @@ public class CourseDao extends MasterDao<Course>{
 	public Course getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Course.class, id);
 	}
-
 }

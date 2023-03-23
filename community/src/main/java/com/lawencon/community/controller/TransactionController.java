@@ -2,6 +2,7 @@ package com.lawencon.community.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,16 +21,20 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.transaction.PojoInsertTransactionReq;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetAllRes;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetAllResData;
+import com.lawencon.community.pojo.transaction.PojoTransactionGetReportRes;
 import com.lawencon.community.pojo.transaction.PojoUpdateTransactionReq;
 import com.lawencon.community.service.TransactionService;
+import com.lawencon.util.JasperUtil;
 
 @RestController
 @RequestMapping("transaction")
 public class TransactionController {
 	private final TransactionService transactionService;
+	private final JasperUtil jasperUtil;
 	
-	public TransactionController(final TransactionService transactionService){
+	public TransactionController(final TransactionService transactionService, final JasperUtil jasperUtil){
 		this.transactionService = transactionService;
+		this.jasperUtil = jasperUtil;
 	}
 	
 //	@GetMapping("/{type}")
@@ -93,5 +98,13 @@ public class TransactionController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
+	@GetMapping("/report")
+	private ResponseEntity<?> getCourseReport(@RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) throws Exception{
+		final List<PojoTransactionGetReportRes> res = transactionService.getReportByDate(startDate, endDate);
+		final String fileName = "report";
+		final byte[] fileBytes = jasperUtil.responseToByteArray(res, null, "report_member_participant");
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+				"attachment; filename=" + fileName + ".pdf").body(fileBytes);
+	}
 	
 }
