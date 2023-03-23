@@ -60,9 +60,8 @@ public class MembershipController {
 	}
 	
 	@GetMapping("/page")
-	public ResponseEntity<PojoMembershipGetAllResData> getMembership(@RequestParam("size") int size, @RequestParam("page") int page) {
-		int offset = (page - 1)*size;
-		final PojoMembershipGetAllResData res = membershipService.getMembership(size, offset);
+	public ResponseEntity<PojoMembershipGetAllResData> getMembership(@RequestParam("limit") int limit, @RequestParam("offset") int offset) {
+		final PojoMembershipGetAllResData res = membershipService.getMembership(limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

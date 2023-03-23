@@ -67,9 +67,9 @@ public class PostController {
 	}
 	
 	@GetMapping("page")
-	public ResponseEntity<PojoPostGetAllResData> getPost(@RequestParam("size") int size, @RequestParam("page") int page){
-		int offset = (page - 1)*size;
-		final PojoPostGetAllResData res = postService.getPost(size, offset);
+	public ResponseEntity<PojoPostGetAllResData> getPost(@RequestParam("limit") int limit, 
+			@RequestParam("offset") int offset){
+		final PojoPostGetAllResData res = postService.getPost(limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

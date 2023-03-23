@@ -116,5 +116,4 @@ public class CourseDao extends MasterDao<Course>{
 	public Course getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Course.class, id);
 	}
-
 }

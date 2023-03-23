@@ -58,9 +58,8 @@ public class PositionController {
 	}
 	
 	@GetMapping("/page")
-	public ResponseEntity<PojoPosistionGetAllResData> getPosition(@RequestParam("size") int size, @RequestParam("page") int page) {
-		int offset = (page - 1)*size;
-		final PojoPosistionGetAllResData res = positionService.getPositioAllResData(size, offset);
+	public ResponseEntity<PojoPosistionGetAllResData> getPosition(@RequestParam("limit") int limit, @RequestParam("offset") int offset) {
+		final PojoPosistionGetAllResData res = positionService.getPositioAllResData(limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 

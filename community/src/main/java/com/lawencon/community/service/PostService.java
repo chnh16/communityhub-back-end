@@ -62,8 +62,8 @@ public class PostService {
 	private final FileDao fileDao;
 	private final PollingService pollingService;
 	private final PrincipalService principalService;
-  
-		public PostService(final PostDao postDao, final PostFileDao postFileDao, final UserLikeDao userLikeDao,
+
+	public PostService(final PostDao postDao, final PostFileDao postFileDao, final UserLikeDao userLikeDao,
 			final UserDao userDao, final PostTypeDao postTypeDao, final CategoryDao categoryDao,
 			final UserBookmarkDao userBookmarkDao, final PostDetailDao postDetailDao, final FileDao fileDao,
 			final PrincipalService principalService, final PollingService pollingService) {
@@ -126,12 +126,13 @@ public class PostService {
 
 	public PojoInsertRes insertPost(final PojoPostInsertReq data) {
 		final Post post = new Post();
-		PostType type = postTypeDao.getByPostTypeCode(com.lawencon.community.constant.PostType.NORMAL.getTypeCode()).get();
+		PostType type = postTypeDao.getByPostTypeCode(com.lawencon.community.constant.PostType.NORMAL.getTypeCode())
+				.get();
 		if (data.getPolling() != null) {
 			type = postTypeDao.getByPostTypeCode(com.lawencon.community.constant.PostType.POLLING.getTypeCode()).get();
-			
+
 		}
-		if(data.getIsPremium()) {
+		if (data.getIsPremium()) {
 			type = postTypeDao.getByPostTypeCode(com.lawencon.community.constant.PostType.PREMIUM.getTypeCode()).get();
 		}
 		Post postInsert = null;
@@ -148,9 +149,9 @@ public class PostService {
 		post.setIsActive(true);
 
 		postInsert = insertPost(post);
-		
-		if(data.getPolling() != null) {
-			for(int i = 0; i < data.getPolling().size(); i++) {
+
+		if (data.getPolling() != null) {
+			for (int i = 0; i < data.getPolling().size(); i++) {
 				final PollingChoice pollingChoice = new PollingChoice();
 				final PojoPollingChoiceInsertReq choice = data.getPolling().get(i);
 				pollingChoice.setChoiceContent(choice.getChoiceContent());
@@ -158,9 +159,9 @@ public class PostService {
 				pollingService.insertPollingChoice(pollingChoice);
 			}
 		}
-		
-		if(data.getFile() != null) {
-			for(int i = 0; i < data.getFile().size(); i++) {
+
+		if (data.getFile() != null) {
+			for (int i = 0; i < data.getFile().size(); i++) {
 				final PojoFileInsertReq pojo = data.getFile().get(i);
 				final PostFile postFile = new PostFile();
 				final File file = new File();
@@ -267,7 +268,7 @@ public class PostService {
 	public int getTotalPost() {
 		return postDao.getTotalPost();
 	}
-  
+
 	public List<PojoPostGetAllRes> getAllPost() {
 		final List<PojoPostGetAllRes> listPojoPost = new ArrayList<>();
 
@@ -300,7 +301,7 @@ public class PostService {
 			pojoPost.setCategoryName(listPost.get(i).getCategory().getCategoryName());
 			pojoPost.setPostTypeId(listPost.get(i).getPostType().getId());
 			pojoPost.setTypeName(listPost.get(i).getPostType().getTypeName());
-      pojoPost.setVer(listPost.get(i).getVersion());
+			pojoPost.setVer(listPost.get(i).getVersion());
 			pojoPost.setIsLiked(pojoLike);
 			pojoPost.setIsBookmarked(pojoBookmark);
 
@@ -350,11 +351,11 @@ public class PostService {
 
 			listPojoPost.add(pojoPost);
 		}
-		
+
 		final PojoPostGetAllResData pojoPostData = new PojoPostGetAllResData();
 		pojoPostData.setData(listPojoPost);
 		pojoPostData.setTotal(getTotalPost());
-		
+
 		return pojoPostData;
 	}
 
