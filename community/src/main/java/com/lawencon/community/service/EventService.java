@@ -160,7 +160,7 @@ public class EventService {
 			res = eventDao.getAll();
 		}else if(category.equals(categoryId.getId())) {
 			res = eventDao.getByCategoryId(categoryId.getId());
-		}else if(category.isEmpty() && price.equals("ASC")){
+		}else if(price.equals("ASC")){
 			res = eventDao.getByPriceAsc();
 		}else if(category.isEmpty() && price.equals("DESC")){
 			res = eventDao.getByPriceDesc();
@@ -171,7 +171,7 @@ public class EventService {
 			final Event event = res.get(i);
 
 			ConnHandler.getManager().detach(event);
-			pojo.setFileId(event.getFile().getFileName());
+			pojo.setFileId(event.getFile().getId());
 			pojo.setId(event.getId());
 			pojo.setEventCode(event.getEventCode());
 			pojo.setEventName(event.getEventName());
@@ -314,10 +314,11 @@ public class EventService {
 		return res;
 	}
 	
-	public PojoEventResGetAll getEvent(final String id) {
-		final Optional<Event> event = getById(id);
+	public PojoEventResGetAll getByEventId(final String id) {
+		final Optional<Event> event = eventDao.getEventById(id);
 		final PojoEventResGetAll pojoEventResGetAll = new PojoEventResGetAll();
 		pojoEventResGetAll.setId(event.get().getId());
+		pojoEventResGetAll.setUserId(event.get().getUser().getId());
 		pojoEventResGetAll.setEventName(event.get().getEventName());
 		pojoEventResGetAll.setEventCode(event.get().getEventCode());
 		pojoEventResGetAll.setProvider(event.get().getProvider());
@@ -325,7 +326,7 @@ public class EventService {
 		pojoEventResGetAll.setStartDate(event.get().getStartDate());
 		pojoEventResGetAll.setEndDate(event.get().getEndDate());
 		pojoEventResGetAll.setPrice(event.get().getPrice());
-		pojoEventResGetAll.setCategoryId(event.get().getCategory().getId());
+		pojoEventResGetAll.setCategoryId(event.get().getCategory().getCategoryName());
 		pojoEventResGetAll.setFileId(event.get().getFile().getId());
 		pojoEventResGetAll.setVer(event.get().getVersion());
 		return pojoEventResGetAll;

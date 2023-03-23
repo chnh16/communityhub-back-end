@@ -20,10 +20,14 @@ public class PostDetail extends BaseEntity {
 	private Post post;
 	
 	@OneToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
+	
+	@OneToOne
 	@JoinColumn(name = "file_id")
 	private File file;
 	
-	@Column(columnDefinition = "TEXT")
+	@Column(columnDefinition = "TEXT", nullable = false)
 	private String detailContent;
 
 	public Post getPost() {
@@ -49,5 +53,12 @@ public class PostDetail extends BaseEntity {
 	public void setDetailContent(String detailContent) {
 		this.detailContent = detailContent;
 	}
-	
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 }

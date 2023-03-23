@@ -42,7 +42,7 @@ private final EventService eventService;
 	}
 	
 	@GetMapping
-	private ResponseEntity<List<PojoEventResGetAll>> getAllEvent(@RequestParam(required = false, value = "category") String category, @RequestParam(required = false, value = "price") String price){
+	private ResponseEntity<List<PojoEventResGetAll>> getAllEvent(@RequestParam("category") String category, @RequestParam("price") String price){
 		final List<PojoEventResGetAll> res = eventService.getAllEvent(category, price);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
@@ -54,11 +54,11 @@ private final EventService eventService;
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-//	@GetMapping("/{id}")
-//	public ResponseEntity<List<PojoEventResGetByCategoryId>> getByCategoryId(@PathVariable("id") final String id) {
-//		final List<PojoEventResGetByCategoryId> res = eventService.getByCategoryId(id);
-//		return new ResponseEntity<>(res, HttpStatus.OK);
-//	}
+	@GetMapping("{id}")
+	public ResponseEntity <PojoEventResGetAll> getByEventId(@PathVariable("id") final String id) {
+		final PojoEventResGetAll res = eventService.getByEventId(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
 	
 	@PutMapping
 	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoEventReqUpdate data){
@@ -66,7 +66,7 @@ private final EventService eventService;
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("{id}")
 	public ResponseEntity<PojoDeleteRes> delete(@PathVariable final String id){
 		final PojoDeleteRes res = eventService.delete(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
