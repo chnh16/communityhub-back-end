@@ -297,13 +297,13 @@ public class TransactionService {
 			pojoTransactionGetAll.setItemName(membership.getMembershipName());
 		}
 
-		pojoTransactionGetAll.setId(listTransaction.getId());
-		pojoTransactionGetAll.setFullName(listTransaction.getUser().getProfile().getFullName());
-		pojoTransactionGetAll.setItemName(listTransaction.getCourse().getCourseName());
-		pojoTransactionGetAll.setFileId(listTransaction.getFile().getId());
-		pojoTransactionGetAll.setGrandTotal(listTransaction.getGrandTotal());
-		pojoTransactionGetAll.setIsApproved(listTransaction.getIsApproved());
-		pojoTransactionGetAll.setVer(listTransaction.getVersion());
+		pojoTransactionGetAll.setId(transaction.get().getId());
+		pojoTransactionGetAll.setFullName(transaction.get().getUser().getProfile().getFullName());
+		pojoTransactionGetAll.setItemName(transaction.get().getCourse().getCourseName());
+		pojoTransactionGetAll.setFileId(transaction.get().getFile().getId());
+		pojoTransactionGetAll.setGrandTotal(transaction.get().getGrandTotal());
+		pojoTransactionGetAll.setIsApproved(transaction.get().getIsApproved());
+		pojoTransactionGetAll.setVer(transaction.get().getVersion());
 
 		return pojoTransactionGetAll;
 	}
