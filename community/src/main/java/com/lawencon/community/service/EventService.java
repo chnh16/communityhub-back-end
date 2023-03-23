@@ -320,6 +320,7 @@ public class EventService {
 		final Optional<Event> event = eventDao.getEventById(id);
 		final PojoEventResGetAll pojoEventResGetAll = new PojoEventResGetAll();
 		pojoEventResGetAll.setId(event.get().getId());
+		pojoEventResGetAll.setUserId(event.get().getUser().getId());
 		pojoEventResGetAll.setEventName(event.get().getEventName());
 		pojoEventResGetAll.setEventCode(event.get().getEventCode());
 		pojoEventResGetAll.setProvider(event.get().getProvider());

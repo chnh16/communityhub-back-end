@@ -42,7 +42,7 @@ private final EventService eventService;
 	}
 	
 	@GetMapping
-	private ResponseEntity<List<PojoEventResGetAll>> getAllEvent(@RequestParam(required = false, value = "category") String category, @RequestParam(required = false, value = "price") String price){
+	private ResponseEntity<List<PojoEventResGetAll>> getAllEvent(@RequestParam("category") String category, @RequestParam("price") String price){
 		final List<PojoEventResGetAll> res = eventService.getAllEvent(category, price);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
