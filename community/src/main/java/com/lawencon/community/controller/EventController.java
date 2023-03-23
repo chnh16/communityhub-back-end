@@ -66,7 +66,7 @@ private final EventService eventService;
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("{id}")
 	public ResponseEntity<PojoDeleteRes> delete(@PathVariable final String id){
 		final PojoDeleteRes res = eventService.delete(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
