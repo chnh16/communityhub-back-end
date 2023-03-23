@@ -5,6 +5,7 @@ public class PojoPostDetailGetAllRes {
 	private String id;
 	private String fullName;
 	private String detailContent;
+	private String fileId;
 	private Integer ver;
 
 	public String getId() {
@@ -37,6 +38,14 @@ public class PojoPostDetailGetAllRes {
 
 	public void setVer(Integer ver) {
 		this.ver = ver;
+	}
+
+	public String getFileId() {
+		return fileId;
+	}
+
+	public void setFileId(String fileId) {
+		this.fileId = fileId;
 	}
 
 }
