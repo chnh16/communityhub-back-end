@@ -29,7 +29,9 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.transaction.PojoInsertTransactionReq;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetAllRes;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetAllResData;
+import com.lawencon.community.pojo.transaction.PojoTransactionGetReportRes;
 import com.lawencon.community.pojo.transaction.PojoUpdateTransactionReq;
+import com.lawencon.community.util.DateUtil;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
@@ -279,8 +281,22 @@ public class TransactionService {
 
 	public PojoTransactionGetAllRes getTransactionById(final String id) {
 
-		final Transaction listTransaction = transactionDao.getById(id).get();
+		final Optional<Transaction> transaction = transactionDao.getTransactionById(id);
 		final PojoTransactionGetAllRes pojoTransactionGetAll = new PojoTransactionGetAllRes();
+		pojoTransactionGetAll.setId(transaction.get().getId());
+		if (transaction.get().getEvent() != null) {
+			final Event event = eventService.getRefById(transaction.get().getEvent().getId());
+			pojoTransactionGetAll.setItemName(event.getEventName());
+		}
+		if (transaction.get().getCourse() != null) {
+			final Course course = courseService.getRefById(transaction.get().getCourse().getId());
+			pojoTransactionGetAll.setItemName(course.getCourseName());
+		}
+		if (transaction.get().getMembership() != null) {
+			final Membership membership = membershipService.getRefById(transaction.get().getMembership().getId());
+			pojoTransactionGetAll.setItemName(membership.getMembershipName());
+		}
+
 		pojoTransactionGetAll.setId(listTransaction.getId());
 		pojoTransactionGetAll.setFullName(listTransaction.getUser().getProfile().getFullName());
 		pojoTransactionGetAll.setItemName(listTransaction.getCourse().getCourseName());
@@ -514,4 +530,21 @@ public class TransactionService {
 		ConnHandler.commit();
 	}
 
+	
+	public List<PojoTransactionGetReportRes> getReportByDate(final String startDate, final String endDate){
+		
+		final List<PojoTransactionGetReportRes> transactions = transactionDao.getCourseReport(DateUtil.strToLocalDate(startDate),DateUtil.strToLocalDate(endDate));
+		
+		for(int i = 0; i < transactions.size(); i++) {
+			final PojoTransactionGetReportRes transactionReport = new PojoTransactionGetReportRes();
+			transactionReport.setActivityType(transactions.get(i).getActivityType());
+			transactionReport.setItemName(transactions.get(i).getItemName());
+			transactionReport.setStartDate(transactions.get(i).getStartDate());
+			transactionReport.setTotalParticipants(transactions.get(i).getTotalParticipants());
+			
+		}
+		
+		return transactions;
+	}
 }
+
