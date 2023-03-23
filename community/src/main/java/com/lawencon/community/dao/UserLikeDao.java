@@ -68,8 +68,8 @@ public class UserLikeDao extends BasePostDao<UserLike> {
 					.setParameter("userId", userId).getSingleResult();
 			if (res != null) {
 				userLike = new UserLike();
-				final Object[] objArr = (Object[]) res;
-				userLike.setId(objArr[0].toString());
+				final String objArr = (String) res;
+				userLike.setId(objArr);
 			}
 		} catch(final Exception e){
 			e.printStackTrace();
