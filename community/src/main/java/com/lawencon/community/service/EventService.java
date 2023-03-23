@@ -160,7 +160,7 @@ public class EventService {
 			res = eventDao.getAll();
 		}else if(category.equals(categoryId.getId())) {
 			res = eventDao.getByCategoryId(categoryId.getId());
-		}else if(category.isEmpty() && price.equals("ASC")){
+		}else if(price.equals("ASC")){
 			res = eventDao.getByPriceAsc();
 		}else if(category.isEmpty() && price.equals("DESC")){
 			res = eventDao.getByPriceDesc();

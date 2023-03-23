@@ -316,7 +316,7 @@ public class PostService {
 			pojoPost.setPostTypeId(listPost.get(i).getPostType().getId());
 			pojoPost.setVer(listPost.get(i).getVersion());
 			pojoPost.setPostDetail(pojoDetails);
-			pojoPost.setDetailCount(pojoDetails.size() + 1);
+			pojoPost.setDetailCount(pojoDetails.size());
 			pojoPost.setIsLiked(pojoLike);
 			pojoPost.setIsBookmarked(pojoBookmark);
 
