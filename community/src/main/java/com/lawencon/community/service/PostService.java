@@ -278,6 +278,7 @@ public class PostService {
 		for (int i = 0; i < listPost.size(); i++) {
 			final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
 			final List<PojoPostDetailGetAllRes> pojoDetails = new ArrayList<>();
+			final List<PostFile> postFiles = postFileDao.getAllPostFile(listPost.get(i).getId());
 			PojoPostLikeRes pojoLike = null;
 			PojoPostBookmarkRes pojoBookmark = null;
 			final List<PostDetail> postDetails = getPostDetailByPostId(listPost.get(i).getId());
@@ -319,6 +320,7 @@ public class PostService {
 			pojoPost.setDetailCount(pojoDetails.size() + 1);
 			pojoPost.setIsLiked(pojoLike);
 			pojoPost.setIsBookmarked(pojoBookmark);
+			pojoPost.setPostedAt(listPost.get(i).getCreatedAt());
 
 			listPojoPost.add(pojoPost);
 		}
@@ -451,23 +453,6 @@ public class PostService {
 		return res;
 	}
 
-	public List<PojoPostFileGetAllRes> getAllPostFile(final String postId) {
-		final List<PojoPostFileGetAllRes> listPojoPostFile = new ArrayList<>();
-
-		final List<PostFile> listPostFile = postFileDao.getAllPostFile(postId);
-
-		for (int i = 0; i < listPostFile.size(); i++) {
-			final PojoPostFileGetAllRes pojoPostFile = new PojoPostFileGetAllRes();
-			pojoPostFile.setId(listPostFile.get(i).getId());
-			pojoPostFile.setPostId(listPostFile.get(i).getPost().getId());
-			pojoPostFile.setFileId(listPostFile.get(i).getFile().getId());
-
-			listPojoPostFile.add(pojoPostFile);
-		}
-
-		return listPojoPostFile;
-	}
-
 	private void valIdNull(final UserLike data) {
 		if (data.getId() != null) {
 			throw new RuntimeException("ID harus kosong");
@@ -591,7 +576,7 @@ public class PostService {
 		return userBookmarkInsert;
 	}
 
-	public java.util.List<UserBookmark> getAllByUser(final String userId) {
+	public List<UserBookmark> getAllByUser(final String userId) {
 		return userBookmarkDao.getAllByUser(userId);
 	}
 
