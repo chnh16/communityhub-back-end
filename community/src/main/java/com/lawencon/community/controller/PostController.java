@@ -91,12 +91,6 @@ public class PostController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping("list-post-file/{postId}")
-	public ResponseEntity<List<PojoPostFileGetAllRes>> getAllPostFile(@PathVariable("postId") String postId){
-		final List<PojoPostFileGetAllRes> res = postService.getAllPostFile(postId);
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
-	
 	@DeleteMapping("post-file/{id}")
 	public ResponseEntity<PojoDeleteRes> deletePostFile(@PathVariable("id") String id){
 		final PojoDeleteRes res = postService.deletePostFileRes(id);

@@ -1,5 +1,6 @@
 package com.lawencon.community.pojo.post;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetAllRes;
@@ -14,10 +15,12 @@ public class PojoPostGetAllRes {
 	private String postContent;
 	private String postTypeId;
 	private String categoryName;
+	private LocalDateTime postedAt;
 	private Integer ver;
 	private Integer likeCount;
 	private Integer detailCount;
 	private List<PojoPostDetailGetAllRes> postDetail;
+	private List<String> fileId;
 	private PojoPostLikeRes isLiked;
 	private PojoPostBookmarkRes isBookmarked;
 	
@@ -99,4 +102,17 @@ public class PojoPostGetAllRes {
 	public void setPostDetail(List<PojoPostDetailGetAllRes> postDetail) {
 		this.postDetail = postDetail;
 	}
+	public LocalDateTime getPostedAt() {
+		return postedAt;
+	}
+	public void setPostedAt(LocalDateTime postedAt) {
+		this.postedAt = postedAt;
+	}
+	public List<String> getFileId() {
+		return fileId;
+	}
+	public void setFileId(List<String> fileId) {
+		this.fileId = fileId;
+	}
+	
 }
