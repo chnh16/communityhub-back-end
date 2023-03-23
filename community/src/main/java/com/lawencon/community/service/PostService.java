@@ -41,7 +41,6 @@ import com.lawencon.community.pojo.postdetail.PojoPostDetailGetAllRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetByPostIdRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailInsertReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailUpdateReq;
-import com.lawencon.community.pojo.postfile.PojoPostFileGetAllRes;
 import com.lawencon.community.pojo.postfile.PojoPostFileInsertListReq;
 import com.lawencon.community.pojo.userbookmark.PojoPostBookmarkRes;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkGetAllRes;
@@ -277,6 +276,7 @@ public class PostService {
 
 		for (int i = 0; i < listPost.size(); i++) {
 			final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
+			final List<String> postFileId = new ArrayList<>();
 			final List<PojoPostDetailGetAllRes> pojoDetails = new ArrayList<>();
 			final List<PostFile> postFiles = postFileDao.getAllPostFile(listPost.get(i).getId());
 			PojoPostLikeRes pojoLike = null;
@@ -293,6 +293,12 @@ public class PostService {
 				pojoDetail.setVer(currentDetail.getVersion());
 
 				pojoDetails.add(pojoDetail);
+			}
+			for (int j = 0; j < postFiles.size(); j++) {
+				final PostFile postFile = postFiles.get(i);
+				final String fileId = postFile.getId();
+
+				postFileId.add(fileId);
 			}
 			final Optional<UserLike> postLike = userLikeDao.getLikeByPostId(listPost.get(i).getId(),
 					principalService.getAuthPrincipal());
@@ -323,6 +329,7 @@ public class PostService {
 			pojoPost.setIsBookmarked(pojoBookmark);
 			pojoPost.setLikeCount(userLikeDao.getCount(listPost.get(i).getId()));
 			pojoPost.setPostedAt(listPost.get(i).getCreatedAt());
+			pojoPost.setFileId(postFileId);
 
 			listPojoPost.add(pojoPost);
 		}
@@ -501,18 +508,17 @@ public class PostService {
 
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
 		pojoInsertRes.setId(userLikeInsert.getId());
-		pojoInsertRes.setMessage("Berhasil Menambah Data");
+		pojoInsertRes.setMessage("Berhasil Menyukai Postingan");
 		return pojoInsertRes;
 	}
 
-	public boolean deleteUserLikeById(final String postId) {
+	public boolean deleteUserLikeById(final String postLikeId) {
 		boolean userLikeDelete = false;
 
 		try {
 			ConnHandler.begin();
-			userLikeDelete = userLikeDao.deleteUserLikeById(principalService.getAuthPrincipal(), postId);
+			userLikeDelete = userLikeDao.delete(postLikeId);
 			ConnHandler.commit();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -539,10 +545,10 @@ public class PostService {
 		return listPojoUserLike;
 	}
 
-	public PojoDeleteRes deleteUserLikeRes(final String postId) {
+	public PojoDeleteRes deleteUserLikeRes(final String postLikeId) {
 		final PojoDeleteRes res = new PojoDeleteRes();
-		deleteUserLikeById(postId);
-		res.setMessage("Berhasil Menghapus Data");
+		deleteUserLikeById(postLikeId);
+		res.setMessage("Berhasil Membatalkan");
 
 		return res;
 	}
@@ -644,7 +650,7 @@ public class PostService {
 		return bookmark;
 	}
 
-	public PojoDeleteRes delete(final String id) {
+	public PojoDeleteRes deleteBookmark(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteBookmarkById(id);
 		res.setMessage("Berhasil Dihapus");

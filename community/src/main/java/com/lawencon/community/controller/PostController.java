@@ -151,9 +151,9 @@ public class PostController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("delete-bookmark/{id}")
+	@DeleteMapping("bookmark/{id}")
 	public ResponseEntity<PojoDeleteRes> deleteBookmark(@PathVariable("id") String id){
-		final PojoDeleteRes res = postService.delete(id);
+		final PojoDeleteRes res = postService.deleteBookmark(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
