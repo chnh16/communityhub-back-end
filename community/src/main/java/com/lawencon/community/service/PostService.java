@@ -270,9 +270,9 @@ public class PostService {
 		return postDao.getTotalPost();
 	}
 
-	public List<PojoPostGetAllRes> getAllPost() {
+	public List<PojoPostGetAllRes> getAllPost(final int limit, final int offset) {
 		final List<PojoPostGetAllRes> listPojoPost = new ArrayList<>();
-		final List<Post> listPost = getAll();
+		final List<Post> listPost = postDao.getAllPost(limit, offset);
 
 		for (int i = 0; i < listPost.size(); i++) {
 			final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
