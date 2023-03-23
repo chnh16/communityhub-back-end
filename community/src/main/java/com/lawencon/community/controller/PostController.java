@@ -18,14 +18,12 @@ import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.post.PojoPostGetAllRes;
-import com.lawencon.community.pojo.post.PojoPostGetAllResData;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetAllRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetByPostIdRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailInsertReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailUpdateReq;
-import com.lawencon.community.pojo.postfile.PojoPostFileGetAllRes;
 import com.lawencon.community.pojo.postfile.PojoPostFileInsertListReq;
 import com.lawencon.community.pojo.posttype.PojoPostTypeGetAllRes;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkGetAllRes;
@@ -55,8 +53,8 @@ public class PostController {
 	}
 	
 	@GetMapping("list-post")
-	public ResponseEntity<List<PojoPostGetAllRes>> getAllPost(){
-		final List<PojoPostGetAllRes> res = postService.getAllPost();
+	public ResponseEntity<List<PojoPostGetAllRes>> getAllPost(@RequestParam("limit") int limit, @RequestParam("offset") int offset){
+		final List<PojoPostGetAllRes> res = postService.getAllPost(limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
@@ -66,12 +64,11 @@ public class PostController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping("page")
-	public ResponseEntity<PojoPostGetAllResData> getPost(@RequestParam("size") int size, @RequestParam("page") int page){
-		int offset = (page - 1)*size;
-		final PojoPostGetAllResData res = postService.getPost(size, offset);
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
+//	@GetMapping("page")
+//	public ResponseEntity<PojoPostGetAllResData> getPost(@RequestParam("size") int limit, @RequestParam("page") int page){
+//		final PojoPostGetAllResData res = postService.getPost(size, offset);
+//		return new ResponseEntity<>(res, HttpStatus.OK);
+//	}
 	
 	@PutMapping
 	public ResponseEntity<PojoUpdateRes> updateIndustry(@RequestBody PojoPostUpdateReq data){
