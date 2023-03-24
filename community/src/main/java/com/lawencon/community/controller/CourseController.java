@@ -79,7 +79,7 @@ private final CourseService courseService;
 	}
 
 	@GetMapping("/page")
-	public ResponseEntity<PojoCourserGetAllResData> getByUserId(@RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+	public ResponseEntity<PojoCourserGetAllResData> getCoursePage(@RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
 		final PojoCourserGetAllResData res = courseService.getCoursePage(limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}

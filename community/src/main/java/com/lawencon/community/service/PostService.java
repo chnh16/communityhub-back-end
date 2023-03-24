@@ -283,7 +283,7 @@ public class PostService {
 			PojoPostLikeRes pojoLike = null;
 			PojoPostBookmarkRes pojoBookmark = null;
 			final List<PostDetail> postDetails = getPostDetailByPostId(listPost.get(i).getId());
-			for (int j = 0; i < postDetails.size(); j++) {
+			for (int j = 0; j < postDetails.size(); j++) {
 				final PostDetail currentDetail = postDetails.get(j);
 				final User user = userDao.getRefById(currentDetail.getUser().getId());
 				final Profile profile = profileDao.getRefById(user.getProfile().getId());
@@ -298,7 +298,7 @@ public class PostService {
 				pojoDetails.add(pojoDetail);
 			}
 			for (int j = 0; j < postFiles.size(); j++) {
-				final PostFile postFile = postFiles.get(i);
+				final PostFile postFile = postFiles.get(j);
 				final String fileId = postFile.getFile().getId();
 
 				postFileId.add(fileId);
