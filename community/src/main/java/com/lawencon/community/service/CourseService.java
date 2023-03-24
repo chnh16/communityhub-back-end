@@ -15,7 +15,6 @@ import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.UserCourseDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.Course;
-import com.lawencon.community.model.Event;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.UserCourse;
@@ -24,10 +23,8 @@ import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.course.PojoCourseGetAllRes;
 import com.lawencon.community.pojo.course.PojoCourseInsertReq;
-import com.lawencon.community.pojo.course.PojoCourseResGetByCategoryId;
 import com.lawencon.community.pojo.course.PojoCourseUpdateReq;
 import com.lawencon.community.pojo.course.PojoCourserGetAllResData;
-import com.lawencon.community.pojo.event.PojoEventResGetAll;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseGetByUserIdRes;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseInsertReq;
 import com.lawencon.community.util.Generate;
@@ -139,16 +136,16 @@ public class CourseService {
 		return pojo;
 	}
 
-	public List<PojoCourseGetAllRes> getAllRes(String category, String price) {
+	public List<PojoCourseGetAllRes> getAllRes(String category, String price, Integer limit, Integer offset) {
 		final List<PojoCourseGetAllRes> pojos = new ArrayList<>();
 		List<Course> res = new ArrayList<>();
 
 		final Category categoryId = categoryDao.getRefById(category);
 
 		if (category.isEmpty() && price.isEmpty()) {
-			res = courseDao.getAll();
+			res = courseDao.getCourse(limit, offset);
 		} else if (category.equals(categoryId.getId())) {
-			res = courseDao.getByCategoryId(categoryId.getId());
+			res = courseDao.getByCategoryId(categoryId.getId(), limit, offset);
 		} else if (category.isEmpty() && price.equals("ASC")) {
 			res = courseDao.getByPriceAsc();
 		} else if (category.isEmpty() && price.equals("DESC")) {
@@ -177,33 +174,33 @@ public class CourseService {
 		return pojos;
 	}
 
-	public List<PojoCourseResGetByCategoryId> getByCategoryId(final String id) {
-		final List<PojoCourseResGetByCategoryId> pojos = new ArrayList<>();
-		final List<Course> res = courseDao.getByCategoryId(id);
-
-		for (int i = 0; i < res.size(); i++) {
-			final PojoCourseResGetByCategoryId pojo = new PojoCourseResGetByCategoryId();
-			final Course course = res.get(i);
-
-			ConnHandler.getManager().detach(course);
-			pojo.setFileId(course.getFile().getFileName());
-			pojo.setId(course.getId());
-			pojo.setCourseCode(course.getCourseCode());
-			pojo.setCourseName(course.getCourseName());
-			pojo.setTrainer(course.getTrainer());
-			pojo.setProvider(course.getProvider());
-			pojo.setLocationName(course.getLocationName());
-			pojo.setCategoryId(course.getCategory().getCategoryName());
-			pojo.setStartDate(course.getStartDate());
-			pojo.setEndDate(course.getEndDate());
-			pojo.setPrice(course.getPrice());
-			pojo.setVer(course.getVersion());
-
-			pojos.add(pojo);
-		}
-
-		return pojos;
-	}
+//	public List<PojoCourseResGetByCategoryId> getByCategoryId(final String id) {
+//		final List<PojoCourseResGetByCategoryId> pojos = new ArrayList<>();
+//		final List<Course> res = courseDao.getByCategoryId(id);
+//
+//		for (int i = 0; i < res.size(); i++) {
+//			final PojoCourseResGetByCategoryId pojo = new PojoCourseResGetByCategoryId();
+//			final Course course = res.get(i);
+//
+//			ConnHandler.getManager().detach(course);
+//			pojo.setFileId(course.getFile().getFileName());
+//			pojo.setId(course.getId());
+//			pojo.setCourseCode(course.getCourseCode());
+//			pojo.setCourseName(course.getCourseName());
+//			pojo.setTrainer(course.getTrainer());
+//			pojo.setProvider(course.getProvider());
+//			pojo.setLocationName(course.getLocationName());
+//			pojo.setCategoryId(course.getCategory().getCategoryName());
+//			pojo.setStartDate(course.getStartDate());
+//			pojo.setEndDate(course.getEndDate());
+//			pojo.setPrice(course.getPrice());
+//			pojo.setVer(course.getVersion());
+//
+//			pojos.add(pojo);
+//		}
+//
+//		return pojos;
+//	}
 
 	public PojoUpdateRes update(final PojoCourseUpdateReq data) {
 		Course courseUpdate = null;
