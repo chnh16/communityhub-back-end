@@ -3,6 +3,7 @@ package com.lawencon.community.pojo.post;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.lawencon.community.pojo.pollingchoice.PojoPollingChoiceGetAllRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetAllRes;
 import com.lawencon.community.pojo.userbookmark.PojoPostBookmarkRes;
 import com.lawencon.community.pojo.userlike.PojoPostLikeRes;
@@ -19,6 +20,7 @@ public class PojoPostGetAllRes {
 	private Integer ver;
 	private Integer likeCount;
 	private Integer detailCount;
+	private List<PojoPollingChoiceGetAllRes> pollingChoice;
 	private List<PojoPostDetailGetAllRes> postDetail;
 	private List<String> fileId;
 	private PojoPostLikeRes isLiked;
@@ -114,4 +116,11 @@ public class PojoPostGetAllRes {
 	public void setUserFileId(String userFileId) {
 		this.userFileId = userFileId;
 	}
+	public List<PojoPollingChoiceGetAllRes> getPollingChoice() {
+		return pollingChoice;
+	}
+	public void setPollingChoice(List<PojoPollingChoiceGetAllRes> pollingChoice) {
+		this.pollingChoice = pollingChoice;
+	}
+	
 }

@@ -144,7 +144,7 @@ public class PostController {
 	
 	@PostMapping("bookmark")
 	public ResponseEntity<PojoInsertRes> insertBookmark(@RequestBody PojoUserBookmarkInsertReq data){
-		final PojoInsertRes res = postService.insert(data);
+		final PojoInsertRes res = postService.insertUserBookmark(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
