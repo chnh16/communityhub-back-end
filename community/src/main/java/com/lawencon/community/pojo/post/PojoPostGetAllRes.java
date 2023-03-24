@@ -9,7 +9,7 @@ import com.lawencon.community.pojo.userlike.PojoPostLikeRes;
 
 public class PojoPostGetAllRes {
 	private String id;
-	private String userId;
+	private String userFileId;
 	private String fullName;
 	private String postTitle;
 	private String postContent;
@@ -53,12 +53,6 @@ public class PojoPostGetAllRes {
 	}
 	public void setId(String id) {
 		this.id = id;
-	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
 	}
 	public String getFullName() {
 		return fullName;
@@ -114,5 +108,10 @@ public class PojoPostGetAllRes {
 	public void setFileId(List<String> fileId) {
 		this.fileId = fileId;
 	}
-	
+	public String getUserFileId() {
+		return userFileId;
+	}
+	public void setUserFileId(String userFileId) {
+		this.userFileId = userFileId;
+	}
 }

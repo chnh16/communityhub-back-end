@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public class PojoPostDetailGetAllRes {
 
 	private String id;
+	private String userFileId;
 	private String fullName;
 	private String detailContent;
 	private String fileId;
@@ -58,4 +59,13 @@ public class PojoPostDetailGetAllRes {
 	public void setPostedAt(LocalDateTime postedAt) {
 		this.postedAt = postedAt;
 	}
+
+	public String getUserFileId() {
+		return userFileId;
+	}
+
+	public void setUserFileId(String userFileId) {
+		this.userFileId = userFileId;
+	}
+	
 }
