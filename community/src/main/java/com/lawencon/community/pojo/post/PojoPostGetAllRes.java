@@ -1,19 +1,26 @@
 package com.lawencon.community.pojo.post;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import com.lawencon.community.pojo.postdetail.PojoPostDetailGetAllRes;
 import com.lawencon.community.pojo.userbookmark.PojoPostBookmarkRes;
 import com.lawencon.community.pojo.userlike.PojoPostLikeRes;
 
 public class PojoPostGetAllRes {
 	private String id;
-	private String userId;
+	private String userFileId;
 	private String fullName;
 	private String postTitle;
 	private String postContent;
 	private String postTypeId;
-	private String typeName;
-	private String categoryId;
 	private String categoryName;
-  private Integer ver;
+	private LocalDateTime postedAt;
+	private Integer ver;
+	private Long likeCount;
+	private Integer detailCount;
+	private List<PojoPostDetailGetAllRes> postDetail;
+	private List<String> fileId;
 	private PojoPostLikeRes isLiked;
 	private PojoPostBookmarkRes isBookmarked;
 	
@@ -25,12 +32,6 @@ public class PojoPostGetAllRes {
 	}
 	public String getPostTypeId() {
 		return postTypeId;
-	}
-	public String getTypeName() {
-		return typeName;
-	}
-	public String getCategoryId() {
-		return categoryId;
 	}
 	public String getCategoryName() {
 		return categoryName;
@@ -44,12 +45,6 @@ public class PojoPostGetAllRes {
 	public void setPostTypeId(String postTypeId) {
 		this.postTypeId = postTypeId;
 	}
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
-	public void setCategoryId(String categoryId) {
-		this.categoryId = categoryId;
-	}
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
@@ -58,12 +53,6 @@ public class PojoPostGetAllRes {
 	}
 	public void setId(String id) {
 		this.id = id;
-	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
 	}
 	public String getFullName() {
 		return fullName;
@@ -88,5 +77,41 @@ public class PojoPostGetAllRes {
 	}
 	public void setIsBookmarked(PojoPostBookmarkRes isBookmarked) {
 		this.isBookmarked = isBookmarked;
+	}
+	public Long getLikeCount() {
+		return likeCount;
+	}
+	public void setLikeCount(Long likeCount) {
+		this.likeCount = likeCount;
+	}
+	public Integer getDetailCount() {
+		return detailCount;
+	}
+	public void setDetailCount(Integer detailCount) {
+		this.detailCount = detailCount;
+	}
+	public List<PojoPostDetailGetAllRes> getPostDetail() {
+		return postDetail;
+	}
+	public void setPostDetail(List<PojoPostDetailGetAllRes> postDetail) {
+		this.postDetail = postDetail;
+	}
+	public LocalDateTime getPostedAt() {
+		return postedAt;
+	}
+	public void setPostedAt(LocalDateTime postedAt) {
+		this.postedAt = postedAt;
+	}
+	public List<String> getFileId() {
+		return fileId;
+	}
+	public void setFileId(List<String> fileId) {
+		this.fileId = fileId;
+	}
+	public String getUserFileId() {
+		return userFileId;
+	}
+	public void setUserFileId(String userFileId) {
+		this.userFileId = userFileId;
 	}
 }

@@ -1,11 +1,15 @@
 package com.lawencon.community.pojo.postdetail;
 
+import java.time.LocalDateTime;
+
 public class PojoPostDetailGetAllRes {
 
 	private String id;
-	private String postId;
-	private String fileId;
+	private String userFileId;
+	private String fullName;
 	private String detailContent;
+	private String fileId;
+	private LocalDateTime postedAt;
 	private Integer ver;
 
 	public String getId() {
@@ -16,20 +20,12 @@ public class PojoPostDetailGetAllRes {
 		this.id = id;
 	}
 
-	public String getPostId() {
-		return postId;
+	public String getFullName() {
+		return fullName;
 	}
 
-	public void setPostId(String postId) {
-		this.postId = postId;
-	}
-
-	public String getFileId() {
-		return fileId;
-	}
-
-	public void setFileId(String fileId) {
-		this.fileId = fileId;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	public String getDetailContent() {
@@ -48,4 +44,28 @@ public class PojoPostDetailGetAllRes {
 		this.ver = ver;
 	}
 
+	public String getFileId() {
+		return fileId;
+	}
+
+	public void setFileId(String fileId) {
+		this.fileId = fileId;
+	}
+
+	public LocalDateTime getPostedAt() {
+		return postedAt;
+	}
+
+	public void setPostedAt(LocalDateTime postedAt) {
+		this.postedAt = postedAt;
+	}
+
+	public String getUserFileId() {
+		return userFileId;
+	}
+
+	public void setUserFileId(String userFileId) {
+		this.userFileId = userFileId;
+	}
+	
 }

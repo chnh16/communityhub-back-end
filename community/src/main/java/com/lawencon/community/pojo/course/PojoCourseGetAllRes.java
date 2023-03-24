@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 public class PojoCourseGetAllRes {
 	private String id;
+	private String userId;
 	private String courseName;
 	private String provider;
 	private String trainer;
@@ -81,6 +82,12 @@ public class PojoCourseGetAllRes {
 	}
 	public void setVer(Integer ver) {
 		this.ver = ver;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	
 	

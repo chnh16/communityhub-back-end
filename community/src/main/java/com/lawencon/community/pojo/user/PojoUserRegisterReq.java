@@ -3,7 +3,6 @@ package com.lawencon.community.pojo.user;
 public class PojoUserRegisterReq {
 	private String email;
 	private String passwordUser;
-
 	private PojoProfileInsertReq profile;
 
 	public String getEmail() {

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.UserBookmark;
-import com.lawencon.community.model.UserLike;
 
 @Repository
 public class UserBookmarkDao extends BasePostDao<UserBookmark> {
@@ -58,8 +57,8 @@ public class UserBookmarkDao extends BasePostDao<UserBookmark> {
 					.setParameter("userId", userId).getSingleResult();
 			if (res != null) {
 				userBookmark = new UserBookmark();
-				final Object[] objArr = (Object[]) res;
-				userBookmark.setId(objArr[0].toString());
+				final String objArr = (String) res;
+				userBookmark.setId(objArr);
 			}
 		} catch(final Exception e){
 			e.printStackTrace();

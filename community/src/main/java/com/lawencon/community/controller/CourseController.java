@@ -54,9 +54,9 @@ private final CourseService courseService;
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<List<PojoCourseResGetByCategoryId>> getByCategoryId(@PathVariable("id") final String id) {
-		final List<PojoCourseResGetByCategoryId> res = courseService.getByCategoryId(id);
+	@GetMapping("{id}")
+	public ResponseEntity<PojoCourseGetAllRes> getCourseById(@PathVariable("id") final String id) {
+		final PojoCourseGetAllRes res = courseService.getCourseById(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

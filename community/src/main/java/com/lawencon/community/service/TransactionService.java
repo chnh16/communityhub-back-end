@@ -149,30 +149,35 @@ public class TransactionService {
 		final Transaction trans = new Transaction();
 		trans.setUser(user);
 		trans.setTransactionDate(LocalDateTime.now());
-
-		if (data.getEventId() != null) {
-			final Event event = eventService.getRefById(data.getEventId());
-			trans.setEvent(event);
-			grandTotal = event.getPrice();
-		}
-		if (data.getMembershipId() != null) {
-			final Membership membership = membershipService.getRefById(data.getMembershipId());
-			trans.setMembership(membership);
-			grandTotal = membership.getAmount();
-		}
-		if (data.getCourseId() != null) {
-			final Course course = courseService.getRefById(data.getCourseId());
-			trans.setCourse(course);
-			grandTotal = course.getPrice();
-		}
+		
+		Float value=(float) 0;
+		
 		if (data.getVoucherCode() != null) {
 			Voucher voucher = null;
 			final Optional<Voucher> optVoucher = voucherDao.getByVoucherCode(data.getVoucherCode());
 			if (optVoucher.isPresent()) {
 				voucher = voucherService.getRefById(optVoucher.get().getId());
 				trans.setVoucher(voucher);
+				value = trans.getVoucher().getAmount().floatValue();
 			}
 		}
+
+		if (data.getEventId() != null) {
+			final Event event = eventService.getRefById(data.getEventId());
+			trans.setEvent(event);
+			grandTotal = event.getPrice().subtract(BigDecimal.valueOf(value));
+		}
+		if (data.getMembershipId() != null) {
+			final Membership membership = membershipService.getRefById(data.getMembershipId());
+			trans.setMembership(membership);
+			grandTotal = membership.getAmount().subtract(BigDecimal.valueOf(value));
+		}
+		if (data.getCourseId() != null) {
+			final Course course = courseService.getRefById(data.getCourseId());
+			trans.setCourse(course);
+			grandTotal = course.getPrice().subtract(BigDecimal.valueOf(value));
+		}
+		
 
 		trans.setGrandTotal(grandTotal);
 		trans.setIsApproved(false);
@@ -209,6 +214,7 @@ public class TransactionService {
 				Profile profile = profileDao.getByIdAndDetach(user.getProfile().getId());
 
 				profile.setPremiumUntil(LocalDateTime.now().plusDays(transactionUpdate.getMembership().getDuration()));
+			
 
 				ConnHandler.begin();
 				profileUpdate = profileDao.update(profile);
@@ -291,8 +297,10 @@ public class TransactionService {
 			final Membership membership = membershipService.getRefById(transaction.get().getMembership().getId());
 			pojoTransactionGetAll.setItemName(membership.getMembershipName());
 		}
+
+		pojoTransactionGetAll.setId(transaction.get().getId());
 		pojoTransactionGetAll.setFullName(transaction.get().getUser().getProfile().getFullName());
-		;
+		pojoTransactionGetAll.setItemName(transaction.get().getCourse().getCourseName());
 		pojoTransactionGetAll.setFileId(transaction.get().getFile().getId());
 		pojoTransactionGetAll.setGrandTotal(transaction.get().getGrandTotal());
 		pojoTransactionGetAll.setIsApproved(transaction.get().getIsApproved());

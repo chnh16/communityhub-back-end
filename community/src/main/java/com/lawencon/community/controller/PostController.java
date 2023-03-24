@@ -18,14 +18,12 @@ import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.post.PojoPostGetAllRes;
-import com.lawencon.community.pojo.post.PojoPostGetAllResData;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetAllRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetByPostIdRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailInsertReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailUpdateReq;
-import com.lawencon.community.pojo.postfile.PojoPostFileGetAllRes;
 import com.lawencon.community.pojo.postfile.PojoPostFileInsertListReq;
 import com.lawencon.community.pojo.posttype.PojoPostTypeGetAllRes;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkGetAllRes;
@@ -55,8 +53,8 @@ public class PostController {
 	}
 	
 	@GetMapping("list-post")
-	public ResponseEntity<List<PojoPostGetAllRes>> getAllPost(){
-		final List<PojoPostGetAllRes> res = postService.getAllPost();
+	public ResponseEntity<List<PojoPostGetAllRes>> getAllPost(@RequestParam("limit") int limit, @RequestParam("offset") int offset){
+		final List<PojoPostGetAllRes> res = postService.getAllPost(limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
@@ -66,12 +64,11 @@ public class PostController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping("page")
-	public ResponseEntity<PojoPostGetAllResData> getPost(@RequestParam("limit") int limit, 
-			@RequestParam("offset") int offset){
-		final PojoPostGetAllResData res = postService.getPost(limit, offset);
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
+//	@GetMapping("page")
+//	public ResponseEntity<PojoPostGetAllResData> getPost(@RequestParam("size") int limit, @RequestParam("page") int page){
+//		final PojoPostGetAllResData res = postService.getPost(size, offset);
+//		return new ResponseEntity<>(res, HttpStatus.OK);
+//	}
 	
 	@PutMapping
 	public ResponseEntity<PojoUpdateRes> updateIndustry(@RequestBody PojoPostUpdateReq data){
@@ -88,12 +85,6 @@ public class PostController {
 	@PostMapping("post-file")
 	public ResponseEntity<PojoInsertRes> insertPostFile(@RequestBody PojoPostFileInsertListReq data){
 		final PojoInsertRes res = postService.insertPostFile(data);
-		return new ResponseEntity<>(res, HttpStatus.OK);
-	}
-	
-	@GetMapping("list-post-file/{postId}")
-	public ResponseEntity<List<PojoPostFileGetAllRes>> getAllPostFile(@PathVariable("postId") String postId){
-		final List<PojoPostFileGetAllRes> res = postService.getAllPostFile(postId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
@@ -157,9 +148,9 @@ public class PostController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("delete-bookmark/{id}")
+	@DeleteMapping("bookmark/{id}")
 	public ResponseEntity<PojoDeleteRes> deleteBookmark(@PathVariable("id") String id){
-		final PojoDeleteRes res = postService.delete(id);
+		final PojoDeleteRes res = postService.deleteBookmark(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
