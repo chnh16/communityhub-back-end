@@ -1,13 +1,42 @@
 package com.lawencon.community.pojo.article;
 
+import java.time.LocalDateTime;
+
 public class PojoArticleResGetAll {
 
 	private String id;
 	private String articleTitle;
 	private String articleContent;
 	private String photoId;
+	private String userFileId;
+	private String createdBy;
+	private LocalDateTime createdAt;
 	private Integer ver;
+	public String getUserFileId() {
+		return userFileId;
+	}
+
+	public void setUserFileId(String userFileId) {
+		this.userFileId = userFileId;
+	}
+
 	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -47,5 +76,4 @@ public class PojoArticleResGetAll {
 	public void setPhotoId(String photoId) {
 		this.photoId = photoId;
 	}
-
 }
