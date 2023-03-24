@@ -151,15 +151,15 @@ public class EventService {
 		return pojoInsertRes;
 	}
 
-	public List<PojoEventResGetAll> getAllEvent(String category, String price) {
+	public List<PojoEventResGetAll> getAllEvent(String category, String price, Integer limit, Integer offset) {
 		final List<PojoEventResGetAll> pojos = new ArrayList<>();
 		List<Event> res = new ArrayList<>();
 		final Category categoryId = categoryDao.getRefById(category);
 		
 		if(category.isEmpty() && price.isEmpty()) {
-			res = eventDao.getAll();
+			res = eventDao.getEvent(limit, offset);
 		}else if(category.equals(categoryId.getId())) {
-			res = eventDao.getByCategoryId(categoryId.getId());
+			res = eventDao.getByCategoryId(categoryId.getId(), limit);
 		}else if(price.equals("ASC")){
 			res = eventDao.getByPriceAsc();
 		}else if(category.isEmpty() && price.equals("DESC")){

@@ -346,7 +346,6 @@ public class CourseService {
 			
 			pojos.add(pojo);
 		} 
-		
 		final PojoCourserGetAllResData pojoCourseData = new PojoCourserGetAllResData();
 		pojoCourseData.setData(pojos);
 		pojoCourseData.setTotal(courseDao.getTotalCourse());

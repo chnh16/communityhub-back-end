@@ -48,7 +48,7 @@ private final EventService eventService;
 	}
 	
 	@GetMapping("page")
-	public ResponseEntity<PojoEventGetAllResData> getByUserId(@RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+	public ResponseEntity<PojoEventGetAllResData> getEventPage(@RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
 		final PojoEventGetAllResData res = eventService.getEventPage(limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
