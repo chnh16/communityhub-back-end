@@ -29,8 +29,4 @@ public class UserCourseDao extends BasePostDao<UserCourse>{
 		return res;
 	}
 
-	
-	
-	
-
 }

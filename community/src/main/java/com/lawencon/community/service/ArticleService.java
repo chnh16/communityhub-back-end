@@ -140,6 +140,9 @@ private final FileDao fileDao;
 			pojo.setPhotoId(article.getPhoto().getId());
 			pojo.setArticleTitle(article.getArticleTitle());
 			pojo.setArticleContent(article.getArticleContent());
+			pojo.setCreatedBy(article.getUser().getProfile().getFullName());
+			pojo.setCreatedAt(article.getCreatedAt());
+			pojo.setUserFileId(article.getUser().getProfile().getFile().getId());
 			pojo.setVer(article.getVersion());
 
 			pojos.add(pojo);
@@ -201,6 +204,9 @@ private final FileDao fileDao;
 			pojo.setPhotoId(article.getPhoto().getId());
 			pojo.setArticleTitle(article.getArticleTitle());
 			pojo.setArticleContent(article.getArticleContent());
+			pojo.setCreatedBy(article.getUser().getProfile().getFullName());
+			pojo.setCreatedAt(article.getCreatedAt());
+			pojo.setUserFileId(article.getUser().getProfile().getFile().getId());
 			pojo.setVer(article.getVersion());
 
 			pojos.add(pojo);
@@ -221,6 +227,9 @@ private final FileDao fileDao;
 		pojoArticle.setArticleTitle(article.get().getArticleTitle());
 		pojoArticle.setArticleContent(article.get().getArticleContent());
 		pojoArticle.setPhotoId(article.get().getPhoto().getId());
+		pojoArticle.setCreatedBy(article.get().getUser().getProfile().getFullName());
+		pojoArticle.setCreatedAt(article.get().getCreatedAt());
+		pojoArticle.setUserFileId(article.get().getUser().getProfile().getFile().getId());
 		pojoArticle.setVer(article.get().getVersion());
 		
 		

@@ -50,7 +50,7 @@ public class PostDao extends MasterDao<Post> {
 	public List<Post> getAllPost(final Integer limit, final Integer offset) {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM post p ")
-			.append(" WHERE p.is_active = true");
+			.append(" WHERE p.is_active = true").append(" ORDER BY p.created_at DESC");
 		final List<Post> res = em().createNativeQuery(toStr(str).toString(), Post.class)
 				.setMaxResults(limit)
 				.setFirstResult((offset-1)*limit)
