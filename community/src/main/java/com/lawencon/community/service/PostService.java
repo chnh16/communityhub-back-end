@@ -279,6 +279,7 @@ public class PostService {
 			final List<String> postFileId = new ArrayList<>();
 			final List<PojoPostDetailGetAllRes> pojoDetails = new ArrayList<>();
 			final List<PostFile> postFiles = postFileDao.getAllPostFile(listPost.get(i).getId());
+			final Profile userProfile = profileDao.getRefById(listPost.get(i).getUser().getProfile().getId());
 			PojoPostLikeRes pojoLike = null;
 			PojoPostBookmarkRes pojoBookmark = null;
 			final List<PostDetail> postDetails = getPostDetailByPostId(listPost.get(i).getId());
@@ -288,15 +289,17 @@ public class PostService {
 				final Profile profile = profileDao.getRefById(user.getProfile().getId());
 				final PojoPostDetailGetAllRes pojoDetail = new PojoPostDetailGetAllRes();
 				pojoDetail.setId(currentDetail.getId());
+				pojoDetail.setUserFileId(profile.getFile().getId());
 				pojoDetail.setFullName(profile.getFullName());
 				pojoDetail.setDetailContent(currentDetail.getDetailContent());
+				pojoDetail.setPostedAt(currentDetail.getCreatedAt());
 				pojoDetail.setVer(currentDetail.getVersion());
 
 				pojoDetails.add(pojoDetail);
 			}
 			for (int j = 0; j < postFiles.size(); j++) {
 				final PostFile postFile = postFiles.get(i);
-				final String fileId = postFile.getId();
+				final String fileId = postFile.getFile().getId();
 
 				postFileId.add(fileId);
 			}
@@ -315,7 +318,7 @@ public class PostService {
 				pojoBookmark.setStatus(true);
 			}
 			pojoPost.setId(listPost.get(i).getId());
-			pojoPost.setUserId(listPost.get(i).getUser().getId());
+			pojoPost.setUserFileId(userProfile.getFile().getId());
 			pojoPost.setFullName(listPost.get(i).getUser().getProfile().getFullName());
 			pojoPost.setPostTitle(listPost.get(i).getPostTitle());
 			pojoPost.setPostContent(listPost.get(i).getPostContent());
@@ -341,7 +344,7 @@ public class PostService {
 
 		final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
 		pojoPost.setId(post.get().getId());
-		pojoPost.setUserId(post.get().getUser().getId());
+		pojoPost.setUserFileId(null);
 		pojoPost.setFullName(post.get().getUser().getProfile().getFullName());
 		pojoPost.setPostTitle(post.get().getPostTitle());
 		pojoPost.setPostContent(post.get().getPostContent());
@@ -362,7 +365,7 @@ public class PostService {
 			final Post currentPost = listPost.get(i);
 
 			pojoPost.setId(currentPost.getId());
-			pojoPost.setUserId(currentPost.getUser().getId());
+			pojoPost.setUserFileId(null);
 			pojoPost.setFullName(currentPost.getUser().getProfile().getFullName());
 			pojoPost.setPostTitle(currentPost.getPostTitle());
 			pojoPost.setPostContent(currentPost.getPostContent());
