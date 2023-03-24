@@ -1,7 +1,7 @@
 package com.lawencon.community.pojo.user;
 
 public class PojoUserGetUserProfileRes {
-
+	private String id;
 	private String email;
 	private String fullName;
 	private String country;
@@ -14,6 +14,14 @@ public class PojoUserGetUserProfileRes {
 	private String company;
 	private String file;
 	private Integer ver;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getEmail() {
 		return email;
