@@ -29,6 +29,7 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.transaction.PojoInsertTransactionReq;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetAllRes;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetAllResData;
+import com.lawencon.community.pojo.transaction.PojoTransactionGetReportParticipantSuperAdminRes;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetReportRes;
 import com.lawencon.community.pojo.transaction.PojoUpdateTransactionReq;
 import com.lawencon.community.util.DateUtil;
@@ -530,21 +531,41 @@ public class TransactionService {
 		ConnHandler.commit();
 	}
 
-	
-	public List<PojoTransactionGetReportRes> getReportByDate(final String startDate, final String endDate){
-		
-		final List<PojoTransactionGetReportRes> transactions = transactionDao.getCourseReport(DateUtil.strToLocalDate(startDate),DateUtil.strToLocalDate(endDate));
-		
-		for(int i = 0; i < transactions.size(); i++) {
+	public List<PojoTransactionGetReportRes> getReportByDate(final String startDate, final String endDate) {
+
+		final List<PojoTransactionGetReportRes> transactions = transactionDao
+				.getCourseReport(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+
+		for (int i = 0; i < transactions.size(); i++) {
 			final PojoTransactionGetReportRes transactionReport = new PojoTransactionGetReportRes();
 			transactionReport.setActivityType(transactions.get(i).getActivityType());
 			transactionReport.setItemName(transactions.get(i).getItemName());
 			transactionReport.setStartDate(transactions.get(i).getStartDate());
 			transactionReport.setTotalParticipants(transactions.get(i).getTotalParticipants());
+
+		}
+
+		return transactions;
+	}
+
+	public List<PojoTransactionGetReportParticipantSuperAdminRes> getReportParticipantSuperAdminByDate(final String startDate, final String endDate) {
+
+		final List<PojoTransactionGetReportParticipantSuperAdminRes> transactions = transactionDao
+				.getCourseReportSuperAdmin(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+		
+		
+		for (int i = 0; i < transactions.size(); i++) {
+			final PojoTransactionGetReportParticipantSuperAdminRes reportSuperAdmin = new PojoTransactionGetReportParticipantSuperAdminRes();
+			reportSuperAdmin.setMemberName(transactions.get(i).getMemberName());
+			reportSuperAdmin.setProviderName(transactions.get(i).getProviderName());
+			
+			reportSuperAdmin.setActivityType(transactions.get(i).getActivityType());
+			reportSuperAdmin.setItemName(transactions.get(i).getItemName());
+			reportSuperAdmin.setStartDate(transactions.get(i).getStartDate());
+			reportSuperAdmin.setTotalParticipants(transactions.get(i).getTotalParticipants());
 			
 		}
-		
+
 		return transactions;
 	}
 }
-

@@ -87,7 +87,7 @@ public class EventDao extends MasterDao<Event>{
 			.append(" WHERE e.is_active = true");
 		final List<Event> res = em().createNativeQuery(toStr(str).toString(), Event.class)
 				.setMaxResults(limit)
-				.setFirstResult(offset)
+				.setFirstResult((offset-1)*limit)
 				.getResultList();
 		return res;
 	}

@@ -79,9 +79,8 @@ private final CourseService courseService;
 	}
 
 	@GetMapping("/page")
-	public ResponseEntity<PojoCourserGetAllResData> getByUserId(@RequestParam("size") Integer size, @RequestParam("page") Integer page) {
-		int offset = (page - 1)* size;
-		final PojoCourserGetAllResData res = courseService.getCoursePage(size, offset);
+	public ResponseEntity<PojoCourserGetAllResData> getByUserId(@RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+		final PojoCourserGetAllResData res = courseService.getCoursePage(limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

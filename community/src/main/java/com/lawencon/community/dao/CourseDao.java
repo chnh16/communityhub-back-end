@@ -85,7 +85,7 @@ public class CourseDao extends MasterDao<Course>{
 			.append(" WHERE c.is_active = true");
 		final List<Course> res = em().createNativeQuery(toStr(str).toString(), Course.class)
 				.setMaxResults(limit)
-				.setFirstResult(offset)
+				.setFirstResult((offset-1)*limit)
 				.getResultList();
 		return res;
 	}
