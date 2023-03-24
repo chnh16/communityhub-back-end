@@ -336,9 +336,9 @@ public class UserService implements UserDetailsService, Runnable {
 
 	public PojoUserGetUserProfileRes getUserProfile() {
 		final User user = getByRefId(principalService.getAuthPrincipal());
-
 		final PojoUserGetUserProfileRes pojo = new PojoUserGetUserProfileRes();
 
+		pojo.setId(user.getProfile().getId());
 		pojo.setEmail(user.getEmail());
 		pojo.setFullName(user.getProfile().getFullName());
 		pojo.setCountry(user.getProfile().getCountry());
@@ -352,7 +352,6 @@ public class UserService implements UserDetailsService, Runnable {
 		pojo.setFile(user.getProfile().getFile().getId());
 
 		return pojo;
-
 	}
 
 	public PojoUpdateRes updateProfile(final PojoProfileUpdateReq data) {
