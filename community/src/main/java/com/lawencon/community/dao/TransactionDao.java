@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.constant.TransactionType;
 import com.lawencon.community.model.Transaction;
+import com.lawencon.community.pojo.transaction.PojoTransactionGetReportIncomeMemberRes;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetReportParticipantSuperAdminRes;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetReportRes;
 import com.lawencon.community.util.DateUtil;
@@ -287,14 +289,14 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PojoTransactionGetReportRes> getCourseReportIncomeMember(final LocalDate startDate, final LocalDate endDate){
-		final List<PojoTransactionGetReportRes> transactions = new ArrayList<>();
+	public List<PojoTransactionGetReportIncomeMemberRes> getCourseReportIncomeMember(final LocalDate startDate, final LocalDate endDate){
+		final List<PojoTransactionGetReportIncomeMemberRes> transactions = new ArrayList<>();
 		
 		try {
 			final StringBuilder str = new StringBuilder();
-			str.append("SELECT 'Course' AS activity_type, c.course_name, DATE(c.start_date), COUNT(tt.user_id) AS total_participants FROM t_transaction tt ")
+			str.append("SELECT 'Course' AS activity_type, c.course_name, SUM(c.price) AS total_incomes FROM t_transaction tt  ")
 			.append("INNER JOIN course c ON tt.course_id = c.id ")
-			.append("WHERE DATE(c.start_date) >= DATE(:startDate) AND DATE(c.end_date) <= DATE(:endDate) AND tt.is_approved = true ")
+			.append("WHERE DATE(tt.updated_at) >= DATE(:startDate) AND DATE(tt.updated_at) <= DATE(:endDate) AND tt.is_approved = true  ")
 			.append("GROUP BY c.course_name, c.start_date ");
 			
 			final List<Object> result = em().createNativeQuery(toStr(str))
@@ -304,12 +306,9 @@ public class TransactionDao extends BasePostDao<Transaction>{
 			for(final Object objs :  result) {
 				final Object[] obj = (Object[]) objs;
 				
-				final PojoTransactionGetReportRes transactionReport = new PojoTransactionGetReportRes();
+				final PojoTransactionGetReportIncomeMemberRes transactionReport = new PojoTransactionGetReportIncomeMemberRes();
 				transactionReport.setActivityType(obj[0].toString());
 				transactionReport.setItemName(obj[1].toString());
-				transactionReport.setStartDate(DateUtil.localDateToStr(Date.valueOf(obj[2].toString()).toLocalDate()));
-				transactionReport.setTotalParticipants(Long.valueOf(obj[3].toString()).intValue());
-				
 				transactions.add(transactionReport);
 			}
 		} catch (Exception e) {
