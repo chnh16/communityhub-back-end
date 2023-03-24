@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.PollingChoiceDao;
 import com.lawencon.community.dao.PostDao;
 import com.lawencon.community.dao.PostDetailDao;
 import com.lawencon.community.dao.PostFileDao;
@@ -32,6 +33,7 @@ import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.file.PojoFileInsertReq;
+import com.lawencon.community.pojo.pollingchoice.PojoPollingChoiceGetAllRes;
 import com.lawencon.community.pojo.pollingchoice.PojoPollingChoiceInsertReq;
 import com.lawencon.community.pojo.post.PojoPostGetAllRes;
 import com.lawencon.community.pojo.post.PojoPostGetAllResData;
@@ -61,6 +63,7 @@ public class PostService {
 	private final UserBookmarkDao userBookmarkDao;
 	private final PostDetailDao postDetailDao;
 	private final FileDao fileDao;
+	private final PollingChoiceDao pollingChoiceDao;
 	private final ProfileDao profileDao;
 	private final PollingService pollingService;
 	private final PrincipalService principalService;
@@ -68,7 +71,8 @@ public class PostService {
 	public PostService(final PostDao postDao, final PostFileDao postFileDao, final UserLikeDao userLikeDao,
 			final UserDao userDao, final PostTypeDao postTypeDao, final CategoryDao categoryDao,
 			final UserBookmarkDao userBookmarkDao, final PostDetailDao postDetailDao, final FileDao fileDao,
-			final PrincipalService principalService, final PollingService pollingService, final ProfileDao profileDao) {
+			final PrincipalService principalService, final PollingService pollingService, final ProfileDao profileDao,
+			final PollingChoiceDao pollingChoiceDao) {
 
 		this.postDao = postDao;
 		this.userDao = userDao;
@@ -81,6 +85,7 @@ public class PostService {
 		this.principalService = principalService;
 		this.userBookmarkDao = userBookmarkDao;
 		this.postDetailDao = postDetailDao;
+		this.pollingChoiceDao = pollingChoiceDao;
 		this.pollingService = pollingService;
 	}
 
@@ -277,8 +282,10 @@ public class PostService {
 		for (int i = 0; i < listPost.size(); i++) {
 			final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
 			final List<String> postFileId = new ArrayList<>();
+			final List<PojoPollingChoiceGetAllRes> pollingPojos = new ArrayList<>();
 			final List<PojoPostDetailGetAllRes> pojoDetails = new ArrayList<>();
 			final List<PostFile> postFiles = postFileDao.getAllPostFile(listPost.get(i).getId());
+			final List<PollingChoice> pollingChoices = pollingChoiceDao.getChoiceByPost(listPost.get(i).getId());
 			final Profile userProfile = profileDao.getRefById(listPost.get(i).getUser().getProfile().getId());
 			PojoPostLikeRes pojoLike = null;
 			PojoPostBookmarkRes pojoBookmark = null;
@@ -297,11 +304,25 @@ public class PostService {
 
 				pojoDetails.add(pojoDetail);
 			}
-			for (int j = 0; j < postFiles.size(); j++) {
-				final PostFile postFile = postFiles.get(j);
-				final String fileId = postFile.getFile().getId();
+      
+			if(postFiles.size() > 0) {
+				for (int j = 0; j < postFiles.size(); j++) {
+					final PostFile postFile = postFiles.get(j);
+					final String fileId = postFile.getFile().getId();
 
-				postFileId.add(fileId);
+					postFileId.add(fileId);
+				}
+			}
+			if(pollingChoices.size() > 0) {
+				for (int j = 0; j < pollingChoices.size(); j++) {
+					final PollingChoice pollingChoice = pollingChoices.get(j);
+					final PojoPollingChoiceGetAllRes pollingPojo = new PojoPollingChoiceGetAllRes();
+					pollingPojo.setPollingChoiceId(pollingChoice.getId());
+					pollingPojo.setChoiceContent(pollingChoice.getChoiceContent());
+					pollingPojo.setVer(pollingChoice.getVersion());
+					
+					pollingPojos.add(pollingPojo);
+				}
 			}
 			final Optional<UserLike> postLike = userLikeDao.getLikeByPostId(listPost.get(i).getId(),
 					principalService.getAuthPrincipal());
@@ -333,6 +354,7 @@ public class PostService {
 			pojoPost.setLikeCount(userLikeDao.getCount(listPost.get(i).getId()));
 			pojoPost.setPostedAt(listPost.get(i).getCreatedAt());
 			pojoPost.setFileId(postFileId);
+			pojoPost.setPollingChoice(pollingPojos);
 
 			listPojoPost.add(pojoPost);
 		}
@@ -359,7 +381,6 @@ public class PostService {
 
 	public PojoPostGetAllResData getPost(final int limit, final int offset) {
 		final List<PojoPostGetAllRes> listPojoPost = new ArrayList<>();
-
 		final List<Post> listPost = postDao.getAllPost(limit, offset);
 
 		for (int i = 0; i < listPost.size(); i++) {
@@ -556,6 +577,13 @@ public class PostService {
 		return res;
 	}
 
+	public PojoDeleteRes deleteBookmark(final String postBookmarkId) {
+		final PojoDeleteRes res = new PojoDeleteRes();
+		deleteBookmarkById(postBookmarkId);
+		res.setMessage("Berhasil Membatalkan");
+		return res;
+	}
+
 	private void valIdNull(final UserBookmark data) {
 		if (data.getId() != null) {
 			throw new RuntimeException("ID harus kosong");
@@ -606,7 +634,7 @@ public class PostService {
 		return userBookmarkDelete;
 	}
 
-	public PojoInsertRes insert(final PojoUserBookmarkInsertReq data) {
+	public PojoInsertRes insertUserBookmark(final PojoUserBookmarkInsertReq data) {
 		final UserBookmark userBookmark = new UserBookmark();
 
 		final User user = userDao.getRefById(principalService.getAuthPrincipal());
@@ -622,7 +650,7 @@ public class PostService {
 
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
 		pojoInsertRes.setId(userBookmarkInsert.getId());
-		pojoInsertRes.setMessage("Success");
+		pojoInsertRes.setMessage("Berhasil Bookmark Post");
 		return pojoInsertRes;
 	}
 
@@ -651,13 +679,6 @@ public class PostService {
 		bookmark.setCountedBookmark(userBookmarkDao.getCount(postId));
 
 		return bookmark;
-	}
-
-	public PojoDeleteRes deleteBookmark(final String id) {
-		final PojoDeleteRes res = new PojoDeleteRes();
-		deleteBookmarkById(id);
-		res.setMessage("Berhasil Dihapus");
-		return res;
 	}
 
 	private void valIdNull(final PostDetail data) {
