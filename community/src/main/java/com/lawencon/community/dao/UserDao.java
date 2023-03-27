@@ -156,47 +156,4 @@ public class UserDao extends MasterDao<User> {
 		}
 		return Optional.ofNullable(user);
 	}
-	
-//	public Optional<User> getUserProfile(String id) {
-//		User user = null;
-//
-//		try {
-//			final StringBuilder str = new StringBuilder();
-//			str.append(" SELECT tu.id, tu.created_by, tu.updated_by, tu.created_at, tu.updated_at, tu.ver, tu.is_active ")
-//					.append("FROM t_user tu ")
-//					.append("INNER JOIN t_role tr ON tu.role_id = tr.id ")
-//					.append("INNER JOIN profile p ON tu.profile_id = p.id " )
-//					.append("INNER JOIN t_role r ON tu.role_id = r.id ")
-//					.append("WHERE r.role_code = :roleCode AND tu.is_active = TRUE ");
-//
-//			final Object result = em().createNativeQuery(toStr(str)).setParameter("roleCode", roleCode).getSingleResult();
-//
-//			if (result != null) {
-//
-//				user = new User();
-//				final Object[] objArr = (Object[]) result;
-//
-//				user.setId(objArr[0].toString());
-//
-//				user.setCreatedBy(objArr[1].toString());
-//				if (objArr[2] != null) {
-//					user.setUpdatedBy(objArr[2].toString());
-//				}
-//
-//				user.setCreatedAt(Timestamp.valueOf(objArr[3].toString()).toLocalDateTime());
-//
-//				if (objArr[4] != null) {
-//					user.setUpdatedAt(Timestamp.valueOf(objArr[4].toString()).toLocalDateTime());
-//				}
-//
-//				user.setVersion(Integer.valueOf(objArr[5].toString()));
-//				user.setIsActive(Boolean.valueOf(objArr[6].toString()));
-//			}
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return Optional.ofNullable(user);
-//	}
-
 }

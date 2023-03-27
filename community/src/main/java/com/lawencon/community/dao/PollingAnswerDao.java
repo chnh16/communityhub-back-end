@@ -1,5 +1,6 @@
 package com.lawencon.community.dao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,7 @@ import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.pollinganswer.PojoPollingAnswerGetCountRes;
 
 @Repository
-public class PollingAnswerDao extends BasePostDao<PollingAnswer>{
+public class PollingAnswerDao extends BasePostDao<PollingAnswer> {
 
 	@Override
 	public PollingAnswer insert(final PollingAnswer data) {
@@ -26,15 +27,15 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer>{
 	public boolean delete(final String id) {
 		return deleteById(PollingAnswer.class, id);
 	}
-	
+
 	public Optional<PollingAnswer> getByPostIdAndUserId(final String postId, final String userId) {
 		PollingAnswer pollingAnswer = null;
 		try {
 			final StringBuilder str = new StringBuilder();
-			str.append("SELECT pa.id, pa.user_id, pa.post_id, pa.polling_choice_id FROM polling_answer pa")
+			str.append(
+					"SELECT pa.id, pa.user_id, pa.post_id, pa.polling_choice_id, pa.created_by, pa.created_at, pa.updated_by, pa.updated_at, pa.ver, pa.is_active FROM polling_answer pa")
 					.append(" WHERE pa.user_id = :userId").append(" AND pa.post_id = :postId")
 					.append(" AND pa.is_active = TRUE");
-
 			final Object res = em().createNativeQuery(toStr(str), PollingAnswer.class).setParameter("userId", userId)
 					.setParameter("postId", postId).getSingleResult();
 			if (res != null) {
@@ -50,68 +51,73 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer>{
 				pollingAnswer.setUser(user);
 				pollingAnswer.setPost(post);
 				pollingAnswer.setPollingChoice(pollingChoice);
+				pollingAnswer.setCreatedBy(objArr[4].toString());
+				pollingAnswer.setCreatedAt(Timestamp.valueOf(objArr[5].toString()).toLocalDateTime());
+				if(objArr[6] != null) {
+					pollingAnswer.setUpdatedBy(objArr[6].toString());
+				}
+				if(objArr[7] != null) {
+					pollingAnswer.setUpdatedAt(Timestamp.valueOf(objArr[7].toString()).toLocalDateTime());
+				}
+				pollingAnswer.setVersion(Integer.valueOf(objArr[8].toString()));
+				pollingAnswer.setIsActive(Boolean.valueOf(objArr[9].toString()));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		return Optional.ofNullable(pollingAnswer);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<PollingAnswer> getByUserId (final String userId){
+	public List<PollingAnswer> getByUserId(final String userId) {
 		final StringBuilder str = new StringBuilder();
-		str.append("SELECT * FROM polling_answer pa ")
-		.append("WHERE pa.user_id = :userId");
-		final List<PollingAnswer> res = em().createNativeQuery(toStr(str), PollingAnswer.class).setParameter("userId", userId).getResultList();
+		str.append("SELECT * FROM polling_answer pa ").append("WHERE pa.user_id = :userId");
+		final List<PollingAnswer> res = em().createNativeQuery(toStr(str), PollingAnswer.class)
+				.setParameter("userId", userId).getResultList();
 		return res;
 	}
-	
+
 	public Long getCount(final String detailId) {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT COUNT(pa.polling_choice_id) FROM polling_answer pa ")
-		.append(" INNER JOIN polling_choice pc ON pc.id = pa.polling_choice_id ")
-		.append(" WHERE pc.polling_detail_id = :detailId");
-		
+				.append(" INNER JOIN polling_choice pc ON pc.id = pa.polling_choice_id ")
+				.append(" WHERE pc.polling_detail_id = :detailId");
+
 		Long countPoll = null;
 		countPoll = Long.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str).toString())
-				.setParameter("detailId", detailId)
-				.getSingleResult().toString());
-		
+				.setParameter("detailId", detailId).getSingleResult().toString());
+
 		return countPoll;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<PojoPollingAnswerGetCountRes> getCountByChoiceId(final String detailId){
+	public List<PojoPollingAnswerGetCountRes> getCountByChoiceId(final String detailId) {
 		final List<PojoPollingAnswerGetCountRes> listPollingAnswer = new ArrayList<>();
-		
+
 		try {
 			final StringBuilder str = new StringBuilder();
 			str.append("SELECT pc.id, COUNT(pa.polling_choice_id) FROM polling_answer pa ")
-			.append(" INNER JOIN polling_choice pc ON pc.id = pa.polling_choice_id ")
-			.append("GROUP BY pc.id ")
-			.append(" HAVING pc.polling_detail_id = :detailId");
-			
-			final List<Object> result = em().createNativeQuery(toStr(str))
-					.setParameter("detailId", detailId)
+					.append(" INNER JOIN polling_choice pc ON pc.id = pa.polling_choice_id ").append("GROUP BY pc.id ")
+					.append(" HAVING pc.polling_detail_id = :detailId");
+
+			final List<Object> result = em().createNativeQuery(toStr(str)).setParameter("detailId", detailId)
 					.getResultList();
-			
+
 			if (result != null) {
 				for (final Object objs : result) {
 					final Object[] obj = (Object[]) objs;
-					
+
 					final PojoPollingAnswerGetCountRes pollingChoice = new PojoPollingAnswerGetCountRes();
 					pollingChoice.setPollingChoiceId(obj[0].toString());
 					pollingChoice.setCountPollAnswer(Long.valueOf(obj[1].toString()));
-					
+
 					listPollingAnswer.add(pollingChoice);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+
 		return listPollingAnswer;
 	}
 
