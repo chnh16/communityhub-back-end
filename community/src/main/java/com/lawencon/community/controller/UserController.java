@@ -70,6 +70,7 @@ public class UserController {
         loginRes.setIdUser(userOptional.get().getId()) ;
         loginRes.setRoleCode(userOptional.get().getRole().getRoleCode());
         loginRes.setFullName(userOptional.get().getProfile().getFullName());
+        loginRes.setPremiumUntil(userOptional.get().getProfile().getPremiumUntil());
 
         return new ResponseEntity<>(loginRes, HttpStatus.OK);
     }

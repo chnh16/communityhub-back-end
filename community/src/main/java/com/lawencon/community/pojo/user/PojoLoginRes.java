@@ -1,11 +1,15 @@
 package com.lawencon.community.pojo.user;
 
+import java.time.LocalDateTime;
+
 public class PojoLoginRes {
 	
 	private String token;
 	private String roleCode;
 	private String idUser;
 	private String fullName;
+	private Boolean isVerified;
+	private LocalDateTime premiumUntil;
 	
 	public String getIdUser() {
 		return idUser;
@@ -37,6 +41,22 @@ public class PojoLoginRes {
 
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+
+	public Boolean getIsVerified() {
+		return isVerified;
+	}
+
+	public void setIsVerified(Boolean isVerified) {
+		this.isVerified = isVerified;
+	}
+
+	public LocalDateTime getPremiumUntil() {
+		return premiumUntil;
+	}
+
+	public void setPremiumUntil(LocalDateTime premiumUntil) {
+		this.premiumUntil = premiumUntil;
 	}
 
 }
