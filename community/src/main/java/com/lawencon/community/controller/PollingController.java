@@ -54,11 +54,11 @@ public class PollingController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@PostMapping("answer")
-	public ResponseEntity<PojoInsertRes> insertPollingAnswer(@RequestBody PojoPollingAnswerInsertReq data) {
-		final PojoInsertRes res = pollingService.insertPollingAnswer(data);
-		return new ResponseEntity<>(res, HttpStatus.CREATED);
-	}
+//	@PostMapping("answer")
+//	public ResponseEntity<PojoInsertRes> insertPollingAnswer(@RequestBody PojoPollingAnswerInsertReq data) {
+//		final PojoInsertRes res = pollingService.insertPollingAnswer(data);
+//		return new ResponseEntity<>(res, HttpStatus.CREATED);
+//	}
 	
 	@GetMapping("count/{detailId}")
 	public ResponseEntity<List<PojoPollingAnswerGetCountRes>> getTotalAnswerByChoiceId(@PathVariable("detailId") String detailId) {

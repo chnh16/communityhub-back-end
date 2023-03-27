@@ -24,7 +24,7 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PollingAnswer> getByMembershipId (final String userId){
+	public List<PollingAnswer> getByUserId (final String userId){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM polling_answer pa ")
 		.append("WHERE pa.user_id = :userId");

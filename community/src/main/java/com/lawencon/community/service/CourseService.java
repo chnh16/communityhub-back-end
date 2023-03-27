@@ -34,7 +34,6 @@ import com.lawencon.security.principal.PrincipalService;
 public class CourseService {
 	private final CourseDao courseDao;
 	private final CategoryDao categoryDao;
-	private final CategoryService categoryService;
 	private final FileDao fileDao;
 	private final UserService userService;
 	private final UserCourseDao userCourseDao;
@@ -43,12 +42,11 @@ public class CourseService {
 	private PrincipalService principalService;
 
 	public CourseService(final CourseDao courseDao, final CategoryDao categoryDao, final FileDao fileDao,
-			final UserService userService, final CategoryService categoryService, UserCourseDao userCourseDao) {
+			final UserService userService, UserCourseDao userCourseDao) {
 		this.courseDao = courseDao;
 		this.categoryDao = categoryDao;
 		this.fileDao = fileDao;
 		this.userService = userService;
-		this.categoryService = categoryService;
 		this.userCourseDao = userCourseDao;
 	}
 
