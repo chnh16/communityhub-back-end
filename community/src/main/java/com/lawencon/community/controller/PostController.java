@@ -177,4 +177,10 @@ public class PostController {
 		final PojoInsertRes res = postService.insertPollingAnswer(pollingChoiceId);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
+	
+	@DeleteMapping("polling/{id}")
+	public ResponseEntity<PojoDeleteRes> deletePollingAnswer(@PathVariable("id") final String pollingAnswerId){
+		final PojoDeleteRes res = postService.deletePollingAnswer(pollingAnswerId);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
 }
