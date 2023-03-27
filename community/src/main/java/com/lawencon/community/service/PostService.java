@@ -906,4 +906,13 @@ public class PostService {
 		pojo.setMessage("Berhasil menjawab polling");
 		return pojo;
 	}
+	
+	
+	public PojoDeleteRes deletePollingAnswer(final String pollingAnswerId) {
+		final PojoDeleteRes deleteRes = new PojoDeleteRes();
+		if(pollingAnswerDao.delete(pollingAnswerId)) {
+			deleteRes.setMessage("Berhasil membatalkan jawaban polling");
+		}
+		return deleteRes;
+	}
 }
