@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.PollingAnswerDao;
 import com.lawencon.community.dao.PollingChoiceDao;
 import com.lawencon.community.dao.PostDao;
 import com.lawencon.community.dao.PostDetailDao;
@@ -20,6 +22,7 @@ import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.dao.UserLikeDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.File;
+import com.lawencon.community.model.PollingAnswer;
 import com.lawencon.community.model.PollingChoice;
 import com.lawencon.community.model.Post;
 import com.lawencon.community.model.PostDetail;
@@ -33,6 +36,7 @@ import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.file.PojoFileInsertReq;
+import com.lawencon.community.pojo.pollinganswer.PojoPollingAnswerRes;
 import com.lawencon.community.pojo.pollingchoice.PojoPollingChoiceGetAllRes;
 import com.lawencon.community.pojo.pollingchoice.PojoPollingChoiceInsertReq;
 import com.lawencon.community.pojo.post.PojoPostGetAllRes;
@@ -54,40 +58,47 @@ import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class PostService {
-	private final PostDao postDao;
-	private final UserDao userDao;
-	private final PostTypeDao postTypeDao;
-	private final CategoryDao categoryDao;
-	private final PostFileDao postFileDao;
-	private final UserLikeDao userLikeDao;
-	private final UserBookmarkDao userBookmarkDao;
-	private final PostDetailDao postDetailDao;
-	private final FileDao fileDao;
-	private final PollingChoiceDao pollingChoiceDao;
-	private final ProfileDao profileDao;
-	private final PollingService pollingService;
-	private final PrincipalService principalService;
+	@Autowired
+	private PostDao postDao;
 
-	public PostService(final PostDao postDao, final PostFileDao postFileDao, final UserLikeDao userLikeDao,
-			final UserDao userDao, final PostTypeDao postTypeDao, final CategoryDao categoryDao,
-			final UserBookmarkDao userBookmarkDao, final PostDetailDao postDetailDao, final FileDao fileDao,
-			final PrincipalService principalService, final PollingService pollingService, final ProfileDao profileDao,
-			final PollingChoiceDao pollingChoiceDao) {
+	@Autowired
+	private UserDao userDao;
 
-		this.postDao = postDao;
-		this.userDao = userDao;
-		this.postTypeDao = postTypeDao;
-		this.categoryDao = categoryDao;
-		this.postFileDao = postFileDao;
-		this.fileDao = fileDao;
-		this.profileDao = profileDao;
-		this.userLikeDao = userLikeDao;
-		this.principalService = principalService;
-		this.userBookmarkDao = userBookmarkDao;
-		this.postDetailDao = postDetailDao;
-		this.pollingChoiceDao = pollingChoiceDao;
-		this.pollingService = pollingService;
-	}
+	@Autowired
+	private PostTypeDao postTypeDao;
+
+	@Autowired
+	private CategoryDao categoryDao;
+
+	@Autowired
+	private PostFileDao postFileDao;
+
+	@Autowired
+	private UserLikeDao userLikeDao;
+
+	@Autowired
+	private UserBookmarkDao userBookmarkDao;
+
+	@Autowired
+	private PostDetailDao postDetailDao;
+
+	@Autowired
+	private FileDao fileDao;
+
+	@Autowired
+	private PollingChoiceDao pollingChoiceDao;
+
+	@Autowired
+	private PollingAnswerDao pollingAnswerDao;
+
+	@Autowired
+	private ProfileDao profileDao;
+
+	@Autowired
+	private PollingService pollingService;
+
+	@Autowired
+	private PrincipalService principalService;
 
 	private void valIdNull(final Post data) {
 		if (data.getId() != null) {
@@ -289,6 +300,7 @@ public class PostService {
 			final Profile userProfile = profileDao.getRefById(listPost.get(i).getUser().getProfile().getId());
 			PojoPostLikeRes pojoLike = null;
 			PojoPostBookmarkRes pojoBookmark = null;
+			PojoPollingAnswerRes pojoAnswer = null;
 			final List<PostDetail> postDetails = getPostDetailByPostId(listPost.get(i).getId());
 			for (int j = 0; i < postDetails.size(); j++) {
 				final PostDetail currentDetail = postDetails.get(j);
@@ -304,7 +316,7 @@ public class PostService {
 
 				pojoDetails.add(pojoDetail);
 			}
-			if(postFiles.size() > 0) {
+			if (postFiles.size() > 0) {
 				for (int j = 0; j < postFiles.size(); j++) {
 					final PostFile postFile = postFiles.get(j);
 					final String fileId = postFile.getFile().getId();
@@ -312,14 +324,14 @@ public class PostService {
 					postFileId.add(fileId);
 				}
 			}
-			if(pollingChoices.size() > 0) {
+			if (pollingChoices.size() > 0) {
 				for (int j = 0; j < pollingChoices.size(); j++) {
 					final PollingChoice pollingChoice = pollingChoices.get(j);
 					final PojoPollingChoiceGetAllRes pollingPojo = new PojoPollingChoiceGetAllRes();
 					pollingPojo.setPollingChoiceId(pollingChoice.getId());
 					pollingPojo.setChoiceContent(pollingChoice.getChoiceContent());
 					pollingPojo.setVer(pollingChoice.getVersion());
-					
+
 					pollingPojos.add(pollingPojo);
 				}
 			}
@@ -864,5 +876,21 @@ public class PostService {
 		res.setMessage("Berhasil Dihapus");
 
 		return res;
+	}
+
+	public PojoInsertRes insertPollingAnswer(final String pollingChoiceId) {
+		PollingAnswer pollingAnwerInsert = null;
+		final PojoInsertRes pojo = new PojoInsertRes();
+		final PollingAnswer pollingAnswer = new PollingAnswer();
+		final PollingChoice pollingChoice = pollingChoiceDao.getRefById(pollingChoiceId);
+		pollingAnswer.setPollingChoice(pollingChoice);
+		pollingAnswer.setUser(userDao.getRefById(principalService.getAuthPrincipal()));
+		pollingAnswer.setIsActive(true);
+		ConnHandler.begin();
+		pollingAnwerInsert = pollingAnswerDao.insert(pollingAnswer);
+		ConnHandler.commit();
+		pojo.setId(pollingAnwerInsert.getId());
+		pojo.setMessage("Berhasil menjawab polling");
+		return pojo;
 	}
 }

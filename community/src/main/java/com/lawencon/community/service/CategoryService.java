@@ -19,13 +19,13 @@ import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
 
 @Service
 public class CategoryService {
-	
+
 	private final CategoryDao categoryDao;
-	
+
 	public CategoryService(final CategoryDao categoryDao) {
 		this.categoryDao = categoryDao;
 	}
-	
+
 	private void valIdNull(final Category data) {
 		if (data.getId() != null) {
 			throw new RuntimeException("ID harus kosong");
@@ -46,7 +46,7 @@ public class CategoryService {
 			throw new RuntimeException("Nama Kategori Kosong");
 		}
 	}
-	
+
 	public Category insertCategory(final Category data) {
 		Category categoryInsert = null;
 		try {
@@ -60,24 +60,24 @@ public class CategoryService {
 		}
 		return categoryInsert;
 	}
-	
+
 	public PojoInsertRes insertCategory(final PojoCategoryInsertReq data) {
 		final Category category = new Category();
-		
+
 		category.setCategoryCode(data.getCategoryCode());
 		category.setCategoryName(data.getCategoryName());
-		
+
 		category.setIsActive(true);
-		
+
 		Category categoryInsert = null;
 		categoryInsert = insertCategory(category);
-		
+
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
 		pojoInsertRes.setId(categoryInsert.getId());
 		pojoInsertRes.setMessage("Berhasil Menambah Data");
 		return pojoInsertRes;
 	}
-	
+
 	public Category updateIndustry(final Category data) {
 		Category categoryUpdate = null;
 		valIdNotNull(data);
@@ -90,31 +90,31 @@ public class CategoryService {
 		}
 		return categoryUpdate;
 	}
-	
+
 	public PojoUpdateRes updateIndustry(final PojoCategoryUpdateReq data) {
 		Category categoryUpdate = null;
-		
+
 		categoryUpdate = getByIdAndDetach(data.getId());
-		
+
 		final Category category = categoryUpdate;
-		
-		if(data.getCategoryCode() != null) {
-			category.setCategoryCode(data.getCategoryCode());			
+
+		if (data.getCategoryCode() != null) {
+			category.setCategoryCode(data.getCategoryCode());
 		}
-		
-		if(data.getCategoryName() != null) {
-			category.setCategoryName(data.getCategoryName());			
+
+		if (data.getCategoryName() != null) {
+			category.setCategoryName(data.getCategoryName());
 		}
-		
+
 		categoryUpdate = updateIndustry(category);
-		
+
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
 		pojoUpdateRes.setVer(categoryUpdate.getVersion());
 		pojoUpdateRes.setMessage("Berhasil Mengubah Data");
-		
+
 		return pojoUpdateRes;
 	}
-	
+
 	public boolean deleteById(final String id) {
 		boolean categoryDelete = false;
 
@@ -129,39 +129,39 @@ public class CategoryService {
 
 		return categoryDelete;
 	}
-	
+
 	public PojoDeleteRes deleteRes(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteById(id);
 		res.setMessage("Berhasil Menghapus Data");
 		return res;
 	}
-	
-	public Optional<Category> getById(final String id){
+
+	public Optional<Category> getById(final String id) {
 		return categoryDao.getById(id);
 	}
-	
+
 	public Category getByIdAndDetach(final String id) {
 		return categoryDao.getByIdAndDetach(Category.class, id);
 	}
-	
-	public Category getRefById(final String id){
+
+	public Category getRefById(final String id) {
 		return categoryDao.getRefById(id);
 	}
-	
-	public List<Category> getAll(){
+
+	public List<Category> getAll() {
 		return categoryDao.getAll();
 	}
-	
+
 	public int getTotalCategory() {
 		return categoryDao.getTotalCategory();
 	}
-	
-	public List<PojoCategoryGetAllResData> getAllCategory(){
+
+	public List<PojoCategoryGetAllResData> getAllCategory() {
 		final List<PojoCategoryGetAllResData> listPojoCategory = new ArrayList<>();
-		
+
 		final List<Category> listCategory = getAll();
-		for(int i = 0; i < listCategory.size(); i++) {
+		for (int i = 0; i < listCategory.size(); i++) {
 			final PojoCategoryGetAllResData pojoCategoryGetAll = new PojoCategoryGetAllResData();
 			pojoCategoryGetAll.setId(listCategory.get(i).getId());
 			pojoCategoryGetAll.setCategoryCode(listCategory.get(i).getCategoryCode());
@@ -171,38 +171,36 @@ public class CategoryService {
 		}
 		return listPojoCategory;
 	}
-	
-	public PojoCategoryGetAllRes getCategory(final Integer limit, final Integer offset){
+
+	public PojoCategoryGetAllRes getCategory(final Integer limit, final Integer offset) {
 		final List<PojoCategoryGetAllResData> listPojoCategory = new ArrayList<>();
 		final List<Category> listCategory = categoryDao.getAllCategory(limit, offset);
-		for(int i = 0; i < listCategory.size(); i++) {
+		for (int i = 0; i < listCategory.size(); i++) {
 			final PojoCategoryGetAllResData pojoCategoryGetAll = new PojoCategoryGetAllResData();
 			pojoCategoryGetAll.setId(listCategory.get(i).getId());
 			pojoCategoryGetAll.setCategoryCode(listCategory.get(i).getCategoryCode());
 			pojoCategoryGetAll.setCategoryName(listCategory.get(i).getCategoryName());
 			pojoCategoryGetAll.setVer(listCategory.get(i).getVersion());
-			listPojoCategory.add(pojoCategoryGetAll); 
+			listPojoCategory.add(pojoCategoryGetAll);
 		}
-		 
-		
+
 		final PojoCategoryGetAllRes pojoCategoryData = new PojoCategoryGetAllRes();
 		pojoCategoryData.setData(listPojoCategory);
-		pojoCategoryData.setTotal(categoryDao.getTotalCategory());	
-		
+		pojoCategoryData.setTotal(categoryDao.getTotalCategory());
+
 		return pojoCategoryData;
 	}
-	
-	public PojoCategoryGetAllResData getCategoryById(final String id){
-		
+
+	public PojoCategoryGetAllResData getCategoryById(final String id) {
+
 		final Optional<Category> listCategory = categoryDao.getCategoryById(id);
 		final PojoCategoryGetAllResData pojoCategoryGetAll = new PojoCategoryGetAllResData();
 		pojoCategoryGetAll.setId(listCategory.get().getId());
 		pojoCategoryGetAll.setCategoryCode(listCategory.get().getCategoryCode());
 		pojoCategoryGetAll.setCategoryName(listCategory.get().getCategoryName());
 		pojoCategoryGetAll.setVer(listCategory.get().getVersion());
-		
+
 		return pojoCategoryGetAll;
 	}
-	
-	
+
 }

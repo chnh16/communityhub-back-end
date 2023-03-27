@@ -171,4 +171,10 @@ public class PostController {
 		final List<PojoPostTypeGetAllRes> res = postTypeService.getAllRes();
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
+	
+	@PostMapping("polling/{id}")
+	public ResponseEntity<PojoInsertRes> insertPollingAnswer(@PathVariable("id") final String pollingChoiceId){
+		final PojoInsertRes res = postService.insertPollingAnswer(pollingChoiceId);
+		return new ResponseEntity<>(res, HttpStatus.CREATED);
+	}
 }

@@ -23,19 +23,19 @@ import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class ArticleService {
-	
-private final ArticleDao articleDao;
-private final UserService userService;
-private final PrincipalService principalService;
-private final FileDao fileDao;
-	
 
-	public ArticleService(final ArticleDao articleDao, UserService userService, PrincipalService principalService, FileDao fileDao) {
+	private ArticleDao articleDao;
+	private UserService userService;
+	private PrincipalService principalService;
+	private FileDao fileDao;
+
+	public ArticleService(final ArticleDao articleDao, UserService userService, PrincipalService principalService,
+			FileDao fileDao) {
 		this.articleDao = articleDao;
 		this.userService = userService;
 		this.principalService = principalService;
 		this.fileDao = fileDao;
-		
+
 	}
 
 	public Article insert(final Article data) {
@@ -72,7 +72,7 @@ private final FileDao fileDao;
 	public List<Article> getAll() {
 		return articleDao.getAll();
 	}
-	
+
 	public int getTotalArticle() {
 		return articleDao.getTotalArticle();
 	}
@@ -96,14 +96,14 @@ private final FileDao fileDao;
 	public Article getByIdAndDetach(final String id) {
 		return articleDao.getByIdAndDetach(Article.class, id);
 	}
-	
+
 	public PojoInsertRes insert(final PojoArticleInsertReq data) {
 		final Article article = new Article();
-		
+
 		final User user = userService.getByRefId(principalService.getAuthPrincipal());
 		user.setId(principalService.getAuthPrincipal());
 		article.setUser(user);
-		
+
 		final File fileInsert = new File();
 		fileInsert.setFileName(data.getPhotoId().getFileName());
 		fileInsert.setFileExtension(data.getPhotoId().getFileExtension());
@@ -113,8 +113,9 @@ private final FileDao fileDao;
 		final File file = fileDao.insert(fileInsert);
 		ConnHandler.commit();
 		article.setPhoto(file);
-		
-		article.setArticleTitle(data.getArticleTitle());;
+
+		article.setArticleTitle(data.getArticleTitle());
+		;
 		article.setArticleContent(data.getArticleContent());
 
 		Article articleInsert = null;
@@ -125,7 +126,7 @@ private final FileDao fileDao;
 		pojoInsertRes.setMessage("Success");
 		return pojoInsertRes;
 	}
-	
+
 	public List<PojoArticleResGetAll> getAllRes() {
 		final List<PojoArticleResGetAll> pojos = new ArrayList<>();
 		final List<Article> res = getAll();
@@ -135,7 +136,7 @@ private final FileDao fileDao;
 			final Article article = res.get(i);
 
 			ConnHandler.getManager().detach(article);
-			
+
 			pojo.setId(article.getId());
 			pojo.setPhotoId(article.getPhoto().getId());
 			pojo.setArticleTitle(article.getArticleTitle());
@@ -146,7 +147,7 @@ private final FileDao fileDao;
 		}
 		return pojos;
 	}
-	
+
 	public PojoUpdateRes update(final PojoArticleUpdateReq data) {
 		Article articleUpdate = null;
 
@@ -156,7 +157,7 @@ private final FileDao fileDao;
 
 		article.setArticleTitle(data.getArticleTitle());
 		article.setArticleContent(data.getArticleContent());
-		
+
 		article.setVersion(data.getVer());
 
 		final File fileInsert = new File();
@@ -184,9 +185,7 @@ private final FileDao fileDao;
 		res.setMessage("Article Berhasil Dihapus");
 		return res;
 	}
-	
-	
-	
+
 	public PojoArticleGetAllResData getArticle(final Integer limit, final Integer offset) {
 		final List<PojoArticleResGetAll> pojos = new ArrayList<>();
 		final List<Article> res = articleDao.getAllArticle(limit, offset);
@@ -196,7 +195,7 @@ private final FileDao fileDao;
 			final Article article = res.get(i);
 
 			ConnHandler.getManager().detach(article);
-			
+
 			pojo.setId(article.getId());
 			pojo.setPhotoId(article.getPhoto().getId());
 			pojo.setArticleTitle(article.getArticleTitle());
@@ -205,25 +204,24 @@ private final FileDao fileDao;
 
 			pojos.add(pojo);
 		}
-		
+
 		final PojoArticleGetAllResData pojoArticleData = new PojoArticleGetAllResData();
 		pojoArticleData.setData(pojos);
 		pojoArticleData.setTotal(articleDao.getTotalArticle());
-		
+
 		return pojoArticleData;
 	}
 
 	public PojoArticleResGetAll getAllArticle(final String id) {
 		final Optional<Article> article = getById(id);
 		final PojoArticleResGetAll pojoArticle = new PojoArticleResGetAll();
-		
+
 		pojoArticle.setId(article.get().getId());
 		pojoArticle.setArticleTitle(article.get().getArticleTitle());
 		pojoArticle.setArticleContent(article.get().getArticleContent());
 		pojoArticle.setPhotoId(article.get().getPhoto().getId());
 		pojoArticle.setVer(article.get().getVersion());
-		
-		
+
 		return pojoArticle;
 	}
 }
