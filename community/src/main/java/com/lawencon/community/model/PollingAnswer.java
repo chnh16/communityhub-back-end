@@ -21,6 +21,18 @@ public class PollingAnswer extends BaseEntity{
 	@OneToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
+	
+	@OneToOne
+	@JoinColumn(name = "post_id", nullable = false)
+	private Post post;
+
+	public Post getPost() {
+		return post;
+	}
+
+	public void setPost(Post post) {
+		this.post = post;
+	}
 
 	public PollingChoice getPollingChoice() {
 		return pollingChoice;
