@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report-income-member" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ebb98eff-286c-4b29-9e0e-d6003de169d4">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src\main\resources\template-folder\CommunityAdapter.jrdax"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="Parameter1" class="java.lang.String"/>
+	<parameter name="Parameter2" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT 'Event' AS activityType, te.event_name AS itemName, SUM(te.price) AS totalIncomes FROM t_transaction tt 
+INNER JOIN t_event te ON tt.event_id = te.id 
+WHERE DATE(tt.updated_at) >= DATE('2023-03-15') AND DATE(tt.updated_at) <= DATE('2023-03-25') AND tt.is_approved = true 
+GROUP BY te.event_name, te.start_date]]>
+	</queryString>
+	<field name="activityType" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="activitytype"/>
+		<property name="com.jaspersoft.studio.field.label" value="activitytype"/>
+	</field>
+	<field name="itemName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="itemname"/>
+		<property name="com.jaspersoft.studio.field.label" value="itemname"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="course"/>
+	</field>
+	<field name="totalIncomes" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="totalincomes"/>
+		<property name="com.jaspersoft.studio.field.label" value="totalincomes"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="80" height="30" uuid="b65e698a-9495-4285-aee7-edfea1411760"/>
+				<text><![CDATA[Periode]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="200" y="0" width="135" height="30" uuid="e694f315-489b-4d1d-bf7a-18da160d3fc2"/>
+				<textFieldExpression><![CDATA[$P{Parameter2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="120" height="30" uuid="03e93060-9e02-47c9-9540-208e3c0c8a26"/>
+				<textFieldExpression><![CDATA[$P{Parameter1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="0" width="20" height="30" uuid="5c84c56f-ad99-4829-8631-8bcbceb80777"/>
+				<box topPadding="2" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="0" width="165" height="30" uuid="b3f01642-9cd1-49bd-8678-f8f50469dcba">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="53b1f874-4666-4111-9a6d-5b685541e93b"/>
+				</reportElement>
+				<box topPadding="2" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<text><![CDATA[Tipe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="187" y="0" width="185" height="30" uuid="fecf941c-dacf-49d8-9dd3-456df6b87528">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7182f1e9-05e7-463e-bfc3-ffd95372427b"/>
+				</reportElement>
+				<box topPadding="2" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<text><![CDATA[Judul]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="372" y="0" width="185" height="30" uuid="7c953da3-ae50-4ea5-8c7d-4c129c31f269">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5b4af080-f072-4d5e-967b-72ad3d91223b"/>
+				</reportElement>
+				<box topPadding="2" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<text><![CDATA[Total Pemasukkan]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="22" y="0" width="165" height="30" uuid="1f1cf49d-5175-4957-b231-e42b42fa52d6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="53b1f874-4666-4111-9a6d-5b685541e93b"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{activityType}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="187" y="0" width="185" height="30" uuid="fe98ec25-0642-40ba-aebc-ca4f788b5e7e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7182f1e9-05e7-463e-bfc3-ffd95372427b"/>
+				</reportElement>
+				<box topPadding="2" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{itemName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="372" y="0" width="185" height="30" uuid="042646ce-4c9b-4271-9b4d-8dde64f4a761">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5b4af080-f072-4d5e-967b-72ad3d91223b"/>
+				</reportElement>
+				<box topPadding="2" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{totalIncomes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="0" width="20" height="30" uuid="5898f28f-a9c9-403d-a8ec-b707603af29a"/>
+				<box topPadding="2" leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="190" y="0" width="100" height="30" uuid="2877fec5-39a8-4793-9d71-6fb75454ccca"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="290" y="0" width="100" height="30" uuid="274e80cc-6130-458d-9102-84ca60185f85"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -29,6 +29,8 @@ import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.transaction.PojoInsertTransactionReq;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetAllRes;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetAllResData;
+import com.lawencon.community.pojo.transaction.PojoTransactionGetReportIncomeMemberRes;
+import com.lawencon.community.pojo.transaction.PojoTransactionGetReportIncomeSuperAdminRes;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetReportParticipantSuperAdminRes;
 import com.lawencon.community.pojo.transaction.PojoTransactionGetReportRes;
 import com.lawencon.community.pojo.transaction.PojoUpdateTransactionReq;
@@ -539,7 +541,23 @@ public class TransactionService {
 
 		return transactions;
 	}
+	
+	public List<PojoTransactionGetReportIncomeMemberRes> getReportIncomeMemberByDate(final String startDate, final String endDate) {
 
+		final List<PojoTransactionGetReportIncomeMemberRes> transactions = transactionDao
+				.getCourseReportIncomeMember(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+
+		for (int i = 0; i < transactions.size(); i++) {
+			final PojoTransactionGetReportIncomeMemberRes transactionReport = new PojoTransactionGetReportIncomeMemberRes();
+			transactionReport.setActivityType(transactions.get(i).getActivityType());
+			transactionReport.setItemName(transactions.get(i).getItemName());
+			transactionReport.setTotalIncomes(transactions.get(i).getTotalIncomes());
+
+		}
+
+		return transactions;
+	}
+	
 	public List<PojoTransactionGetReportParticipantSuperAdminRes> getReportParticipantSuperAdminByDate(final String startDate, final String endDate) {
 
 		final List<PojoTransactionGetReportParticipantSuperAdminRes> transactions = transactionDao
@@ -555,6 +573,96 @@ public class TransactionService {
 			reportSuperAdmin.setItemName(transactions.get(i).getItemName());
 			reportSuperAdmin.setStartDate(transactions.get(i).getStartDate());
 			reportSuperAdmin.setTotalParticipants(transactions.get(i).getTotalParticipants());
+			
+		}
+
+		return transactions;
+	}
+	
+	public List<PojoTransactionGetReportIncomeSuperAdminRes> getReportIncomeSuperAdminByDate(final String startDate, final String endDate) {
+
+		final List<PojoTransactionGetReportIncomeSuperAdminRes> transactions = transactionDao
+				.getCourseReportIncomeSuperAdmin(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+		
+		
+		for (int i = 0; i < transactions.size(); i++) {
+			final PojoTransactionGetReportIncomeSuperAdminRes reportSuperAdmin = new PojoTransactionGetReportIncomeSuperAdminRes();
+			reportSuperAdmin.setFullName(transactions.get(i).getFullName());
+			
+			reportSuperAdmin.setActivityType(transactions.get(i).getActivityType());
+			reportSuperAdmin.setTotalIncome(transactions.get(i).getTotalIncome());
+			
+		}
+
+		return transactions;
+	}
+	
+	public List<PojoTransactionGetReportRes> getEventReportByDate(final String startDate, final String endDate) {
+
+		final List<PojoTransactionGetReportRes> transactions = transactionDao
+				.getEventReport(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+
+		for (int i = 0; i < transactions.size(); i++) {
+			final PojoTransactionGetReportRes transactionReport = new PojoTransactionGetReportRes();
+			transactionReport.setActivityType(transactions.get(i).getActivityType());
+			transactionReport.setItemName(transactions.get(i).getItemName());
+			transactionReport.setStartDate(transactions.get(i).getStartDate());
+			transactionReport.setTotalParticipants(transactions.get(i).getTotalParticipants());
+
+		}
+
+		return transactions;
+	}
+	
+	public List<PojoTransactionGetReportIncomeMemberRes> getEventReportIncomeMemberByDate(final String startDate, final String endDate) {
+
+		final List<PojoTransactionGetReportIncomeMemberRes> transactions = transactionDao
+				.getEventReportIncomeMember(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+
+		for (int i = 0; i < transactions.size(); i++) {
+			final PojoTransactionGetReportIncomeMemberRes transactionReport = new PojoTransactionGetReportIncomeMemberRes();
+			transactionReport.setActivityType(transactions.get(i).getActivityType());
+			transactionReport.setItemName(transactions.get(i).getItemName());
+			transactionReport.setTotalIncomes(transactions.get(i).getTotalIncomes());
+
+		}
+
+		return transactions;
+	}
+	
+	public List<PojoTransactionGetReportParticipantSuperAdminRes> getEventReportParticipantSuperAdminByDate(final String startDate, final String endDate) {
+
+		final List<PojoTransactionGetReportParticipantSuperAdminRes> transactions = transactionDao
+				.getEventReportSuperAdmin(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+		
+		
+		for (int i = 0; i < transactions.size(); i++) {
+			final PojoTransactionGetReportParticipantSuperAdminRes reportSuperAdmin = new PojoTransactionGetReportParticipantSuperAdminRes();
+			reportSuperAdmin.setMemberName(transactions.get(i).getMemberName());
+			reportSuperAdmin.setProviderName(transactions.get(i).getProviderName());
+			
+			reportSuperAdmin.setActivityType(transactions.get(i).getActivityType());
+			reportSuperAdmin.setItemName(transactions.get(i).getItemName());
+			reportSuperAdmin.setStartDate(transactions.get(i).getStartDate());
+			reportSuperAdmin.setTotalParticipants(transactions.get(i).getTotalParticipants());
+			
+		}
+
+		return transactions;
+	}
+	
+	public List<PojoTransactionGetReportIncomeSuperAdminRes> getEventReportIncomeSuperAdminByDate(final String startDate, final String endDate) {
+
+		final List<PojoTransactionGetReportIncomeSuperAdminRes> transactions = transactionDao
+				.getEventReportIncomeSuperAdmin(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+		
+		
+		for (int i = 0; i < transactions.size(); i++) {
+			final PojoTransactionGetReportIncomeSuperAdminRes reportSuperAdmin = new PojoTransactionGetReportIncomeSuperAdminRes();
+			reportSuperAdmin.setFullName(transactions.get(i).getFullName());
+			
+			reportSuperAdmin.setActivityType(transactions.get(i).getActivityType());
+			reportSuperAdmin.setTotalIncome(transactions.get(i).getTotalIncome());
 			
 		}
 

@@ -8,10 +8,10 @@
 	<parameter name="Parameter1" class="java.lang.String"/>
 	<parameter name="Parameter2" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT 'Course' AS activityType, c.course_name AS itemName, DATE(c.start_date) AS startDate, COUNT(tt.user_id) AS totalParticipants FROM t_transaction tt 
-INNER JOIN course c ON tt.course_id = c.id 
-WHERE DATE(c.start_date) >= DATE('2023-03-15') AND DATE(c.end_date) <= DATE('2023-03-25') AND tt.is_approved = true 
-GROUP BY c.course_name, c.start_date]]>
+		<![CDATA[SELECT 'Event' AS activityType, te.event_name AS itemName, DATE(te.start_date) AS startDate, COUNT(tt.user_id) AS totalParticipants FROM t_transaction tt 
+INNER JOIN t_event te ON tt.event_id = te.id 
+WHERE DATE(te.start_date) >= DATE('2023-03-15') AND DATE(te.end_date) <= DATE('2023-03-25') AND tt.is_approved = true 
+GROUP BY te.event_name, te.start_date]]>
 	</queryString>
 	<field name="activityType" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="activitytype"/>
