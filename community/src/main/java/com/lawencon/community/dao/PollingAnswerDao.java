@@ -33,10 +33,10 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer> {
 		try {
 			final StringBuilder str = new StringBuilder();
 			str.append(
-					"SELECT pa.id, pa.user_id, pa.post_id, pa.polling_choice_id, pa.created_by, pa.created_at, pa.updated_by, pa.updated_at, pa.ver, pa.is_active FROM polling_answer pa")
+					"SELECT pa.id, pa.user_id, pa.post_id, pa.polling_choice_id FROM polling_answer pa")
 					.append(" WHERE pa.user_id = :userId").append(" AND pa.post_id = :postId")
 					.append(" AND pa.is_active = TRUE");
-			final Object res = em().createNativeQuery(toStr(str), PollingAnswer.class).setParameter("userId", userId)
+			final Object res = em().createNativeQuery(toStr(str)).setParameter("userId", userId)
 					.setParameter("postId", postId).getSingleResult();
 			if (res != null) {
 				pollingAnswer = new PollingAnswer();
@@ -51,16 +51,7 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer> {
 				pollingAnswer.setUser(user);
 				pollingAnswer.setPost(post);
 				pollingAnswer.setPollingChoice(pollingChoice);
-				pollingAnswer.setCreatedBy(objArr[4].toString());
-				pollingAnswer.setCreatedAt(Timestamp.valueOf(objArr[5].toString()).toLocalDateTime());
-				if(objArr[6] != null) {
-					pollingAnswer.setUpdatedBy(objArr[6].toString());
-				}
-				if(objArr[7] != null) {
-					pollingAnswer.setUpdatedAt(Timestamp.valueOf(objArr[7].toString()).toLocalDateTime());
-				}
-				pollingAnswer.setVersion(Integer.valueOf(objArr[8].toString()));
-				pollingAnswer.setIsActive(Boolean.valueOf(objArr[9].toString()));
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
