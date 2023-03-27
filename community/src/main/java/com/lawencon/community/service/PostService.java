@@ -894,8 +894,10 @@ public class PostService {
 		final PojoInsertRes pojo = new PojoInsertRes();
 		final PollingAnswer pollingAnswer = new PollingAnswer();
 		final PollingChoice pollingChoice = pollingChoiceDao.getRefById(pollingChoiceId);
+		final Post post = pollingChoice.getPost();
 		pollingAnswer.setPollingChoice(pollingChoice);
 		pollingAnswer.setUser(userDao.getRefById(principalService.getAuthPrincipal()));
+		pollingAnswer.setPost(post);
 		pollingAnswer.setIsActive(true);
 		ConnHandler.begin();
 		pollingAnwerInsert = pollingAnswerDao.insert(pollingAnswer);
