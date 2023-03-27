@@ -910,7 +910,11 @@ public class PostService {
 	
 	public PojoDeleteRes deletePollingAnswer(final String pollingAnswerId) {
 		final PojoDeleteRes deleteRes = new PojoDeleteRes();
-		if(pollingAnswerDao.delete(pollingAnswerId)) {
+		
+		ConnHandler.begin();
+		boolean delete = pollingAnswerDao.delete(pollingAnswerId);
+		ConnHandler.commit();
+		if(delete) {
 			deleteRes.setMessage("Berhasil membatalkan jawaban polling");
 		}
 		return deleteRes;

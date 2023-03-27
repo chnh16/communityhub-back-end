@@ -186,6 +186,7 @@ public class UserService implements UserDetailsService, Runnable {
 		profile.setFile(fileInsert);
 		ConnHandler.begin();
 		profileInsert = profileDao.saveNoLogin(profile, () -> getUserSystem.getId());
+		ConnHandler.commit();
 
 		user.setEmail(data.getEmail());
 		user.setPasswordUser(encoder.encode(data.getPasswordUser()));
@@ -193,7 +194,9 @@ public class UserService implements UserDetailsService, Runnable {
 		user.setIsVerified(false);
 		user.setProfile(profileInsert);
 
+		ConnHandler.begin();
 		final User userInsert = userDao.saveNoLogin(user, () -> getUserSystem.getId());
+		ConnHandler.commit();
 
 		final RegisterVerification registerVerification = new RegisterVerification();
 		final String generatePass = Generate.generateCode(8);
@@ -201,8 +204,8 @@ public class UserService implements UserDetailsService, Runnable {
 		registerVerification.setCodeVerifcation(generatePass);
 		registerVerification.setExpired(LocalDateTime.now().plusMinutes(5));
 
+		ConnHandler.begin();
 		registerVerificationDao.saveNoLogin(registerVerification, () -> getUserSystem.getId());
-
 		ConnHandler.commit();
 
 		final EmailDetails email = new EmailDetails();
