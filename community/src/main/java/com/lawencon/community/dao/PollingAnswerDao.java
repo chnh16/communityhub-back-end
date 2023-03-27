@@ -29,27 +29,32 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer>{
 	
 	public Optional<PollingAnswer> getByPostIdAndUserId(final String postId, final String userId) {
 		PollingAnswer pollingAnswer = null;
-		final StringBuilder str = new StringBuilder();
-		str.append("SELECT pa.id, pa.user_id, pa.post_id, pa.polling_choice_id FROM polling_answer pa")
-				.append(" WHERE pa.user_id = :userId").append(" AND pa.post_id = :postId")
-				.append(" AND pa.is_active = TRUE");
+		try {
+			final StringBuilder str = new StringBuilder();
+			str.append("SELECT pa.id, pa.user_id, pa.post_id, pa.polling_choice_id FROM polling_answer pa")
+					.append(" WHERE pa.user_id = :userId").append(" AND pa.post_id = :postId")
+					.append(" AND pa.is_active = TRUE");
 
-		final Object res = em().createNativeQuery(toStr(str), PollingAnswer.class).setParameter("userId", userId)
-				.setParameter("postId", postId).getSingleResult();
-		if (res != null) {
-			pollingAnswer = new PollingAnswer();
-			final Object[] objArr = (Object[]) res;
-			final User user = new User();
-			user.setId(objArr[1].toString());
-			final Post post = new Post();
-			post.setId(objArr[2].toString());
-			final PollingChoice pollingChoice = new PollingChoice();
-			pollingChoice.setId(objArr[3].toString());
-			pollingAnswer.setId(objArr[0].toString());
-			pollingAnswer.setUser(user);
-			pollingAnswer.setPost(post);
-			pollingAnswer.setPollingChoice(pollingChoice);
+			final Object res = em().createNativeQuery(toStr(str), PollingAnswer.class).setParameter("userId", userId)
+					.setParameter("postId", postId).getSingleResult();
+			if (res != null) {
+				pollingAnswer = new PollingAnswer();
+				final Object[] objArr = (Object[]) res;
+				final User user = new User();
+				user.setId(objArr[1].toString());
+				final Post post = new Post();
+				post.setId(objArr[2].toString());
+				final PollingChoice pollingChoice = new PollingChoice();
+				pollingChoice.setId(objArr[3].toString());
+				pollingAnswer.setId(objArr[0].toString());
+				pollingAnswer.setUser(user);
+				pollingAnswer.setPost(post);
+				pollingAnswer.setPollingChoice(pollingChoice);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		
 		return Optional.ofNullable(pollingAnswer);
 	}
 	
