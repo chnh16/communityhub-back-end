@@ -19,7 +19,7 @@ public class PojoPostGetAllRes {
 	private String categoryName;
 	private LocalDateTime postedAt;
 	private Integer ver;
-	private Integer likeCount;
+	private Long likeCount;
 	private Integer detailCount;
 	private List<PojoPollingChoiceGetAllRes> pollingChoice;
 	private List<PojoPostDetailGetAllRes> postDetail;
@@ -82,10 +82,10 @@ public class PojoPostGetAllRes {
 	public void setIsBookmarked(PojoPostBookmarkRes isBookmarked) {
 		this.isBookmarked = isBookmarked;
 	}
-	public Integer getLikeCount() {
+	public Long getLikeCount() {
 		return likeCount;
 	}
-	public void setLikeCount(Integer likeCount) {
+	public void setLikeCount(Long likeCount) {
 		this.likeCount = likeCount;
 	}
 	public Integer getDetailCount() {

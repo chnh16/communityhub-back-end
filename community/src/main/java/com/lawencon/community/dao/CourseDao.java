@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Course;
+import com.lawencon.community.model.Event;
 
 @Repository
 public class CourseDao extends MasterDao<Course>{
@@ -50,7 +51,7 @@ public class CourseDao extends MasterDao<Course>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Course> getByCategoryId (final String catgoryId){
+	public List<Course> getByCategoryId (final String catgoryId, Integer limit, final Integer offset){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM course c ")
 		.append("WHERE c.category_id = :catgoryId");
@@ -65,6 +66,18 @@ public class CourseDao extends MasterDao<Course>{
 		.append(" WHERE is_active = TRUE")
 		.append(" ORDER BY price ASC");
 		final List<Course> res = em().createNativeQuery(toStr(str), Course.class).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Course> getCourse(final Integer limit, final Integer offset) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM course c")
+			.append(" WHERE c.is_active = true");
+		final List<Course> res = em().createNativeQuery(toStr(str).toString(), Course.class)
+				.setMaxResults(limit)
+				.setFirstResult((offset-1)*limit)
+				.getResultList();
 		return res;
 	}
 	
@@ -85,7 +98,7 @@ public class CourseDao extends MasterDao<Course>{
 			.append(" WHERE c.is_active = true");
 		final List<Course> res = em().createNativeQuery(toStr(str).toString(), Course.class)
 				.setMaxResults(limit)
-				.setFirstResult(offset)
+				.setFirstResult((offset-1)*limit)
 				.getResultList();
 		return res;
 	}
@@ -105,7 +118,7 @@ public class CourseDao extends MasterDao<Course>{
 	public Optional<Course> getCourseById(final String id) {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM course c ")
-			.append(" WHERE c.id = :id AND c.is_active = true");
+			.append("WHERE c.id = :id AND c.is_active = true");
 		final List<Course> res = em().createNativeQuery(toStr(str), Course.class)
 				.setParameter("id", id)
 				.getResultList();
@@ -116,5 +129,4 @@ public class CourseDao extends MasterDao<Course>{
 	public Course getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Course.class, id);
 	}
-
 }

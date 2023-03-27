@@ -1,5 +1,6 @@
 package com.lawencon.community.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -83,9 +84,9 @@ public class EventService {
 		return eventDao.getById(id);
 	}
 
-	public List<Event> getAll() {
-		return eventDao.getAll();
-	}
+//	public List<Event> getAll() {
+//		return eventDao.getAll();
+//	}
 
 	public boolean deleteById(final String id) {
 		boolean eventDelete = false;
@@ -151,16 +152,16 @@ public class EventService {
 		return pojoInsertRes;
 	}
 
-	public List<PojoEventResGetAll> getAllEvent(String category, String price) {
+	public List<PojoEventResGetAll> getAllEvent(String category, String price, Integer limit, Integer offset) {
 		final List<PojoEventResGetAll> pojos = new ArrayList<>();
 		List<Event> res = new ArrayList<>();
 		final Category categoryId = categoryDao.getRefById(category);
 		
 		if(category.isEmpty() && price.isEmpty()) {
-			res = eventDao.getAll();
+			res = eventDao.getEvent(limit, offset);
 		}else if(category.equals(categoryId.getId())) {
-			res = eventDao.getByCategoryId(categoryId.getId());
-		}else if(category.isEmpty() && price.equals("ASC")){
+			res = eventDao.getByCategoryId(categoryId.getId(), limit, offset);
+		}else if(price.equals("ASC")){
 			res = eventDao.getByPriceAsc();
 		}else if(category.isEmpty() && price.equals("DESC")){
 			res = eventDao.getByPriceDesc();
@@ -178,6 +179,9 @@ public class EventService {
 			pojo.setProvider(event.getProvider());
 			pojo.setLocationName(event.getLocationName());
 			pojo.setCategoryId(event.getCategory().getCategoryName());
+			
+			//LocalDate localDate = event.getStartDate().toLocalDate();
+			
 			pojo.setStartDate(event.getStartDate());
 			pojo.setEndDate(event.getEndDate());
 			pojo.setPrice(event.getPrice());
@@ -318,6 +322,7 @@ public class EventService {
 		final Optional<Event> event = eventDao.getEventById(id);
 		final PojoEventResGetAll pojoEventResGetAll = new PojoEventResGetAll();
 		pojoEventResGetAll.setId(event.get().getId());
+		pojoEventResGetAll.setUserId(event.get().getUser().getId());
 		pojoEventResGetAll.setEventName(event.get().getEventName());
 		pojoEventResGetAll.setEventCode(event.get().getEventCode());
 		pojoEventResGetAll.setProvider(event.get().getProvider());

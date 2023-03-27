@@ -24,8 +24,8 @@ public class EventDao extends MasterDao<Event>{
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public List<Event> getAll() {
+	
+	public List<Event> getAll(final Integer limit, final Integer offset) {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_event")
 		.append(" WHERE is_active = TRUE");
@@ -51,12 +51,13 @@ public class EventDao extends MasterDao<Event>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Event> getByCategoryId (String id){
+	public List<Event> getByCategoryId (String id, final Integer limit, final Integer offset){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_event e ")
 		.append("WHERE e.category_id = :id")
 		.append(" AND e.is_active = TRUE");
-		final List<Event> res = em().createNativeQuery(toStr(str), Event.class).setParameter("id", id).getResultList();
+		final List<Event> res = em().createNativeQuery(toStr(str), Event.class).setParameter("id", id).setMaxResults(limit)
+				.setFirstResult((offset-1)*limit).getResultList();
 		return res;
 	}
 	
@@ -87,7 +88,7 @@ public class EventDao extends MasterDao<Event>{
 			.append(" WHERE e.is_active = true");
 		final List<Event> res = em().createNativeQuery(toStr(str).toString(), Event.class)
 				.setMaxResults(limit)
-				.setFirstResult(offset)
+				.setFirstResult((offset-1)*limit)
 				.getResultList();
 		return res;
 	}
@@ -117,6 +118,11 @@ public class EventDao extends MasterDao<Event>{
 	@Override
 	public Event getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Event.class, id);
+	}
+
+	@Override
+	List<Event> getAll() {
+		return null;
 	}
 
 }

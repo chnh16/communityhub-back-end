@@ -52,9 +52,8 @@ public class CategoryController {
 	}
 	
 	@GetMapping("/page")
-	public ResponseEntity<PojoCategoryGetAllRes> getCategory(@RequestParam("size") int size, @RequestParam("page") int page) {
-		int offset = (page - 1)*size;
-		final PojoCategoryGetAllRes res = categoryService.getCategory(size, offset);
+	public ResponseEntity<PojoCategoryGetAllRes> getCategory(@RequestParam("limit") int limit, @RequestParam("offset") int offset) {
+		final PojoCategoryGetAllRes res = categoryService.getCategory(limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 

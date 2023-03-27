@@ -302,7 +302,7 @@ public class PostService {
 			PojoPostBookmarkRes pojoBookmark = null;
 			PojoPollingAnswerRes pojoAnswer = null;
 			final List<PostDetail> postDetails = getPostDetailByPostId(listPost.get(i).getId());
-			for (int j = 0; i < postDetails.size(); j++) {
+			for (int j = 0; j < postDetails.size(); j++) {
 				final PostDetail currentDetail = postDetails.get(j);
 				final User user = userDao.getRefById(currentDetail.getUser().getId());
 				final Profile profile = profileDao.getRefById(user.getProfile().getId());
@@ -316,6 +316,7 @@ public class PostService {
 
 				pojoDetails.add(pojoDetail);
 			}
+      
 			if (postFiles.size() > 0) {
 				for (int j = 0; j < postFiles.size(); j++) {
 					final PostFile postFile = postFiles.get(j);
@@ -340,8 +341,9 @@ public class PostService {
 			final Optional<UserBookmark> postBookmark = userBookmarkDao.getBookmarkByPostId(listPost.get(i).getId(),
 					principalService.getAuthPrincipal());
 			if (postLike.isPresent()) {
+				final UserLike userLike = postLike.get(); 
 				pojoLike = new PojoPostLikeRes();
-				pojoLike.setId(postLike.get().getId());
+				pojoLike.setId(userLike.getId());
 				pojoLike.setStatus(true);
 			}
 			if (postBookmark.isPresent()) {
@@ -361,6 +363,7 @@ public class PostService {
 			pojoPost.setDetailCount(pojoDetails.size());
 			pojoPost.setIsLiked(pojoLike);
 			pojoPost.setIsBookmarked(pojoBookmark);
+			pojoPost.setLikeCount(userLikeDao.getCount(listPost.get(i).getId()));
 			pojoPost.setPostedAt(listPost.get(i).getCreatedAt());
 			pojoPost.setFileId(postFileId);
 			pojoPost.setPollingChoice(pollingPojos);

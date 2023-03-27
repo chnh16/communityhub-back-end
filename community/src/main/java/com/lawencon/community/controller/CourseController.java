@@ -43,8 +43,8 @@ private final CourseService courseService;
 	}
 	
 	@GetMapping
-	private ResponseEntity<List<PojoCourseGetAllRes>> getAllRes(@RequestParam(required = false, value = "category") String category, String price){
-		final List<PojoCourseGetAllRes> res = courseService.getAllRes(category, price);
+	private ResponseEntity<List<PojoCourseGetAllRes>> getAllRes(@RequestParam(required = false, value = "category") String category, String price, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset){
+		final List<PojoCourseGetAllRes> res = courseService.getAllRes(category, price, limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
@@ -54,9 +54,9 @@ private final CourseService courseService;
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<List<PojoCourseResGetByCategoryId>> getByCategoryId(@PathVariable("id") final String id) {
-		final List<PojoCourseResGetByCategoryId> res = courseService.getByCategoryId(id);
+	@GetMapping("{id}")
+	public ResponseEntity<PojoCourseGetAllRes> getCourseById(@PathVariable("id") final String id) {
+		final PojoCourseGetAllRes res = courseService.getCourseById(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
@@ -79,9 +79,8 @@ private final CourseService courseService;
 	}
 
 	@GetMapping("/page")
-	public ResponseEntity<PojoCourserGetAllResData> getByUserId(@RequestParam("size") Integer size, @RequestParam("page") Integer page) {
-		int offset = (page - 1)* size;
-		final PojoCourserGetAllResData res = courseService.getCoursePage(size, offset);
+	public ResponseEntity<PojoCourserGetAllResData> getCoursePage(@RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+		final PojoCourserGetAllResData res = courseService.getCoursePage(limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

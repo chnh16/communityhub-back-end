@@ -57,8 +57,8 @@ public class UserBookmarkDao extends BasePostDao<UserBookmark> {
 					.setParameter("userId", userId).getSingleResult();
 			if (res != null) {
 				userBookmark = new UserBookmark();
-				final Object[] objArr = (Object[]) res;
-				userBookmark.setId(objArr[0].toString());
+				final String objArr = (String) res;
+				userBookmark.setId(objArr);
 			}
 		} catch(final Exception e){
 			e.printStackTrace();

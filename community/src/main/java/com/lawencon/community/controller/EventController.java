@@ -42,15 +42,14 @@ private final EventService eventService;
 	}
 	
 	@GetMapping
-	private ResponseEntity<List<PojoEventResGetAll>> getAllEvent(@RequestParam(required = false, value = "category") String category, @RequestParam(required = false, value = "price") String price){
-		final List<PojoEventResGetAll> res = eventService.getAllEvent(category, price);
+	private ResponseEntity<List<PojoEventResGetAll>> getAllEvent(@RequestParam("category") String category, @RequestParam("price") String price, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset){
+		final List<PojoEventResGetAll> res = eventService.getAllEvent(category, price, limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
 	@GetMapping("page")
-	public ResponseEntity<PojoEventGetAllResData> getByUserId(@RequestParam("size") Integer size, @RequestParam("page") Integer page) {
-		int offset = (page - 1)* size;
-		final PojoEventGetAllResData res = eventService.getEventPage(size, offset);
+	public ResponseEntity<PojoEventGetAllResData> getEventPage(@RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+		final PojoEventGetAllResData res = eventService.getEventPage(limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
@@ -66,7 +65,7 @@ private final EventService eventService;
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("{id}")
 	public ResponseEntity<PojoDeleteRes> delete(@PathVariable final String id){
 		final PojoDeleteRes res = eventService.delete(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);

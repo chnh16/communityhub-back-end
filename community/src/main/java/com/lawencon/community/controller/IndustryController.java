@@ -52,8 +52,7 @@ public class IndustryController {
 	}
 	
 	@GetMapping("/page")
-	public ResponseEntity<PojoIndustryGetAllResData> getIndustry(@RequestParam("size") int size, @RequestParam("page") int page) {
-		int offset = (page - 1)*size;
+	public ResponseEntity<PojoIndustryGetAllResData> getIndustry(@RequestParam("limit") int size, @RequestParam("offset") int offset) {
 		final PojoIndustryGetAllResData res = industryService.getIndustry(size, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}

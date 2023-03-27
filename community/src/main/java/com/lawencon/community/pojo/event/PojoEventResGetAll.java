@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 public class PojoEventResGetAll {
 
 	private String id;
+	private String userId;
 	private String eventName;
 	private String eventCode;
 	private String provider;
@@ -105,6 +106,14 @@ public class PojoEventResGetAll {
 
 	public void setVer(Integer ver) {
 		this.ver = ver;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	
