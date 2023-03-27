@@ -45,9 +45,8 @@ public class VoucherController {
 	}
 	
 	@GetMapping("/page")
-	public ResponseEntity<PojoVoucherGetAllResData> getVoucher(@RequestParam("size") int size, @RequestParam("page") int page) {
-		int offset = (page - 1)*size;
-		final PojoVoucherGetAllResData res = voucherService.getVoucherGetAllResData(size, offset);
+	public ResponseEntity<PojoVoucherGetAllResData> getVoucher(@RequestParam("limit") int limit, @RequestParam("offset") int offset) {
+		final PojoVoucherGetAllResData res = voucherService.getVoucherGetAllResData(limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

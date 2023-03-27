@@ -1,2 +1,8 @@
 /report_member_participant.jasper
 /report-participant-admin.jasper
+/report-income-member.jasper
+/report-income-super-admin.jasper
+/report-event-member-participant.jasper
+/report-event-participant-admin.jasper
+/report-event-income-member.jasper
+/report-event-income-super-admin.jasper
