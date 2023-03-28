@@ -51,7 +51,7 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	public Optional<Transaction> getTransactionById(final String id){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_transaction t ")
-			.append(" WHERE t.id = :id AND t.is_active = true");
+			.append("WHERE t.id = :id AND t.is_active = true");
 		final List<Transaction> res = em().createNativeQuery(toStr(str), Transaction.class)
 				.setParameter("id", id)
 				.getResultList();
