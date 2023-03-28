@@ -84,6 +84,8 @@ public class TransactionService {
 			trans.setTransactionDate(LocalDateTime.now());
 			trans.setGrandTotal(data.getGrandTotal());
 			trans.setFile(data.getFile());
+			trans.setStatusTransaction(data.getStatusTransaction());
+			trans.setTransactionCode(data.getTransactionCode());
 			trans.setCreatedAt(LocalDateTime.now());
 			trans.setIsApproved(false);
 			trans.setUser(data.getUser());
@@ -158,9 +160,9 @@ public class TransactionService {
 		final Transaction trans = new Transaction();
 		trans.setUser(user);
 		trans.setTransactionDate(LocalDateTime.now());
-		
-		Float value=(float) 0;
-		
+
+		Float value = (float) 0;
+
 		if (data.getVoucherCode() != null) {
 			Voucher voucher = null;
 			final Optional<Voucher> optVoucher = voucherDao.getByVoucherCode(data.getVoucherCode());
@@ -186,14 +188,15 @@ public class TransactionService {
 			trans.setCourse(course);
 			grandTotal = course.getPrice().subtract(BigDecimal.valueOf(value));
 		}
-		
-		final StatusTransaction getStatus = statusTransactionDao.getByStatusCode(StatusTransactions.PENDING.getStatusCode()).get();
+
+		final StatusTransaction getStatus = statusTransactionDao
+				.getByStatusCode(StatusTransactions.PENDING.getStatusCode()).get();
 		trans.setStatusTransaction(getStatus);
-		
+
 		trans.setGrandTotal(grandTotal);
 		trans.setIsApproved(false);
 		trans.setTransactionCode(generateCode);
-		
+
 		final File fileInsert = new File();
 		fileInsert.setFileName(data.getFile().getFileName());
 		fileInsert.setFileExtension(data.getFile().getFileExtension());
@@ -214,12 +217,16 @@ public class TransactionService {
 		Transaction transactionUpdate = null;
 		transactionUpdate = getByIdAndDetach(data.getId());
 		final Transaction transaction = transactionUpdate;
-		
-		if (data.getStatus().equals(StatusTransactions.APPROVE.getStatusName())) {
+		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
+		if (data.getStatusTransactionId().equals(StatusTransactions.APPROVE.getStatusCode())) {
 			transaction.setIsApproved(data.getIsApproved());
-			
+			final StatusTransaction getStatus = statusTransactionDao
+					.getByStatusCode(StatusTransactions.APPROVE.getStatusCode()).get();
+			transaction.setStatusTransaction(getStatus);
+
 			transaction.setVersion(data.getVer());
 			transactionUpdate = update(transaction);
+
 			if (transactionUpdate.getIsApproved() == true) {
 				if (transactionUpdate.getMembership() != null) {
 					addSystemBalance(transactionUpdate);
@@ -228,25 +235,30 @@ public class TransactionService {
 					Profile profileUpdate = null;
 					Profile profile = profileDao.getByIdAndDetach(user.getProfile().getId());
 
-					profile.setPremiumUntil(LocalDateTime.now().plusDays(transactionUpdate.getMembership().getDuration()));
-				
+					profile.setPremiumUntil(
+							LocalDateTime.now().plusDays(transactionUpdate.getMembership().getDuration()));
 
 					ConnHandler.begin();
 					profileUpdate = profileDao.update(profile);
 					ConnHandler.commit();
+
 				} else if (transactionUpdate.getEvent() != null || transactionUpdate.getCourse() != null) {
 					profitSharing(transactionUpdate);
 				}
-			}
-		} else if (data.getStatus().equals(StatusTransactions.REJECTED.getStatusName())) {
-			
-		}
-		
-		
 
-		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
-		pojoUpdate.setVer(data.getVer());
-		pojoUpdate.setMessage("Updated");
+				pojoUpdate.setVer(data.getVer());
+				pojoUpdate.setMessage("Approved");
+
+			}
+		} else if (data.getStatusTransactionId().equals(StatusTransactions.REJECTED.getStatusCode())) {
+			final StatusTransaction getStatus = statusTransactionDao
+					.getByStatusCode(StatusTransactions.REJECTED.getStatusCode()).get();
+			transaction.setStatusTransaction(getStatus);
+
+			pojoUpdate.setVer(data.getVer());
+			pojoUpdate.setMessage("Rejected");
+
+		}
 		return pojoUpdate;
 
 	}
@@ -567,8 +579,9 @@ public class TransactionService {
 
 		return transactions;
 	}
-	
-	public List<PojoTransactionGetReportIncomeMemberRes> getReportIncomeMemberByDate(final String startDate, final String endDate) {
+
+	public List<PojoTransactionGetReportIncomeMemberRes> getReportIncomeMemberByDate(final String startDate,
+			final String endDate) {
 
 		final List<PojoTransactionGetReportIncomeMemberRes> transactions = transactionDao
 				.getCourseReportIncomeMember(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
@@ -583,46 +596,46 @@ public class TransactionService {
 
 		return transactions;
 	}
-	
-	public List<PojoTransactionGetReportParticipantSuperAdminRes> getReportParticipantSuperAdminByDate(final String startDate, final String endDate) {
+
+	public List<PojoTransactionGetReportParticipantSuperAdminRes> getReportParticipantSuperAdminByDate(
+			final String startDate, final String endDate) {
 
 		final List<PojoTransactionGetReportParticipantSuperAdminRes> transactions = transactionDao
 				.getCourseReportSuperAdmin(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
-		
-		
+
 		for (int i = 0; i < transactions.size(); i++) {
 			final PojoTransactionGetReportParticipantSuperAdminRes reportSuperAdmin = new PojoTransactionGetReportParticipantSuperAdminRes();
 			reportSuperAdmin.setMemberName(transactions.get(i).getMemberName());
 			reportSuperAdmin.setProviderName(transactions.get(i).getProviderName());
-			
+
 			reportSuperAdmin.setActivityType(transactions.get(i).getActivityType());
 			reportSuperAdmin.setItemName(transactions.get(i).getItemName());
 			reportSuperAdmin.setStartDate(transactions.get(i).getStartDate());
 			reportSuperAdmin.setTotalParticipants(transactions.get(i).getTotalParticipants());
-			
+
 		}
 
 		return transactions;
 	}
-	
-	public List<PojoTransactionGetReportIncomeSuperAdminRes> getReportIncomeSuperAdminByDate(final String startDate, final String endDate) {
+
+	public List<PojoTransactionGetReportIncomeSuperAdminRes> getReportIncomeSuperAdminByDate(final String startDate,
+			final String endDate) {
 
 		final List<PojoTransactionGetReportIncomeSuperAdminRes> transactions = transactionDao
 				.getCourseReportIncomeSuperAdmin(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
-		
-		
+
 		for (int i = 0; i < transactions.size(); i++) {
 			final PojoTransactionGetReportIncomeSuperAdminRes reportSuperAdmin = new PojoTransactionGetReportIncomeSuperAdminRes();
 			reportSuperAdmin.setFullName(transactions.get(i).getFullName());
-			
+
 			reportSuperAdmin.setActivityType(transactions.get(i).getActivityType());
 			reportSuperAdmin.setTotalIncome(transactions.get(i).getTotalIncome());
-			
+
 		}
 
 		return transactions;
 	}
-	
+
 	public List<PojoTransactionGetReportRes> getEventReportByDate(final String startDate, final String endDate) {
 
 		final List<PojoTransactionGetReportRes> transactions = transactionDao
@@ -639,8 +652,9 @@ public class TransactionService {
 
 		return transactions;
 	}
-	
-	public List<PojoTransactionGetReportIncomeMemberRes> getEventReportIncomeMemberByDate(final String startDate, final String endDate) {
+
+	public List<PojoTransactionGetReportIncomeMemberRes> getEventReportIncomeMemberByDate(final String startDate,
+			final String endDate) {
 
 		final List<PojoTransactionGetReportIncomeMemberRes> transactions = transactionDao
 				.getEventReportIncomeMember(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
@@ -655,41 +669,41 @@ public class TransactionService {
 
 		return transactions;
 	}
-	
-	public List<PojoTransactionGetReportParticipantSuperAdminRes> getEventReportParticipantSuperAdminByDate(final String startDate, final String endDate) {
+
+	public List<PojoTransactionGetReportParticipantSuperAdminRes> getEventReportParticipantSuperAdminByDate(
+			final String startDate, final String endDate) {
 
 		final List<PojoTransactionGetReportParticipantSuperAdminRes> transactions = transactionDao
 				.getEventReportSuperAdmin(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
-		
-		
+
 		for (int i = 0; i < transactions.size(); i++) {
 			final PojoTransactionGetReportParticipantSuperAdminRes reportSuperAdmin = new PojoTransactionGetReportParticipantSuperAdminRes();
 			reportSuperAdmin.setMemberName(transactions.get(i).getMemberName());
 			reportSuperAdmin.setProviderName(transactions.get(i).getProviderName());
-			
+
 			reportSuperAdmin.setActivityType(transactions.get(i).getActivityType());
 			reportSuperAdmin.setItemName(transactions.get(i).getItemName());
 			reportSuperAdmin.setStartDate(transactions.get(i).getStartDate());
 			reportSuperAdmin.setTotalParticipants(transactions.get(i).getTotalParticipants());
-			
+
 		}
 
 		return transactions;
 	}
-	
-	public List<PojoTransactionGetReportIncomeSuperAdminRes> getEventReportIncomeSuperAdminByDate(final String startDate, final String endDate) {
+
+	public List<PojoTransactionGetReportIncomeSuperAdminRes> getEventReportIncomeSuperAdminByDate(
+			final String startDate, final String endDate) {
 
 		final List<PojoTransactionGetReportIncomeSuperAdminRes> transactions = transactionDao
 				.getEventReportIncomeSuperAdmin(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
-		
-		
+
 		for (int i = 0; i < transactions.size(); i++) {
 			final PojoTransactionGetReportIncomeSuperAdminRes reportSuperAdmin = new PojoTransactionGetReportIncomeSuperAdminRes();
 			reportSuperAdmin.setFullName(transactions.get(i).getFullName());
-			
+
 			reportSuperAdmin.setActivityType(transactions.get(i).getActivityType());
 			reportSuperAdmin.setTotalIncome(transactions.get(i).getTotalIncome());
-			
+
 		}
 
 		return transactions;

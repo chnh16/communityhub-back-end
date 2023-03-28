@@ -3,7 +3,8 @@ package com.lawencon.community.pojo.transaction;
 public class PojoUpdateTransactionReq {
 	private String id;
 	private Boolean isApproved;
-	private String status;
+
+	private String statusTransactionId;
 	private Integer ver;
 
 	public String getId() {
@@ -30,12 +31,12 @@ public class PojoUpdateTransactionReq {
 		this.ver = ver;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getStatusTransactionId() {
+		return statusTransactionId;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setStatusTransactionId(String statusTransactionId) {
+		this.statusTransactionId = statusTransactionId;
 	}
 
 }
