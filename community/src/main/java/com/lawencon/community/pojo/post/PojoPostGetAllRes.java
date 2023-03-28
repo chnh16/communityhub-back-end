@@ -27,6 +27,7 @@ public class PojoPostGetAllRes {
 	private PojoPostLikeRes isLiked;
 	private PojoPostBookmarkRes isBookmarked;
 	private PojoPollingAnswerRes isAnswered;
+	private Boolean isPremium;
 	
 	public String getPostTitle() {
 		return postTitle;
@@ -130,5 +131,10 @@ public class PojoPostGetAllRes {
 	public void setIsAnswered(PojoPollingAnswerRes isAnswered) {
 		this.isAnswered = isAnswered;
 	}
-	
+	public Boolean getIsPremium() {
+		return isPremium;
+	}
+	public void setIsPremium(Boolean isPremium) {
+		this.isPremium = isPremium;
+	}
 }

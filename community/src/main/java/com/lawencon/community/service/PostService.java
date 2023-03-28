@@ -291,7 +291,12 @@ public class PostService {
 		final List<Post> listPost = postDao.getAllPost(limit, offset);
 
 		for (int i = 0; i < listPost.size(); i++) {
+			Boolean isPremium = false;
 			final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
+			final PostType postType = postTypeDao.getRefById(listPost.get(i).getPostType().getId());
+			if(postType.getTypeCode().equals(com.lawencon.community.constant.PostType.PREMIUM.getTypeCode())) {
+				isPremium = true;
+			}
 			final List<String> postFileId = new ArrayList<>();
 			final List<PojoPollingChoiceGetAllRes> pollingPojos = new ArrayList<>();
 			final List<PojoPostDetailGetAllRes> pojoDetails = new ArrayList<>();
@@ -375,6 +380,7 @@ public class PostService {
 			pojoPost.setFileId(postFileId);
 			pojoPost.setPollingChoice(pollingPojos);
 			pojoPost.setIsAnswered(pojoAnswer);
+			pojoPost.setIsPremium(isPremium);
 
 			listPojoPost.add(pojoPost);
 		}
