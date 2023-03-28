@@ -297,21 +297,21 @@ public class PostService {
 			PojoPostLikeRes pojoLike = null;
 			PojoPostBookmarkRes pojoBookmark = null;
 			PojoPollingAnswerRes pojoAnswer = null;
-			final List<PostDetail> postDetails = getPostDetailByPostId(listPost.get(i).getId());
-			for (int j = 0; j < postDetails.size(); j++) {
-				final PostDetail currentDetail = postDetails.get(j);
-				final User user = userDao.getRefById(currentDetail.getUser().getId());
-				final Profile profile = profileDao.getRefById(user.getProfile().getId());
-				final PojoPostDetailGetAllRes pojoDetail = new PojoPostDetailGetAllRes();
-				pojoDetail.setId(currentDetail.getId());
-				pojoDetail.setUserFileId(profile.getFile().getId());
-				pojoDetail.setFullName(profile.getFullName());
-				pojoDetail.setDetailContent(currentDetail.getDetailContent());
-				pojoDetail.setPostedAt(currentDetail.getCreatedAt());
-				pojoDetail.setVer(currentDetail.getVersion());
-
-				pojoDetails.add(pojoDetail);
-			}
+//			final List<PostDetail> postDetails = getPostDetailByPostId(listPost.get(i).getId());
+//			for (int j = 0; j < postDetails.size(); j++) {
+//				final PostDetail currentDetail = postDetails.get(j);
+//				final User user = userDao.getRefById(currentDetail.getUser().getId());
+//				final Profile profile = profileDao.getRefById(user.getProfile().getId());
+//				final PojoPostDetailGetAllRes pojoDetail = new PojoPostDetailGetAllRes();
+//				pojoDetail.setId(currentDetail.getId());
+//				pojoDetail.setUserFileId(profile.getFile().getId());
+//				pojoDetail.setFullName(profile.getFullName());
+//				pojoDetail.setDetailContent(currentDetail.getDetailContent());
+//				pojoDetail.setPostedAt(currentDetail.getCreatedAt());
+//				pojoDetail.setVer(currentDetail.getVersion());
+//
+//				pojoDetails.add(pojoDetail);
+//			}
 			if (postFiles.size() > 0) {
 				for (int j = 0; j < postFiles.size(); j++) {
 					final PostFile postFile = postFiles.get(j);

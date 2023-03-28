@@ -119,7 +119,7 @@ public class PostController {
 	}
 	
 	@GetMapping("detail/{postId}")
-	public ResponseEntity<List<PojoPostDetailGetAllRes>> getDetailByPostId(@RequestParam("postId") final String postId){
+	public ResponseEntity<List<PojoPostDetailGetAllRes>> getDetailByPostId(@PathVariable("postId") final String postId){
 		final List<PojoPostDetailGetAllRes> res = postService.getDetailByPostId(postId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
