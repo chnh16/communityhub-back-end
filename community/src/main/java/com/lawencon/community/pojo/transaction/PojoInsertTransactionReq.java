@@ -15,6 +15,8 @@ public class PojoInsertTransactionReq {
 	private String voucherCode;
 
 	private Boolean isApproved;
+	private String statusTransactionId;
+	private String transactionCode;
 
 	public LocalDateTime getTransactionDate() {
 		return transactionDate;
@@ -79,5 +81,24 @@ public class PojoInsertTransactionReq {
 	public void setVoucherCode(String voucherCode) {
 		this.voucherCode = voucherCode;
 	}
+
+	public String getStatusTransactionId() {
+		return statusTransactionId;
+	}
+
+	public void setStatusTransactionId(String statusTransactionId) {
+		this.statusTransactionId = statusTransactionId;
+	}
+
+	public String getTransactionCode() {
+		return transactionCode;
+	}
+
+	public void setTransactionCode(String transactionCode) {
+		this.transactionCode = transactionCode;
+	}
+
+	
+	
 
 }
