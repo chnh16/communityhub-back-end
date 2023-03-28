@@ -718,7 +718,6 @@ public class PostService {
 	public PostDetail insert(final PostDetail data) {
 		PostDetail postDetailInsert = null;
 		try {
-			ConnHandler.begin();
 			valIdNull(data);
 			valNotNullable(data);
 			final User user = userDao.getById(principalService.getAuthPrincipal()).get();
@@ -842,7 +841,7 @@ public class PostService {
 	}
 
 	public List<PojoPostDetailGetAllRes> getDetailByPostId(final String postId) {
-		final List<PojoPostDetailGetAllRes> pojos = new ArrayList<>();
+		final List<PojoPostDetailGetAllRes> pojos = new ArrayList<>(); 
 		final List<PostDetail> details = getPostDetailByPostId(postId);
 		for (int i = 0; i < details.size(); i++) {
 			final PojoPostDetailGetAllRes pojo = new PojoPostDetailGetAllRes();
