@@ -225,16 +225,6 @@ public class PostService {
 			post.setPostContent(data.getPostContent());
 		}
 
-		if (data.getPostTypeId() != null) {
-			final PostType postType = postTypeDao.getRefById(data.getPostTypeId());
-			post.setPostType(postType);
-		}
-
-		if (data.getCategoryId() != null) {
-			final Category category = categoryDao.getRefById(data.getCategoryId());
-			post.setCategory(category);
-		}
-
 		postUpdate = updatePost(post);
 
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
@@ -389,18 +379,16 @@ public class PostService {
 	}
 
 	public PojoPostGetAllRes getPostById(final String id) {
-
-		final Optional<Post> post = postDao.getById(id);
+		final Post post = postDao.getRefById(id);
 
 		final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
-		pojoPost.setId(post.get().getId());
-		pojoPost.setUserFileId(null);
-		pojoPost.setFullName(post.get().getUser().getProfile().getFullName());
-		pojoPost.setPostTitle(post.get().getPostTitle());
-		pojoPost.setPostContent(post.get().getPostContent());
-		pojoPost.setCategoryName(post.get().getCategory().getCategoryName());
-		pojoPost.setPostTypeId(post.get().getPostType().getId());
-		pojoPost.setVer(post.get().getVersion());
+		pojoPost.setId(post.getId());
+		pojoPost.setUserFileId(post.getUser().getProfile().getFile().getId());
+		pojoPost.setFullName(post.getUser().getProfile().getFullName());
+		pojoPost.setPostTitle(post.getPostTitle());
+		pojoPost.setPostContent(post.getPostContent());
+		pojoPost.setCategoryName(post.getCategory().getCategoryName());
+		pojoPost.setVer(post.getVersion());
 
 		return pojoPost;
 	}
