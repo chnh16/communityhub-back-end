@@ -4,7 +4,6 @@ public class PojoPostUpdateReq {
 	private String id;
 	private String postTitle;
 	private String postContent;
-	private String postTypeId;
 	private String categoryId;
 	private Integer ver;
 	
@@ -16,9 +15,6 @@ public class PojoPostUpdateReq {
 	}
 	public String getPostContent() {
 		return postContent;
-	}
-	public String getPostTypeId() {
-		return postTypeId;
 	}
 	public String getCategoryId() {
 		return categoryId;
@@ -34,9 +30,6 @@ public class PojoPostUpdateReq {
 	}
 	public void setPostContent(String postContent) {
 		this.postContent = postContent;
-	}
-	public void setPostTypeId(String postTypeId) {
-		this.postTypeId = postTypeId;
 	}
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
