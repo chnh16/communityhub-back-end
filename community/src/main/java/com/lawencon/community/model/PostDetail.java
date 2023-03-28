@@ -11,7 +11,7 @@ import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name = "post_detail",uniqueConstraints = {
-		@UniqueConstraint(name = "post_detail_ck", columnNames = {"post_id", "file_id"}
+		@UniqueConstraint(name = "post_detail_ck", columnNames = {"post_id"}
 )})
 public class PostDetail extends BaseEntity {
 	
@@ -23,9 +23,6 @@ public class PostDetail extends BaseEntity {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 	
-	@OneToOne
-	@JoinColumn(name = "file_id")
-	private File file;
 	
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String detailContent;
@@ -34,9 +31,7 @@ public class PostDetail extends BaseEntity {
 		return post;
 	}
 
-	public File getFile() {
-		return file;
-	}
+	
 
 	public String getDetailContent() {
 		return detailContent;
@@ -46,9 +41,7 @@ public class PostDetail extends BaseEntity {
 		this.post = post;
 	}
 
-	public void setFile(File file) {
-		this.file = file;
-	}
+	
 
 	public void setDetailContent(String detailContent) {
 		this.detailContent = detailContent;

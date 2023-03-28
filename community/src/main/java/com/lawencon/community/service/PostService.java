@@ -720,8 +720,9 @@ public class PostService {
 		try {
 			valIdNull(data);
 			valNotNullable(data);
-			ConnHandler.begin();
+			final User user = userDao.getById(principalService.getAuthPrincipal()).get();
 			final PostDetail postDetail = data;
+			postDetail.setUser(user);
 			postDetailInsert = postDetailDao.insert(postDetail);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -807,7 +808,7 @@ public class PostService {
 			ConnHandler.begin();
 			final File fileInsert = fileDao.insert(file);
 			ConnHandler.commit();
-			postDetail.setFile(fileInsert);
+//			postDetail.setFile(fileInsert);
 		}
 
 		if (data.getPostId() != null) {
