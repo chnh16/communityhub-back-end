@@ -81,16 +81,16 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<PojoPollingAnswerGetCountRes> getCountByChoiceId(final String detailId) {
+	public List<PojoPollingAnswerGetCountRes> getCountByChoiceId(final String postId) {
 		final List<PojoPollingAnswerGetCountRes> listPollingAnswer = new ArrayList<>();
 
 		try {
 			final StringBuilder str = new StringBuilder();
 			str.append("SELECT pc.id, COUNT(pa.polling_choice_id) FROM polling_answer pa ")
 					.append(" INNER JOIN polling_choice pc ON pc.id = pa.polling_choice_id ").append("GROUP BY pc.id ")
-					.append(" HAVING pc.polling_detail_id = :detailId");
+					.append(" HAVING pc.post_id = :postId");
 
-			final List<Object> result = em().createNativeQuery(toStr(str)).setParameter("detailId", detailId)
+			final List<Object> result = em().createNativeQuery(toStr(str)).setParameter("postId", postId)
 					.getResultList();
 
 			if (result != null) {

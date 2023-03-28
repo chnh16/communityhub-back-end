@@ -75,11 +75,11 @@ public class PollingService {
 		return pojoAnswerCount;
 	}
 
-	public List<PojoPollingAnswerGetCountRes> getAnswerByChoiceId(final String detailId) {
+	public List<PojoPollingAnswerGetCountRes> getAnswerByChoiceId(final String postId) {
 
-		final List<PojoPollingAnswerGetCountRes> listAnswer = pollingAnswerDao.getCountByChoiceId(detailId);
+		final List<PojoPollingAnswerGetCountRes> listAnswer = pollingAnswerDao.getCountByChoiceId(postId);
 
-		final Long totalChoice = pollingAnswerDao.getCount(detailId);
+		final Long totalChoice = pollingAnswerDao.getCount(postId);
 
 		for (int i = 0; i < listAnswer.size(); i++) {
 			final PojoPollingAnswerGetCountRes pojoAnswerCount = listAnswer.get(i);
