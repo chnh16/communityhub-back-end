@@ -16,19 +16,16 @@ import com.lawencon.community.pojo.position.PojoPosistionGetAllResData;
 import com.lawencon.community.pojo.position.PojoPositionGetAllRes;
 import com.lawencon.community.pojo.position.PojoPositionInsertReq;
 import com.lawencon.community.pojo.position.PojoPositionUpdateReq;
-import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class PositionService extends ValidationService<Position> {
-	
+
 	private final PositionDao positionDao;
-	private final PrincipalService principalService;
-	
-	public PositionService(PositionDao positionDao, PrincipalService principalService) {
+
+	public PositionService(PositionDao positionDao) {
 		this.positionDao = positionDao;
-		this.principalService = principalService;
 	}
-	
+
 	public Position insert(final Position data) {
 		Position positionInsert = null;
 		try {
@@ -40,7 +37,7 @@ public class PositionService extends ValidationService<Position> {
 		}
 		return positionInsert;
 	}
-	
+
 	public Position update(final Position data) {
 		Position positionUpdate = null;
 
@@ -52,14 +49,13 @@ public class PositionService extends ValidationService<Position> {
 			e.printStackTrace();
 		}
 
-		
 		return positionUpdate;
 	}
-	
+
 	public Optional<Position> getById(final String id) {
 		return positionDao.getById(id);
 	}
-	
+
 	public Position getRefById(final String id) {
 		return positionDao.getRefById(id);
 	}
@@ -67,7 +63,7 @@ public class PositionService extends ValidationService<Position> {
 	public List<Position> getAll() {
 		return positionDao.getAll();
 	}
-	
+
 	public boolean deleteById(final String id) {
 		boolean positionDelete = false;
 
@@ -82,7 +78,7 @@ public class PositionService extends ValidationService<Position> {
 
 		return positionDelete;
 	}
-	
+
 	public Position getByIdAndDetach(final String id) {
 		return positionDao.getByIdAndDetach(Position.class, id);
 	}
@@ -91,36 +87,36 @@ public class PositionService extends ValidationService<Position> {
 		final Position position = new Position();
 
 		position.setPositionName(data.getPositionName());
-		
+
 		final Position positionInsert = insert(position);
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
 		pojoInsertRes.setId(positionInsert.getId());
 		pojoInsertRes.setMessage("Success");
 		return pojoInsertRes;
 	}
-	
-	public PojoUpdateRes update (final PojoPositionUpdateReq data) {
+
+	public PojoUpdateRes update(final PojoPositionUpdateReq data) {
 		final Position position = getByIdAndDetach(data.getId());
-		
+
 		position.setPositionName(data.getPositionName());
-		
+
 		position.setVersion(data.getVer());
-		
+
 		final Position positionUpdate = update(position);
 		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
 		pojoUpdate.setVer(positionUpdate.getVersion());
 		pojoUpdate.setMessage("Updated");
-		return pojoUpdate;	
+		return pojoUpdate;
 	}
-	
-	public List<PojoPositionGetAllRes> getAllRes(){
+
+	public List<PojoPositionGetAllRes> getAllRes() {
 		final List<PojoPositionGetAllRes> pojos = new ArrayList<>();
 		final List<Position> res = getAll();
-		
-		for(int i = 0; i < res.size(); i++) {
+
+		for (int i = 0; i < res.size(); i++) {
 			final PojoPositionGetAllRes pojo = new PojoPositionGetAllRes();
 			final Position position = res.get(i);
-			
+
 			ConnHandler.getManager().detach(position);
 			pojo.setId(position.getId());
 			pojo.setPositionName(res.get(i).getPositionName());
@@ -129,17 +125,17 @@ public class PositionService extends ValidationService<Position> {
 		}
 		return pojos;
 	}
-	
+
 	public PojoDeleteRes delete(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deleteById(id);
 		res.setMessage("Berhasil Dihapus");
 		return res;
 	}
-	
+
 	public PojoPositionGetAllRes getPositionById(final String id) {
 		final Optional<Position> position = positionDao.getPositionById(id);
-		
+
 		final PojoPositionGetAllRes pojoPosition = new PojoPositionGetAllRes();
 		pojoPosition.setId(position.get().getId());
 		pojoPosition.setPositionName(position.get().getPositionName());
@@ -150,35 +146,34 @@ public class PositionService extends ValidationService<Position> {
 	public PojoPosistionGetAllResData getPositioAllResData(final Integer limit, final Integer offset) {
 		final List<PojoPositionGetAllRes> pojos = new ArrayList<>();
 		final List<Position> res = positionDao.getPosition(limit, offset);
-		
-		for(int i = 0; i < res.size(); i++) {
+
+		for (int i = 0; i < res.size(); i++) {
 			final PojoPositionGetAllRes pojo = new PojoPositionGetAllRes();
 			final Position position = res.get(i);
-			
+
 			ConnHandler.getManager().detach(position);
 			pojo.setId(position.getId());
 			pojo.setPositionName(res.get(i).getPositionName());
 			pojo.setVer(position.getVersion());
 			pojos.add(pojo);
 		}
-		
-		
+
 		final PojoPosistionGetAllResData pojoPositionData = new PojoPosistionGetAllResData();
 		pojoPositionData.setData(pojos);
 		pojoPositionData.setTotal(positionDao.getTotalPosition());
-		
+
 		return pojoPositionData;
 	}
-	
+
 	@Override
 	void valId(Position data) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	void valIdNull(Position data) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

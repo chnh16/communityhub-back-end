@@ -64,12 +64,6 @@ public class PostController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-//	@GetMapping("page")
-//	public ResponseEntity<PojoPostGetAllResData> getPost(@RequestParam("size") int limit, @RequestParam("page") int page){
-//		final PojoPostGetAllResData res = postService.getPost(size, offset);
-//		return new ResponseEntity<>(res, HttpStatus.OK);
-//	}
-	
 	@PutMapping
 	public ResponseEntity<PojoUpdateRes> updateIndustry(@RequestBody PojoPostUpdateReq data){
 		final PojoUpdateRes res = postService.updatePost(data);
@@ -112,9 +106,9 @@ public class PostController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@PostMapping("detail")
+	@PostMapping("detail/add")
 	public ResponseEntity<PojoInsertRes> insertPostDetail(@RequestBody PojoPostDetailInsertReq data){
-		final PojoInsertRes res = postService.insert(data);
+		final PojoInsertRes res = postService.insertDetail(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
@@ -124,9 +118,9 @@ public class PostController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping("total-commentar/{id}")
-	public ResponseEntity<List<PojoPostDetailGetByPostIdRes>> getByPostId(@PathVariable("id") String id) {
-		final List<PojoPostDetailGetByPostIdRes> res = postService.getByPostId(id);
+	@GetMapping("detail/{postId}")
+	public ResponseEntity<List<PojoPostDetailGetAllRes>> getDetailByPostId(@RequestParam("postId") final String postId){
+		final List<PojoPostDetailGetAllRes> res = postService.getDetailByPostId(postId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

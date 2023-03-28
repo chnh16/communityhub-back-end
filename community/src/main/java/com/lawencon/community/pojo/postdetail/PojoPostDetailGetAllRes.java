@@ -3,12 +3,10 @@ package com.lawencon.community.pojo.postdetail;
 import java.time.LocalDateTime;
 
 public class PojoPostDetailGetAllRes {
-
 	private String id;
 	private String userFileId;
 	private String fullName;
 	private String detailContent;
-	private String fileId;
 	private LocalDateTime postedAt;
 	private Integer ver;
 
@@ -42,14 +40,6 @@ public class PojoPostDetailGetAllRes {
 
 	public void setVer(Integer ver) {
 		this.ver = ver;
-	}
-
-	public String getFileId() {
-		return fileId;
-	}
-
-	public void setFileId(String fileId) {
-		this.fileId = fileId;
 	}
 
 	public LocalDateTime getPostedAt() {
