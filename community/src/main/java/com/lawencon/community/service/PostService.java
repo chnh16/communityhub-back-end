@@ -721,10 +721,10 @@ public class PostService {
 			ConnHandler.begin();
 			valIdNull(data);
 			valNotNullable(data);
-			final File file = fileDao.insert(data.getFile());
-			postDetailInsert = data;
-			postDetailInsert.setFile(file);
-			postDetailInsert = postDetailDao.insert(postDetailInsert);
+			final User user = userDao.getById(principalService.getAuthPrincipal()).get();
+			final PostDetail postDetail = data;
+			postDetail.setUser(user);
+			postDetailInsert = postDetailDao.insert(postDetail);
 			ConnHandler.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -809,7 +809,7 @@ public class PostService {
 			ConnHandler.begin();
 			final File fileInsert = fileDao.insert(file);
 			ConnHandler.commit();
-			postDetail.setFile(fileInsert);
+//			postDetail.setFile(fileInsert);
 		}
 
 		if (data.getPostId() != null) {
