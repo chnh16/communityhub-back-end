@@ -58,8 +58,6 @@ public class VoucherService {
 		return voucherDao.getRefById(id);
 	}
 
-	
-	
 	public Voucher getByIdAndDetach(final String id) {
 		return voucherDao.getByIdAndDetach(Voucher.class, id);
 	}

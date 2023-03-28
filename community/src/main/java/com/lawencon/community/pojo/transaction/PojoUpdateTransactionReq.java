@@ -4,7 +4,7 @@ public class PojoUpdateTransactionReq {
 	private String id;
 	private Boolean isApproved;
 
-	private String statusTransactionId;
+	private String statusTransaction;
 	private Integer ver;
 
 	public String getId() {
@@ -31,12 +31,13 @@ public class PojoUpdateTransactionReq {
 		this.ver = ver;
 	}
 
-	public String getStatusTransactionId() {
-		return statusTransactionId;
+	public String getStatusTransaction() {
+		return statusTransaction;
 	}
 
-	public void setStatusTransactionId(String statusTransactionId) {
-		this.statusTransactionId = statusTransactionId;
+	public void setStatusTransaction(String statusTransaction) {
+		this.statusTransaction = statusTransaction;
 	}
 
+	
 }

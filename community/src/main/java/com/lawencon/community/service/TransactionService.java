@@ -218,7 +218,8 @@ public class TransactionService {
 		transactionUpdate = getByIdAndDetach(data.getId());
 		final Transaction transaction = transactionUpdate;
 		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
-		if (data.getStatusTransactionId().equals(StatusTransactions.APPROVE.getStatusCode())) {
+		
+		if (data.getStatusTransaction().equals(StatusTransactions.APPROVE.getStatusCode())) {
 			transaction.setIsApproved(data.getIsApproved());
 			final StatusTransaction getStatus = statusTransactionDao
 					.getByStatusCode(StatusTransactions.APPROVE.getStatusCode()).get();
@@ -250,10 +251,14 @@ public class TransactionService {
 				pojoUpdate.setMessage("Approved");
 
 			}
-		} else if (data.getStatusTransactionId().equals(StatusTransactions.REJECTED.getStatusCode())) {
+		} else if (data.getStatusTransaction().equals(StatusTransactions.REJECTED.getStatusCode())) {
+			transaction.setIsApproved(data.getIsApproved());
 			final StatusTransaction getStatus = statusTransactionDao
 					.getByStatusCode(StatusTransactions.REJECTED.getStatusCode()).get();
 			transaction.setStatusTransaction(getStatus);
+
+			transaction.setVersion(data.getVer());
+			transactionUpdate = update(transaction);
 
 			pojoUpdate.setVer(data.getVer());
 			pojoUpdate.setMessage("Rejected");
