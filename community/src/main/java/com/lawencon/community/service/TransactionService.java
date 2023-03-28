@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.constant.RoleList;
+import com.lawencon.community.constant.StatusTransactions;
 import com.lawencon.community.constant.TransactionType;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.ProfileDao;
+import com.lawencon.community.dao.StatusTransactionDao;
 import com.lawencon.community.dao.TransactionDao;
 import com.lawencon.community.dao.VoucherDao;
 import com.lawencon.community.model.Course;
@@ -20,6 +22,7 @@ import com.lawencon.community.model.Event;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Membership;
 import com.lawencon.community.model.Profile;
+import com.lawencon.community.model.StatusTransaction;
 import com.lawencon.community.model.Transaction;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.Voucher;
@@ -35,6 +38,7 @@ import com.lawencon.community.pojo.transaction.PojoTransactionGetReportParticipa
 import com.lawencon.community.pojo.transaction.PojoTransactionGetReportRes;
 import com.lawencon.community.pojo.transaction.PojoUpdateTransactionReq;
 import com.lawencon.community.util.DateUtil;
+import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
@@ -43,6 +47,7 @@ public class TransactionService {
 	private final FileDao fileDao;
 	private final VoucherDao voucherDao;
 	private final ProfileDao profileDao;
+	private final StatusTransactionDao statusTransactionDao;
 	private final UserService userService;
 	private final EventService eventService;
 	private final MembershipService membershipService;
@@ -56,7 +61,7 @@ public class TransactionService {
 			final EventService eventService, final MembershipService membershipService,
 			final CourseService courseService, final PrincipalService principalService,
 			final VoucherService voucherService, final FileDao fileDao, final VoucherDao voucherDao,
-			final ProfileDao profileDao) {
+			final ProfileDao profileDao, final StatusTransactionDao statusTransactionDao) {
 		this.transactionDao = transactionDao;
 		this.userService = userService;
 		this.eventService = eventService;
@@ -67,6 +72,7 @@ public class TransactionService {
 		this.fileDao = fileDao;
 		this.voucherDao = voucherDao;
 		this.profileDao = profileDao;
+		this.statusTransactionDao = statusTransactionDao;
 	}
 
 	private Transaction insert(final Transaction data) {
@@ -147,6 +153,7 @@ public class TransactionService {
 		BigDecimal grandTotal = null;
 		final PojoInsertRes pojo = new PojoInsertRes();
 		Transaction transactionInsert = null;
+		final String generateCode = Generate.generateCode(8);
 		final User user = userService.getByRefId(principalService.getAuthPrincipal());
 		final Transaction trans = new Transaction();
 		trans.setUser(user);
@@ -180,10 +187,13 @@ public class TransactionService {
 			grandTotal = course.getPrice().subtract(BigDecimal.valueOf(value));
 		}
 		
-
+		final StatusTransaction getStatus = statusTransactionDao.getByStatusCode(StatusTransactions.PENDING.getStatusCode()).get();
+		trans.setStatusTransaction(getStatus);
+		
 		trans.setGrandTotal(grandTotal);
 		trans.setIsApproved(false);
-
+		trans.setTransactionCode(generateCode);
+		
 		final File fileInsert = new File();
 		fileInsert.setFileName(data.getFile().getFileName());
 		fileInsert.setFileExtension(data.getFile().getFileExtension());
@@ -204,27 +214,35 @@ public class TransactionService {
 		Transaction transactionUpdate = null;
 		transactionUpdate = getByIdAndDetach(data.getId());
 		final Transaction transaction = transactionUpdate;
-		transaction.setIsApproved(data.getIsApproved());
-		transaction.setVersion(data.getVer());
-		transactionUpdate = update(transaction);
-		if (transactionUpdate.getIsApproved() == true) {
-			if (transactionUpdate.getMembership() != null) {
-				addSystemBalance(transactionUpdate);
-				final User user = userService.getByRefId(principalService.getAuthPrincipal());
-
-				Profile profileUpdate = null;
-				Profile profile = profileDao.getByIdAndDetach(user.getProfile().getId());
-
-				profile.setPremiumUntil(LocalDateTime.now().plusDays(transactionUpdate.getMembership().getDuration()));
+		
+		if (data.getStatus().equals(StatusTransactions.APPROVE.getStatusName())) {
+			transaction.setIsApproved(data.getIsApproved());
 			
+			transaction.setVersion(data.getVer());
+			transactionUpdate = update(transaction);
+			if (transactionUpdate.getIsApproved() == true) {
+				if (transactionUpdate.getMembership() != null) {
+					addSystemBalance(transactionUpdate);
+					final User user = userService.getByRefId(principalService.getAuthPrincipal());
 
-				ConnHandler.begin();
-				profileUpdate = profileDao.update(profile);
-				ConnHandler.commit();
-			} else if (transactionUpdate.getEvent() != null || transactionUpdate.getCourse() != null) {
-				profitSharing(transactionUpdate);
+					Profile profileUpdate = null;
+					Profile profile = profileDao.getByIdAndDetach(user.getProfile().getId());
+
+					profile.setPremiumUntil(LocalDateTime.now().plusDays(transactionUpdate.getMembership().getDuration()));
+				
+
+					ConnHandler.begin();
+					profileUpdate = profileDao.update(profile);
+					ConnHandler.commit();
+				} else if (transactionUpdate.getEvent() != null || transactionUpdate.getCourse() != null) {
+					profitSharing(transactionUpdate);
+				}
 			}
+		} else if (data.getStatus().equals(StatusTransactions.REJECTED.getStatusName())) {
+			
 		}
+		
+		
 
 		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
 		pojoUpdate.setVer(data.getVer());

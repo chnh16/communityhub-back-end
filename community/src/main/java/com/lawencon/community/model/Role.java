@@ -8,11 +8,11 @@ import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name = "t_role")
-public class Role extends BaseEntity{
-	
+public class Role extends BaseEntity {
+
 	@Column(length = 5, nullable = false)
 	private String roleCode;
-	
+
 	@Column(length = 30, nullable = false)
 	private String roleName;
 
