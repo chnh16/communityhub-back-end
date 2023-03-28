@@ -60,9 +60,9 @@ public class PollingController {
 //		return new ResponseEntity<>(res, HttpStatus.CREATED);
 //	}
 	
-	@GetMapping("count/{detailId}")
-	public ResponseEntity<List<PojoPollingAnswerGetCountRes>> getTotalAnswerByChoiceId(@PathVariable("detailId") String detailId) {
-		final List<PojoPollingAnswerGetCountRes> res = pollingService.getAnswerByChoiceId(detailId);
+	@GetMapping("count/{postId}")
+	public ResponseEntity<List<PojoPollingAnswerGetCountRes>> getTotalAnswerByChoiceId(@PathVariable("postId") String postId) {
+		final List<PojoPollingAnswerGetCountRes> res = pollingService.getAnswerByChoiceId(postId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
