@@ -67,15 +67,15 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer> {
 		return res;
 	}
 
-	public Long getCount(final String detailId) {
+	public Long getCount(final String postId) {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT COUNT(pa.polling_choice_id) FROM polling_answer pa ")
 				.append(" INNER JOIN polling_choice pc ON pc.id = pa.polling_choice_id ")
-				.append(" WHERE pc.polling_detail_id = :detailId");
+				.append("WHERE pc.post_id = :postId");
 
 		Long countPoll = null;
 		countPoll = Long.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str).toString())
-				.setParameter("detailId", detailId).getSingleResult().toString());
+				.setParameter("postId", postId).getSingleResult().toString());
 
 		return countPoll;
 	}
