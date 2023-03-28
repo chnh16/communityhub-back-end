@@ -718,13 +718,11 @@ public class PostService {
 	public PostDetail insert(final PostDetail data) {
 		PostDetail postDetailInsert = null;
 		try {
-			ConnHandler.begin();
 			valIdNull(data);
 			valNotNullable(data);
-			final File file = fileDao.insert(data.getFile());
-			postDetailInsert = data;
-			postDetailInsert.setFile(file);
-			postDetailInsert = postDetailDao.insert(postDetailInsert);
+			ConnHandler.begin();
+			final PostDetail postDetail = data;
+			postDetailInsert = postDetailDao.insert(postDetail);
 			ConnHandler.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -842,7 +840,7 @@ public class PostService {
 	}
 
 	public List<PojoPostDetailGetAllRes> getDetailByPostId(final String postId) {
-		final List<PojoPostDetailGetAllRes> pojos = new ArrayList<>();
+		final List<PojoPostDetailGetAllRes> pojos = new ArrayList<>(); 
 		final List<PostDetail> details = getPostDetailByPostId(postId);
 		for (int i = 0; i < details.size(); i++) {
 			final PojoPostDetailGetAllRes pojo = new PojoPostDetailGetAllRes();
