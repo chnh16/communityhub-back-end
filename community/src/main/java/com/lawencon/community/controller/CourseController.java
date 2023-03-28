@@ -19,7 +19,6 @@ import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
 import com.lawencon.community.pojo.course.PojoCourseGetAllRes;
 import com.lawencon.community.pojo.course.PojoCourseInsertReq;
-import com.lawencon.community.pojo.course.PojoCourseResGetByCategoryId;
 import com.lawencon.community.pojo.course.PojoCourseUpdateReq;
 import com.lawencon.community.pojo.course.PojoCourserGetAllResData;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseGetByUserIdRes;
@@ -29,7 +28,7 @@ import com.lawencon.community.service.CourseService;
 @RestController
 @RequestMapping("courses")
 public class CourseController {
-	
+
 private final CourseService courseService;
 	
 	public CourseController(CourseService courseService) {

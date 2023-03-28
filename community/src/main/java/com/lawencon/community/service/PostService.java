@@ -44,7 +44,6 @@ import com.lawencon.community.pojo.post.PojoPostGetAllResData;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetAllRes;
-import com.lawencon.community.pojo.postdetail.PojoPostDetailGetByPostIdRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailInsertReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailUpdateReq;
 import com.lawencon.community.pojo.postfile.PojoPostFileInsertListReq;
@@ -225,16 +224,6 @@ public class PostService {
 			post.setPostContent(data.getPostContent());
 		}
 
-		if (data.getPostTypeId() != null) {
-			final PostType postType = postTypeDao.getRefById(data.getPostTypeId());
-			post.setPostType(postType);
-		}
-
-		if (data.getCategoryId() != null) {
-			final Category category = categoryDao.getRefById(data.getCategoryId());
-			post.setCategory(category);
-		}
-
 		postUpdate = updatePost(post);
 
 		final PojoUpdateRes pojoUpdateRes = new PojoUpdateRes();
@@ -294,7 +283,7 @@ public class PostService {
 			Boolean isPremium = false;
 			final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
 			final PostType postType = postTypeDao.getRefById(listPost.get(i).getPostType().getId());
-			if(postType.getTypeCode().equals(com.lawencon.community.constant.PostType.PREMIUM.getTypeCode())) {
+			if (postType.getTypeCode().equals(com.lawencon.community.constant.PostType.PREMIUM.getTypeCode())) {
 				isPremium = true;
 			}
 			final List<String> postFileId = new ArrayList<>();
@@ -308,21 +297,21 @@ public class PostService {
 			PojoPostLikeRes pojoLike = null;
 			PojoPostBookmarkRes pojoBookmark = null;
 			PojoPollingAnswerRes pojoAnswer = null;
-			final List<PostDetail> postDetails = getPostDetailByPostId(listPost.get(i).getId());
-			for (int j = 0; j < postDetails.size(); j++) {
-				final PostDetail currentDetail = postDetails.get(j);
-				final User user = userDao.getRefById(currentDetail.getUser().getId());
-				final Profile profile = profileDao.getRefById(user.getProfile().getId());
-				final PojoPostDetailGetAllRes pojoDetail = new PojoPostDetailGetAllRes();
-				pojoDetail.setId(currentDetail.getId());
-				pojoDetail.setUserFileId(profile.getFile().getId());
-				pojoDetail.setFullName(profile.getFullName());
-				pojoDetail.setDetailContent(currentDetail.getDetailContent());
-				pojoDetail.setPostedAt(currentDetail.getCreatedAt());
-				pojoDetail.setVer(currentDetail.getVersion());
-
-				pojoDetails.add(pojoDetail);
-			}
+//			final List<PostDetail> postDetails = getPostDetailByPostId(listPost.get(i).getId());
+//			for (int j = 0; j < postDetails.size(); j++) {
+//				final PostDetail currentDetail = postDetails.get(j);
+//				final User user = userDao.getRefById(currentDetail.getUser().getId());
+//				final Profile profile = profileDao.getRefById(user.getProfile().getId());
+//				final PojoPostDetailGetAllRes pojoDetail = new PojoPostDetailGetAllRes();
+//				pojoDetail.setId(currentDetail.getId());
+//				pojoDetail.setUserFileId(profile.getFile().getId());
+//				pojoDetail.setFullName(profile.getFullName());
+//				pojoDetail.setDetailContent(currentDetail.getDetailContent());
+//				pojoDetail.setPostedAt(currentDetail.getCreatedAt());
+//				pojoDetail.setVer(currentDetail.getVersion());
+//
+//				pojoDetails.add(pojoDetail);
+//			}
 			if (postFiles.size() > 0) {
 				for (int j = 0; j < postFiles.size(); j++) {
 					final PostFile postFile = postFiles.get(j);
@@ -342,7 +331,7 @@ public class PostService {
 					pollingPojos.add(pollingPojo);
 				}
 			}
-			if(pollingAnswer.isPresent()) {
+			if (pollingAnswer.isPresent()) {
 				final PollingAnswer answer = pollingAnswer.get();
 				pojoAnswer = new PojoPollingAnswerRes();
 				pojoAnswer.setId(answer.getId());
@@ -389,18 +378,16 @@ public class PostService {
 	}
 
 	public PojoPostGetAllRes getPostById(final String id) {
-
-		final Optional<Post> post = postDao.getById(id);
+		final Post post = postDao.getRefById(id);
 
 		final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
-		pojoPost.setId(post.get().getId());
-		pojoPost.setUserFileId(null);
-		pojoPost.setFullName(post.get().getUser().getProfile().getFullName());
-		pojoPost.setPostTitle(post.get().getPostTitle());
-		pojoPost.setPostContent(post.get().getPostContent());
-		pojoPost.setCategoryName(post.get().getCategory().getCategoryName());
-		pojoPost.setPostTypeId(post.get().getPostType().getId());
-		pojoPost.setVer(post.get().getVersion());
+		pojoPost.setId(post.getId());
+		pojoPost.setUserFileId(post.getUser().getProfile().getFile().getId());
+		pojoPost.setFullName(post.getUser().getProfile().getFullName());
+		pojoPost.setPostTitle(post.getPostTitle());
+		pojoPost.setPostContent(post.getPostContent());
+		pojoPost.setCategoryName(post.getCategory().getCategoryName());
+		pojoPost.setVer(post.getVersion());
 
 		return pojoPost;
 	}
@@ -731,13 +718,11 @@ public class PostService {
 	public PostDetail insert(final PostDetail data) {
 		PostDetail postDetailInsert = null;
 		try {
-			ConnHandler.begin();
 			valIdNull(data);
 			valNotNullable(data);
-			final File file = fileDao.insert(data.getFile());
-			postDetailInsert = data;
-			postDetailInsert.setFile(file);
-			postDetailInsert = postDetailDao.insert(postDetailInsert);
+			ConnHandler.begin();
+			final PostDetail postDetail = data;
+			postDetailInsert = postDetailDao.insert(postDetail);
 			ConnHandler.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -788,31 +773,18 @@ public class PostService {
 		return postDetailDao.getByIdAndDetach(PostDetail.class, id);
 	}
 
-	public PojoInsertRes insert(final PojoPostDetailInsertReq data) {
+	public PojoInsertRes insertDetail(final PojoPostDetailInsertReq data) {
 		final PostDetail postDetail = new PostDetail();
-
-		postDetail.setDetailContent(data.getDetailContent());
-
-		final File file = new File();
-		file.setFileName(data.getFile().getFileName());
-		file.setFileExtension(data.getFile().getFileExtension());
-		file.setFileContent(data.getFile().getFileContent());
-
-		ConnHandler.begin();
-		final File fileInsert = fileDao.insert(file);
-		ConnHandler.commit();
-		postDetail.setFile(fileInsert);
-
-		final Post post = postDao.getByIdRef(Post.class, data.getPostId());
-		post.setId(data.getPostId());
+		final Post post = getRefById(data.getPostId());
 		postDetail.setPost(post);
+		postDetail.setDetailContent(data.getDetailContent());
 
 		PostDetail postDetailInsert = null;
 		postDetailInsert = insert(postDetail);
 
 		final PojoInsertRes pojoInsertRes = new PojoInsertRes();
 		pojoInsertRes.setId(postDetailInsert.getId());
-		pojoInsertRes.setMessage("Success");
+		pojoInsertRes.setMessage("Terkirim");
 		return pojoInsertRes;
 	}
 
@@ -867,23 +839,22 @@ public class PostService {
 		return getAllRes;
 	}
 
-	public List<PojoPostDetailGetByPostIdRes> getByPostId(final String id) {
-		final List<PojoPostDetailGetByPostIdRes> pojos = new ArrayList<>();
-		final List<PostDetail> res = postDetailDao.getByPostId(id);
-
-		for (int i = 0; i < res.size(); i++) {
-			final PojoPostDetailGetByPostIdRes pojo = new PojoPostDetailGetByPostIdRes();
-			final PostDetail postDetail = res.get(i);
-
-			ConnHandler.getManager().detach(postDetail);
-			pojo.setFileId(postDetail.getFile().getFileName());
-			pojo.setId(postDetail.getId());
-			pojo.setPostId(postDetail.getPost().getId());
-			pojo.setDetailContent(postDetail.getDetailContent());
-			pojo.setCountedCommentar(postDetailDao.getCount(id));
+	public List<PojoPostDetailGetAllRes> getDetailByPostId(final String postId) {
+		final List<PojoPostDetailGetAllRes> pojos = new ArrayList<>(); 
+		final List<PostDetail> details = getPostDetailByPostId(postId);
+		for (int i = 0; i < details.size(); i++) {
+			final PojoPostDetailGetAllRes pojo = new PojoPostDetailGetAllRes();
+			final PostDetail detail = details.get(i);
+			final User user = userDao.getRefById(detail.getUser().getId());
+			final Profile profile = profileDao.getRefById(user.getProfile().getId());
+			pojo.setId(detail.getId());
+			pojo.setFullName(profile.getFullName());
+			pojo.setUserFileId(profile.getFile().getId());
+			pojo.setPostedAt(detail.getCreatedAt());
+			pojo.setVer(detail.getVersion());
+			pojo.setDetailContent(detail.getDetailContent());
 			pojos.add(pojo);
 		}
-
 		return pojos;
 	}
 
@@ -912,15 +883,14 @@ public class PostService {
 		pojo.setMessage("Berhasil menjawab polling");
 		return pojo;
 	}
-	
-	
+
 	public PojoDeleteRes deletePollingAnswer(final String pollingAnswerId) {
 		final PojoDeleteRes deleteRes = new PojoDeleteRes();
-		
+
 		ConnHandler.begin();
 		boolean delete = pollingAnswerDao.delete(pollingAnswerId);
 		ConnHandler.commit();
-		if(delete) {
+		if (delete) {
 			deleteRes.setMessage("Berhasil membatalkan jawaban polling");
 		}
 		return deleteRes;
