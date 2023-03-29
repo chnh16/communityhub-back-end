@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -23,20 +24,18 @@ import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class ArticleService {
-
+	
+	@Autowired
 	private ArticleDao articleDao;
+	
+	@Autowired
 	private UserService userService;
+	
+	@Autowired
 	private PrincipalService principalService;
+	
+	@Autowired
 	private FileDao fileDao;
-
-	public ArticleService(final ArticleDao articleDao, UserService userService, PrincipalService principalService,
-			FileDao fileDao) {
-		this.articleDao = articleDao;
-		this.userService = userService;
-		this.principalService = principalService;
-		this.fileDao = fileDao;
-
-	}
 
 	public Article insert(final Article data) {
 		Article articleInsert = null;

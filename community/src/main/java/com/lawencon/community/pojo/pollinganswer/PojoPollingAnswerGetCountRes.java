@@ -34,5 +34,4 @@ public class PojoPollingAnswerGetCountRes {
 	public void setChoiceContent(String choiceContent) {
 		this.choiceContent = choiceContent;
 	}
-	
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -20,11 +21,9 @@ import com.lawencon.community.pojo.voucher.PojoVoucherUpdateReq;
 
 @Service
 public class VoucherService {
-	private final VoucherDao voucherDao;
 
-	public VoucherService(final VoucherDao voucherDao) {
-		this.voucherDao = voucherDao;
-	}
+	@Autowired
+	private VoucherDao voucherDao;
 
 	private void valIdNull(final Voucher data) {
 		if (data.getId() != null) {
@@ -53,7 +52,7 @@ public class VoucherService {
 	public List<Voucher> getAll() {
 		return voucherDao.getAll();
 	}
-	
+
 	public Voucher getRefById(final String id) {
 		return voucherDao.getRefById(id);
 	}
@@ -133,8 +132,8 @@ public class VoucherService {
 		}
 		return pojos;
 	}
-	
-	public Optional<Voucher> getByVoucherCode(final String vocherCode) {	
+
+	public Optional<Voucher> getByVoucherCode(final String vocherCode) {
 		return voucherDao.getByVoucherCode(vocherCode);
 	}
 
@@ -180,21 +179,21 @@ public class VoucherService {
 		res.setMessage("Berhasil menghapus");
 		return res;
 	}
-	
+
 	public PojoVoucherGetAllRes getVoucherById(final String id) {
 		final Optional<Voucher> voucher = voucherDao.getVoucherById(id);
-		
+
 		final PojoVoucherGetAllRes pojoVoucher = new PojoVoucherGetAllRes();
-		
+
 		pojoVoucher.setId(voucher.get().getId());
 		pojoVoucher.setVoucherCode(voucher.get().getVoucherCode());
 		pojoVoucher.setExpiredDate(voucher.get().getExpiredDate());
 		pojoVoucher.setAmount(voucher.get().getAmount());
 		pojoVoucher.setVer(voucher.get().getVersion());
-		
+
 		return pojoVoucher;
 	}
-	
+
 	public PojoVoucherGetAllResData getVoucherGetAllResData(final Integer limit, final Integer offset) {
 		final List<PojoVoucherGetAllRes> pojos = new ArrayList<>();
 		final List<Voucher> res = voucherDao.getVoucher(limit, offset);
@@ -206,14 +205,15 @@ public class VoucherService {
 			pojo.setVoucherCode(vcr.getVoucherCode());
 			pojo.setAmount(vcr.getAmount());
 			pojo.setExpiredDate(vcr.getExpiredDate());
-			pojo.setVer(vcr.getVersion());;
+			pojo.setVer(vcr.getVersion());
+			;
 			pojos.add(pojo);
 		}
-		
+
 		final PojoVoucherGetAllResData pojoVoucher = new PojoVoucherGetAllResData();
 		pojoVoucher.setData(pojos);
 		pojoVoucher.setTotal(voucherDao.getTotalVoucher());
-		
+
 		return pojoVoucher;
 	}
-}	
+}

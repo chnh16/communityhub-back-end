@@ -3,6 +3,7 @@ package com.lawencon.community.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -15,13 +16,12 @@ import com.lawencon.community.pojo.pollingchoice.PojoPollingChoiceGetAllRes;
 
 @Service
 public class PollingService {
-	private final PollingChoiceDao pollingChoiceDao;
-	private final PollingAnswerDao pollingAnswerDao;
-
-	public PollingService(final PollingChoiceDao pollingChoiceDao, final PollingAnswerDao pollingAnswerDao) {
-		this.pollingChoiceDao = pollingChoiceDao;
-		this.pollingAnswerDao = pollingAnswerDao;
-	}
+	
+	@Autowired
+	private PollingChoiceDao pollingChoiceDao;
+	
+	@Autowired
+	private PollingAnswerDao pollingAnswerDao;
 
 	public PollingChoice insertPollingChoice(final PollingChoice pollingChoice) {
 		PollingChoice insertChoice = null;

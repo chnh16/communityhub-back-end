@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,34 +41,39 @@ import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class UserService implements UserDetailsService, Runnable {
-
-	private final UserDao userDao;
-	private final FileDao fileDao;
-	private final ProfileDao profileDao;
-	private final RoleDao roleDao;
-	private final RegisterVerificationDao registerVerificationDao;
-	private final PasswordEncoder encoder;
-	private final PositionService positionService;
-	private final IndustryService industryService;
-	private final EmailService emailService;
-	private final PrincipalService principalService;
+	
+	
+	@Autowired
+	private UserDao userDao;
+	
+	@Autowired
+	private FileDao fileDao;
+	
+	@Autowired
+	private ProfileDao profileDao;
+	
+	@Autowired
+	private RoleDao roleDao;
+	
+	@Autowired
+	private RegisterVerificationDao registerVerificationDao;
+	
+	@Autowired
+	private PasswordEncoder encoder;
+	
+	@Autowired
+	private PositionService positionService;
+	
+	@Autowired
+	private IndustryService industryService;
+	
+	@Autowired
+	private EmailService emailService;
+	
+	@Autowired
+	private PrincipalService principalService;
 	private EmailDetails emailDetails;
 
-	public UserService(final UserDao userDao, final FileDao fileDao, final RoleDao roleDao, final ProfileDao profileDao,
-			final PositionService positionService, final PasswordEncoder encoder, final IndustryService industryService,
-			final EmailService emailService, final RegisterVerificationDao registerVerificationDao,
-			final PrincipalService principalService) {
-		this.userDao = userDao;
-		this.fileDao = fileDao;
-		this.profileDao = profileDao;
-		this.registerVerificationDao = registerVerificationDao;
-		this.encoder = encoder;
-		this.roleDao = roleDao;
-		this.positionService = positionService;
-		this.industryService = industryService;
-		this.emailService = emailService;
-		this.principalService = principalService;
-	}
 
 	public User insert(final User data) {
 		User userInsert = null;
@@ -250,7 +256,6 @@ public class UserService implements UserDetailsService, Runnable {
 	}
 
 	public PojoUpdateRes updateCodeVerification(final PojoVerificationCodeUpdateReq data) {
-
 		RegisterVerification registerVerification = null;
 		registerVerification = registerVerificationDao.getByIdAndDetach(RegisterVerification.class,
 				data.getRegisterVerificationId());

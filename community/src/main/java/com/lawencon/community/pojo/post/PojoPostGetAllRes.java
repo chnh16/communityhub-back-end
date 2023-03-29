@@ -3,6 +3,7 @@ package com.lawencon.community.pojo.post;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.lawencon.community.pojo.pollinganswer.PojoPollingAnswerGetCountRes;
 import com.lawencon.community.pojo.pollinganswer.PojoPollingAnswerRes;
 import com.lawencon.community.pojo.pollingchoice.PojoPollingChoiceGetAllRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetAllRes;
@@ -24,6 +25,7 @@ public class PojoPostGetAllRes {
 	private List<PojoPollingChoiceGetAllRes> pollingChoice;
 	private List<PojoPostDetailGetAllRes> postDetail;
 	private List<String> fileId;
+	private List<PojoPollingAnswerGetCountRes> pollingAnswer;
 	private PojoPostLikeRes isLiked;
 	private PojoPostBookmarkRes isBookmarked;
 	private PojoPollingAnswerRes isAnswered;
@@ -137,4 +139,11 @@ public class PojoPostGetAllRes {
 	public void setIsPremium(Boolean isPremium) {
 		this.isPremium = isPremium;
 	}
+	public List<PojoPollingAnswerGetCountRes> getPollingAnswer() {
+		return pollingAnswer;
+	}
+	public void setPollingAnswer(List<PojoPollingAnswerGetCountRes> pollingAnswer) {
+		this.pollingAnswer = pollingAnswer;
+	}
+	
 }

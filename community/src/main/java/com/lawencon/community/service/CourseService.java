@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -32,23 +33,24 @@ import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class CourseService {
-	private final CourseDao courseDao;
-	private final CategoryDao categoryDao;
-	private final FileDao fileDao;
-	private final UserService userService;
-	private final UserCourseDao userCourseDao;
+	
+	@Autowired
+	private CourseDao courseDao;
+	
+	@Autowired
+	private CategoryDao categoryDao;
+	
+	@Autowired
+	private FileDao fileDao;
+	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private UserCourseDao userCourseDao;
 
 	@Inject
 	private PrincipalService principalService;
-
-	public CourseService(final CourseDao courseDao, final CategoryDao categoryDao, final FileDao fileDao,
-			final UserService userService, UserCourseDao userCourseDao) {
-		this.courseDao = courseDao;
-		this.categoryDao = categoryDao;
-		this.fileDao = fileDao;
-		this.userService = userService;
-		this.userCourseDao = userCourseDao;
-	}
 
 	public Course insert(final Course data) {
 		Course insertCourse = null;
