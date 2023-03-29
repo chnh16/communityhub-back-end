@@ -76,17 +76,13 @@ public class PollingService {
 	}
 
 	public List<PojoPollingAnswerGetCountRes> getAnswerByChoiceId(final String postId) {
-
 		final List<PojoPollingAnswerGetCountRes> listAnswer = pollingAnswerDao.getCountByChoiceId(postId);
-
 		final Long totalChoice = pollingAnswerDao.getCount(postId);
-
 		for (int i = 0; i < listAnswer.size(); i++) {
 			final PojoPollingAnswerGetCountRes pojoAnswerCount = listAnswer.get(i);
 			float percent = (listAnswer.get(i).getCountPollAnswer() * (100 / totalChoice));
-
+			pojoAnswerCount.setChoiceContent(null);
 			pojoAnswerCount.setPercent(percent);
-
 		}
 		return listAnswer;
 	}

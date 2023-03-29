@@ -2,6 +2,7 @@ package com.lawencon.community.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,11 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
+import com.lawencon.community.pojo.pollinganswer.PojoPollingAnswerGetCountRes;
 import com.lawencon.community.pojo.post.PojoPostGetAllRes;
 import com.lawencon.community.pojo.post.PojoPostInsertReq;
 import com.lawencon.community.pojo.post.PojoPostUpdateReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailGetAllRes;
-import com.lawencon.community.pojo.postdetail.PojoPostDetailGetByPostIdRes;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailInsertReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailUpdateReq;
 import com.lawencon.community.pojo.postfile.PojoPostFileInsertListReq;
@@ -36,15 +37,11 @@ import com.lawencon.community.service.PostTypeService;
 @RestController
 @RequestMapping("post")
 public class PostController {
+	@Autowired
+	private PostService postService;
 	
-	private final PostService postService;
-	private final PostTypeService postTypeService;
-	
-
-	public PostController(final PostService postService, final PostTypeService postTypeService) {
-		this.postService = postService;
-		this.postTypeService = postTypeService;
-	}
+	@Autowired
+	private PostTypeService postTypeService;
 	
 	@PostMapping
 	public ResponseEntity<PojoInsertRes> insertPost(@RequestBody PojoPostInsertReq data){
@@ -175,6 +172,12 @@ public class PostController {
 	@DeleteMapping("polling/{id}")
 	public ResponseEntity<PojoDeleteRes> deletePollingAnswer(@PathVariable("id") final String pollingAnswerId){
 		final PojoDeleteRes res = postService.deletePollingAnswer(pollingAnswerId);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("polling/{id}")
+	public ResponseEntity<List<PojoPollingAnswerGetCountRes>> getTotalAnswerByChoiceId(@PathVariable("postId") String postId) {
+		final List<PojoPollingAnswerGetCountRes> res = postService.getAnswerByChoiceId(postId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 }

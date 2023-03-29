@@ -43,18 +43,11 @@ public class PollingController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	
 	@DeleteMapping("{pollingId}")
 	public ResponseEntity<PojoDeleteRes> deletePolling(@PathVariable("pollingId") String pollingId) {
 		final PojoDeleteRes res = pollingService.deletePollingRes(pollingId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
-//	@PostMapping("answer")
-//	public ResponseEntity<PojoInsertRes> insertPollingAnswer(@RequestBody PojoPollingAnswerInsertReq data) {
-//		final PojoInsertRes res = pollingService.insertPollingAnswer(data);
-//		return new ResponseEntity<>(res, HttpStatus.CREATED);
-//	}
 	
 	@GetMapping("count/{postId}")
 	public ResponseEntity<List<PojoPollingAnswerGetCountRes>> getTotalAnswerByChoiceId(@PathVariable("postId") String postId) {
