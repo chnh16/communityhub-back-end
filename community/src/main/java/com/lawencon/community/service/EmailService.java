@@ -12,18 +12,30 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import com.lawencon.community.model.EmailDetails;
+import com.lawencon.community.model.RegisterVerification;
+import com.lawencon.community.model.User;
 
 @Service
 public class EmailService {
 	
 	@Autowired
 	private JavaMailSender javaMailSender;
+	
+	@Autowired
+	private TemplateEngine templateEngine;
 
 	@Value("${spring.mail.username}")
 	private String sender;
 
+	
+	public EmailService(TemplateEngine templateEngine, JavaMailSender javaMailSender) {
+		this.templateEngine = templateEngine;
+		this.javaMailSender = javaMailSender;
+	}
 	
 	public String sendSimpleMail(final EmailDetails details) {
 		try {
@@ -68,4 +80,18 @@ public class EmailService {
 		}
 	}
 
+	
+	public String sendMail(RegisterVerification registerVerification) throws MessagingException{
+		Context context = new Context();
+        context.setVariable("registerVerification", registerVerification);
+
+        String process = templateEngine.process("email", context);
+        javax.mail.internet.MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+        helper.setSubject("Welcome " + registerVerification.getEmail() );
+        helper.setText(process, true);
+        helper.setTo(registerVerification.getEmail());
+        javaMailSender.send(mimeMessage);
+        return "Sent";
+	}
 }
