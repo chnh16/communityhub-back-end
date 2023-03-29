@@ -1,5 +1,8 @@
 package com.lawencon.community.pojo.user;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
+
 public class PojoUserGetUserProfileRes {
 	private String id;
 	private String email;
@@ -8,6 +11,7 @@ public class PojoUserGetUserProfileRes {
 	private String province;
 	private String city;
 	private String phoneNumber;
+	private LocalDateTime premiumUntil;
 	private String postalCode;
 	private String positionId;
 	private String industryId;
@@ -117,6 +121,14 @@ public class PojoUserGetUserProfileRes {
 
 	public void setVer(Integer ver) {
 		this.ver = ver;
+	}
+
+	public LocalDateTime getPremiumUntil() {
+		return premiumUntil;
+	}
+
+	public void setPremiumUntil(LocalDateTime premiumUntil) {
+		this.premiumUntil = premiumUntil;
 	}
 
 }

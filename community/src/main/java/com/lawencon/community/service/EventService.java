@@ -159,12 +159,12 @@ public class EventService {
 		
 		if(category.isEmpty() && price.isEmpty()) {
 			res = eventDao.getEvent(limit, offset);
-		}else if(category.equals(categoryId.getId())) {
-			res = eventDao.getByCategoryId(categoryId.getId(), limit, offset);
 		}else if(price.equals("ASC")){
 			res = eventDao.getByPriceAsc();
-		}else if(category.isEmpty() && price.equals("DESC")){
+		}else if(price.equals("DESC")){
 			res = eventDao.getByPriceDesc();
+		}else if(category.equals(categoryId.getId())) {
+			res = eventDao.getByCategoryId(categoryId.getId(), limit, offset);
 		}
 		
 		for (int i = 0; i < res.size(); i++) {
