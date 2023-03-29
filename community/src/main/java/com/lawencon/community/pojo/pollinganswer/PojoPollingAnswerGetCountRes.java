@@ -2,6 +2,7 @@ package com.lawencon.community.pojo.pollinganswer;
 
 public class PojoPollingAnswerGetCountRes {
 	private String pollingChoiceId;
+	private String choiceContent;
 	private Long countPollAnswer;
 	private Float percent;
 	
@@ -26,6 +27,12 @@ public class PojoPollingAnswerGetCountRes {
 
 	public void setPercent(Float percent) {
 		this.percent = percent;
+	}
+	public String getChoiceContent() {
+		return choiceContent;
+	}
+	public void setChoiceContent(String choiceContent) {
+		this.choiceContent = choiceContent;
 	}
 	
 	

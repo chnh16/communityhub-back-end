@@ -86,8 +86,8 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer> {
 
 		try {
 			final StringBuilder str = new StringBuilder();
-			str.append("SELECT pc.id, COUNT(pa.polling_choice_id) FROM polling_answer pa ")
-					.append(" RIGHT JOIN polling_choice pc ON pc.id = pa.polling_choice_id ").append("GROUP BY pc.id ")
+			str.append("SELECT pc.id, pc.choice_content, COUNT(pa.polling_choice_id) FROM polling_answer pa ")
+					.append(" RIGHT JOIN polling_choice pc ON pc.id = pa.polling_choice_id ").append("GROUP BY pc.id, pc.choice_content ")
 					.append(" HAVING pc.post_id = :postId");
 
 			final List<Object> result = em().createNativeQuery(toStr(str)).setParameter("postId", postId)
@@ -99,7 +99,8 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer> {
 
 					final PojoPollingAnswerGetCountRes pollingChoice = new PojoPollingAnswerGetCountRes();
 					pollingChoice.setPollingChoiceId(obj[0].toString());
-					pollingChoice.setCountPollAnswer(Long.valueOf(obj[1].toString()));
+					pollingChoice.setChoiceContent(obj[1].toString());
+					pollingChoice.setCountPollAnswer(Long.valueOf(obj[2].toString()));
 
 					listPollingAnswer.add(pollingChoice);
 				}
