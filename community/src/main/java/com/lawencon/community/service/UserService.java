@@ -221,9 +221,13 @@ public class UserService implements UserDetailsService, Runnable {
 				+ "\nMohon lakukan verifkasi untuk akun anda, menggunakan kode verifikasi diatas, lakukan verifikasi dalam 5 menit \n TerimaKasih");
 		email.setRecipient(userInsert.getEmail());
 		email.setSubject("Berhasil ");
-
-		emailService.sendSimpleMail(email);
-
+	
+//		emailService.sendSimpleMail(email);
+		try {
+			emailService.sendMail(registerVerification);			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		pojo.setId(userInsert.getId());
 		pojo.setMessage("Registrasi Berhasil");
 		return pojo;
