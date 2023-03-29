@@ -184,6 +184,7 @@ public class UserService implements UserDetailsService, Runnable {
 
 		}
 		profile.setFile(fileInsert);
+		
 		ConnHandler.begin();
 		profileInsert = profileDao.saveNoLogin(profile, () -> getUserSystem.getId());
 		ConnHandler.commit();
@@ -350,6 +351,7 @@ public class UserService implements UserDetailsService, Runnable {
 		pojo.setPhoneNumber(user.getProfile().getNoHandphone());
 		pojo.setPostalCode(user.getProfile().getPostalCode());
 		pojo.setCompany(user.getProfile().getCompany());
+		pojo.setPremiumUntil(user.getProfile().getPremiumUntil());
 		pojo.setPositionId(user.getProfile().getPosition().getPositionName());
 		pojo.setIndustryId(user.getProfile().getIndustry().getIndustryName());
 		pojo.setFile(user.getProfile().getFile().getId());

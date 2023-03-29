@@ -16,15 +16,20 @@ import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.ProfileDao;
 import com.lawencon.community.dao.StatusTransactionDao;
 import com.lawencon.community.dao.TransactionDao;
+import com.lawencon.community.dao.UserCourseDao;
+import com.lawencon.community.dao.UserEventDao;
 import com.lawencon.community.dao.VoucherDao;
 import com.lawencon.community.model.Course;
 import com.lawencon.community.model.Event;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Membership;
+import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.StatusTransaction;
 import com.lawencon.community.model.Transaction;
 import com.lawencon.community.model.User;
+import com.lawencon.community.model.UserCourse;
+import com.lawencon.community.model.UserEvent;
 import com.lawencon.community.model.Voucher;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
@@ -47,6 +52,8 @@ public class TransactionService {
 	private final FileDao fileDao;
 	private final VoucherDao voucherDao;
 	private final ProfileDao profileDao;
+	private final UserEventDao userEventDao;
+	private final UserCourseDao userCourseDao;
 	private final StatusTransactionDao statusTransactionDao;
 	private final UserService userService;
 	private final EventService eventService;
@@ -61,7 +68,7 @@ public class TransactionService {
 			final EventService eventService, final MembershipService membershipService,
 			final CourseService courseService, final PrincipalService principalService,
 			final VoucherService voucherService, final FileDao fileDao, final VoucherDao voucherDao,
-			final ProfileDao profileDao, final StatusTransactionDao statusTransactionDao) {
+			final ProfileDao profileDao, final StatusTransactionDao statusTransactionDao, final UserEventDao userEventDao, UserCourseDao userCourseDao) {
 		this.transactionDao = transactionDao;
 		this.userService = userService;
 		this.eventService = eventService;
@@ -73,6 +80,8 @@ public class TransactionService {
 		this.voucherDao = voucherDao;
 		this.profileDao = profileDao;
 		this.statusTransactionDao = statusTransactionDao;
+		this.userEventDao = userEventDao;
+		this.userCourseDao = userCourseDao;
 	}
 
 	private Transaction insert(final Transaction data) {
@@ -244,10 +253,36 @@ public class TransactionService {
 					ConnHandler.commit();
 
 				} else if (transactionUpdate.getEvent() != null || transactionUpdate.getCourse() != null) {
+					
+					if(transactionUpdate.getEvent() != null) {
+//						final User userE = userService.getRefById(transaction.getEvent().getUser().getId());
+//						final Event event = eventService.getRefById(transaction.getEvent().getId());
+						
+						final UserEvent userEvent = new UserEvent();
+						userEvent.setUser(transaction.getUser());
+						userEvent.setEvent(transaction.getEvent());
+						
+						UserEvent userEventInsert = null;
+						ConnHandler.begin();
+						userEventInsert = userEventDao.insert(userEvent);
+						ConnHandler.commit();
+						
+					} else if (transactionUpdate.getCourse() != null) {
+						final UserCourse userCourse = new UserCourse();
+						userCourse.setUser(transaction.getUser());
+						userCourse.setCourse(transaction.getCourse());
+						
+						UserCourse userCourseInsert = null;
+						ConnHandler.begin();
+						userCourseInsert = userCourseDao.insert(userCourse);
+						ConnHandler.commit();
+					}
+					
 					profitSharing(transactionUpdate);
 				}
 
 			}
+			
 			pojoUpdate.setVer(data.getVer());
 			pojoUpdate.setMessage("Approved");
 		} else if (data.getStatusTransaction().equals(StatusTransactions.REJECTED.getStatusCode())) {
