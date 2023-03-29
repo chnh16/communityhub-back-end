@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -18,34 +19,10 @@ import com.lawencon.community.pojo.category.PojoCategoryInsertReq;
 import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
 
 @Service
-public class CategoryService {
+public class CategoryService extends ValidationService<Category> {
 
-	private final CategoryDao categoryDao;
-
-	public CategoryService(final CategoryDao categoryDao) {
-		this.categoryDao = categoryDao;
-	}
-
-	private void valIdNull(final Category data) {
-		if (data.getId() != null) {
-			throw new RuntimeException("ID harus kosong");
-		}
-	}
-
-	private void valIdNotNull(final Category data) {
-		if (data.getId() == null) {
-			throw new RuntimeException("ID kosong");
-		}
-	}
-
-	private void valNotNullable(final Category data) {
-		if (data.getCategoryCode() == null) {
-			throw new RuntimeException("Kode Kategori Kosong");
-		}
-		if (data.getCategoryName() == null) {
-			throw new RuntimeException("Nama Kategori Kosong");
-		}
-	}
+	@Autowired
+	private CategoryDao categoryDao;
 
 	public Category insertCategory(final Category data) {
 		Category categoryInsert = null;
@@ -201,6 +178,66 @@ public class CategoryService {
 		pojoCategoryGetAll.setVer(listCategory.get().getVersion());
 
 		return pojoCategoryGetAll;
+	}
+
+	@Override
+	void valBkNull(Category data) {
+		if(data.getCategoryCode() == null) {
+			throw new RuntimeException("BK Kosong");
+		}
+		
+	}
+
+	@Override
+	void valFkNull(Category data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valMaxLength(Category data) {
+		if(data.getCategoryCode().length() > 5) {
+			throw new RuntimeException("Input terlalu panjang");
+		}
+		if(data.getCategoryName().length() > 30) {
+			throw new RuntimeException("Input terlalu panjang");
+		}
+	}
+
+	@Override
+	void valMinLength(Category data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valIdPresent(Category data) {
+		final Optional<Category> res = getById(data.getId());
+		if(res.isPresent()) {
+			throw new RuntimeException("ID sudah ada di database");
+		}
+		
+	}
+	
+	void valIdNull(final Category data) {
+		if (data.getId() == null) {
+			throw new RuntimeException("ID kosong");
+		}
+	}
+
+	void valIdNotNull(final Category data) {
+		if (data.getId() != null) {
+			throw new RuntimeException("ID harus kosong");
+		}
+	}
+	
+	void valNotNullable(final Category data) {
+		if (data.getCategoryCode() == null) {
+			throw new RuntimeException("Kode Kategori Kosong");
+		}
+		if (data.getCategoryName() == null) {
+			throw new RuntimeException("Nama Kategori Kosong");
+		}
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -20,14 +21,10 @@ import com.lawencon.community.util.Generate;
 
 @Service
 public class MembershipService {
-
-	private final MembershipDao membershipDao;
 	
-
-	public MembershipService(final MembershipDao membershipDao) {
-		this.membershipDao = membershipDao;
-		
-	}
+	@Autowired
+	private MembershipDao membershipDao;
+	
 
 	public Membership insert(final Membership data) {
 		Membership membershipInsert = null;

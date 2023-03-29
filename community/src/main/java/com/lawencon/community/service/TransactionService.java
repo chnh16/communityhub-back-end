@@ -23,7 +23,6 @@ import com.lawencon.community.model.Course;
 import com.lawencon.community.model.Event;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.Membership;
-import com.lawencon.community.model.Position;
 import com.lawencon.community.model.Profile;
 import com.lawencon.community.model.StatusTransaction;
 import com.lawencon.community.model.Transaction;
@@ -68,7 +67,8 @@ public class TransactionService {
 			final EventService eventService, final MembershipService membershipService,
 			final CourseService courseService, final PrincipalService principalService,
 			final VoucherService voucherService, final FileDao fileDao, final VoucherDao voucherDao,
-			final ProfileDao profileDao, final StatusTransactionDao statusTransactionDao, final UserEventDao userEventDao, UserCourseDao userCourseDao) {
+			final ProfileDao profileDao, final StatusTransactionDao statusTransactionDao,
+			final UserEventDao userEventDao, UserCourseDao userCourseDao) {
 		this.transactionDao = transactionDao;
 		this.userService = userService;
 		this.eventService = eventService;
@@ -156,10 +156,6 @@ public class TransactionService {
 		return transactionDao.getByIdAndDetach(Transaction.class, id);
 	}
 
-	private List<Transaction> getAll(final String type, final String id) {
-		return transactionDao.getTransaction(type, id);
-	}
-
 	public PojoInsertRes insertRes(final PojoInsertTransactionReq data) {
 		BigDecimal grandTotal = null;
 		final PojoInsertRes pojo = new PojoInsertRes();
@@ -227,7 +223,7 @@ public class TransactionService {
 		transactionUpdate = getByIdAndDetach(data.getId());
 		final Transaction transaction = transactionUpdate;
 		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
-		
+
 		if (data.getStatusTransaction().equals(StatusTransactions.APPROVE.getStatusCode())) {
 			transaction.setIsApproved(data.getIsApproved());
 			final StatusTransaction getStatus = statusTransactionDao
@@ -241,48 +237,42 @@ public class TransactionService {
 				if (transactionUpdate.getMembership() != null) {
 					addSystemBalance(transactionUpdate);
 					final User user = userService.getByRefId(principalService.getAuthPrincipal());
-
-					Profile profileUpdate = null;
 					Profile profile = profileDao.getByIdAndDetach(user.getProfile().getId());
 
 					profile.setPremiumUntil(
 							LocalDateTime.now().plusDays(transactionUpdate.getMembership().getDuration()));
 
 					ConnHandler.begin();
-					profileUpdate = profileDao.update(profile);
+					profileDao.update(profile);
 					ConnHandler.commit();
 
 				} else if (transactionUpdate.getEvent() != null || transactionUpdate.getCourse() != null) {
-					
-					if(transactionUpdate.getEvent() != null) {
-//						final User userE = userService.getRefById(transaction.getEvent().getUser().getId());
-//						final Event event = eventService.getRefById(transaction.getEvent().getId());
-						
+
+					if (transactionUpdate.getEvent() != null) {
+
 						final UserEvent userEvent = new UserEvent();
 						userEvent.setUser(transaction.getUser());
 						userEvent.setEvent(transaction.getEvent());
-						
-						UserEvent userEventInsert = null;
+
 						ConnHandler.begin();
-						userEventInsert = userEventDao.insert(userEvent);
+						userEventDao.insert(userEvent);
 						ConnHandler.commit();
-						
+
 					} else if (transactionUpdate.getCourse() != null) {
 						final UserCourse userCourse = new UserCourse();
 						userCourse.setUser(transaction.getUser());
 						userCourse.setCourse(transaction.getCourse());
-						
-						UserCourse userCourseInsert = null;
+
 						ConnHandler.begin();
-						userCourseInsert = userCourseDao.insert(userCourse);
+						userCourseDao.insert(userCourse);
 						ConnHandler.commit();
 					}
-					
+
 					profitSharing(transactionUpdate);
 				}
 
 			}
-			
+
 			pojoUpdate.setVer(data.getVer());
 			pojoUpdate.setMessage("Approved");
 		} else if (data.getStatusTransaction().equals(StatusTransactions.REJECTED.getStatusCode())) {
@@ -372,7 +362,7 @@ public class TransactionService {
 
 		pojoTransactionGetAll.setId(transaction.get().getId());
 		pojoTransactionGetAll.setFullName(transaction.get().getUser().getProfile().getFullName());
-		//pojoTransactionGetAll.setItemName(transaction.get().getCourse().getCourseName());
+		// pojoTransactionGetAll.setItemName(transaction.get().getCourse().getCourseName());
 		pojoTransactionGetAll.setFileId(transaction.get().getFile().getId());
 		pojoTransactionGetAll.setStatusTransaction(transaction.get().getStatusTransaction().getId());
 		pojoTransactionGetAll.setGrandTotal(transaction.get().getGrandTotal());
@@ -427,123 +417,6 @@ public class TransactionService {
 		pojoTransactionData.setTotal(transactionDao.getTotalTransaction(type));
 		return pojoTransactionData;
 	}
-
-//	public List<PojoTransactionGetAllRes> getAllRes(final String type) {
-//		final List<PojoTransactionGetAllRes> pojos = new ArrayList<>();
-//		List<Transaction> res = new ArrayList<>();
-//		if (type.equals(null)) {
-//			res = getAll(type);
-//		}
-//		if (type.equals(TransactionType.EVENT.getTypeName())) {
-//			res = getAll(TransactionType.EVENT.getTypeName());
-//		}
-//		if (type.equals(TransactionType.COURSE.getTypeName())) {
-//			res = getAll(TransactionType.COURSE.getTypeName());
-//		}
-//		if (type.equals(TransactionType.MEMBERSHIP.getTypeName())) {
-//			res = getAll(TransactionType.MEMBERSHIP.getTypeNam	e());
-//		}
-//		for (int i = 0; i < res.size(); i++) {
-//			final PojoTransactionGetAllRes pojo = new PojoTransactionGetAllRes();
-//			final Transaction transaction = res.get(i);
-//			final User user = userService.getByRefId(transaction.getUser().getId());
-//			if (transaction.getEvent() != null) {
-//				final Event event = eventService.getRefById(transaction.getEvent().getId());
-//				pojo.setItemName(event.getEventName());
-//			}
-//			if (transaction.getCourse() != null) {
-//				final Course course = courseService.getRefById(transaction.getCourse().getId());
-//				pojo.setItemName(course.getCourseName());
-//			}
-//			if (transaction.getMembership() != null) {
-//				final Membership membership = membershipService.getRefById(transaction.getMembership().getId());
-//				pojo.setItemName(membership.getMembershipName());
-//			}
-//			pojo.setId(transaction.getId());
-//			pojo.setGrandTotal(transaction.getGrandTotal());
-//			pojo.setFileId(transaction.getFile().getId());
-//			pojo.setFullName(user.getProfile().getFullName());
-//			pojo.setIsApproved(transaction.getIsApproved());
-//			pojos.add(pojo);
-//		}
-//
-//		return pojos;
-//	}
-
-//	public List<PojoTransactionGetByEventIdRes> getByEventId(final String id) {
-//		final List<PojoTransactionGetByEventIdRes> pojos = new ArrayList<>();
-//		final List<Transaction> res = transactionDao.getByEventId(id);
-//
-//		for (int i = 0; i < res.size(); i++) {
-//			final PojoTransactionGetByEventIdRes pojo = new PojoTransactionGetByEventIdRes();
-//			final Transaction transaction = res.get(i);
-//			final User user = userService.getByRefId(transaction.getUser().getId());
-//
-//			final Event event = eventService.getRefById(transaction.getEvent().getId());
-//			pojo.setItemName(event.getEventName());
-//
-//			ConnHandler.getManager().detach(transaction);
-//			pojo.setId(transaction.getId());
-//			pojo.setGrandTotal(transaction.getGrandTotal());
-//			pojo.setFileId(transaction.getFile().getId());
-//			pojo.setFullName(user.getProfile().getFullName());
-//			pojo.setIsApproved(transaction.getIsApproved());
-//
-//			pojos.add(pojo);
-//		}
-//
-//		return pojos;
-//	}
-//
-//	public List<PojoTransactionGetByCourseIdRes> getByCourseId(final String id) {
-//		final List<PojoTransactionGetByCourseIdRes> pojos = new ArrayList<>();
-//		final List<Transaction> res = transactionDao.getByCourseId(id);
-//
-//		for (int i = 0; i < res.size(); i++) {
-//			final PojoTransactionGetByCourseIdRes pojo = new PojoTransactionGetByCourseIdRes();
-//			final Transaction transaction = res.get(i);
-//			final User user = userService.getByRefId(transaction.getUser().getId());
-//
-//			final Course course = courseService.getRefById(transaction.getCourse().getId());
-//			pojo.setItemName(course.getCourseName());
-//
-//			ConnHandler.getManager().detach(transaction);
-//			pojo.setId(transaction.getId());
-//			pojo.setGrandTotal(transaction.getGrandTotal());
-//			pojo.setFileId(transaction.getFile().getId());
-//			pojo.setFullName(user.getProfile().getFullName());
-//			pojo.setIsApproved(transaction.getIsApproved());
-//
-//			pojos.add(pojo);
-//		}
-//
-//		return pojos;
-//	}
-//
-//	public List<PojoTransactionGetByMembershipIdRes> getByMembershipId(final String id) {
-//		final List<PojoTransactionGetByMembershipIdRes> pojos = new ArrayList<>();
-//		final List<Transaction> res = transactionDao.getByMembershipId(id);
-//
-//		for (int i = 0; i < res.size(); i++) {
-//			final PojoTransactionGetByMembershipIdRes pojo = new PojoTransactionGetByMembershipIdRes();
-//			final Transaction transaction = res.get(i);
-//			final User user = userService.getByRefId(transaction.getUser().getId());
-//
-//			final Membership membership = membershipService.getRefById(transaction.getMembership().getId());
-//			pojo.setItemName(membership.getMembershipName());
-//
-//			ConnHandler.getManager().detach(transaction);
-//			pojo.setId(transaction.getId());
-//			pojo.setGrandTotal(transaction.getGrandTotal());
-//			pojo.setFileId(transaction.getFile().getId());
-//			pojo.setFullName(user.getProfile().getFullName());
-//			pojo.setIsApproved(transaction.getIsApproved());
-//
-//			pojos.add(pojo);
-//		}
-//
-//		return pojos;
-//	}
 
 	private void addSystemBalance(final Transaction data) {
 		final Optional<User> system = userService.getUserSystem(RoleList.SYSTEM.getRoleCode());

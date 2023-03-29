@@ -1,7 +1,5 @@
 package com.lawencon.community.pojo.postdetail;
 
-import com.lawencon.community.pojo.file.PojoFileInsertReq;
-
 public class PojoPostDetailUpdateReq {
 
 	private String id;
@@ -24,8 +22,6 @@ public class PojoPostDetailUpdateReq {
 	public void setPostId(String postId) {
 		this.postId = postId;
 	}
-
-	
 
 	public String getDetailContent() {
 		return detailContent;
