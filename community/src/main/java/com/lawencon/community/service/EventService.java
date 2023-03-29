@@ -12,6 +12,7 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.EventDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.dao.UserEventDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.Event;
@@ -36,6 +37,7 @@ public class EventService {
 	private EventDao eventDao;
 	private CategoryDao categoryDao;
 	private FileDao fileDao;
+	private UserDao userDao;
 	private UserService userService;
 	private UserEventDao userEventDao;
 
@@ -43,13 +45,14 @@ public class EventService {
 	private PrincipalService principalService;
 
 	public EventService(EventDao eventDao, CategoryDao categoryDao, FileDao fileDao, PrincipalService principalService,
-			UserService userService, UserEventDao userEventDao) {
+			UserService userService, UserEventDao userEventDao, UserDao userDao) {
 		this.eventDao = eventDao;
 		this.categoryDao = categoryDao;
 		this.fileDao = fileDao;
 		this.principalService = principalService;
 		this.userService = userService;
 		this.userEventDao = userEventDao;
+		this.userDao = userDao;
 	}
 
 	public Event insert(final Event data) {
@@ -156,6 +159,7 @@ public class EventService {
 		List<Event> res = new ArrayList<>();
 		final Category categoryId = categoryDao.getRefById(category);
 		
+		
 		if(category.isEmpty() && price.isEmpty()) {
 			res = eventDao.getEvent(limit, offset);
 		}else if(price.equals("ASC")){
@@ -190,6 +194,8 @@ public class EventService {
 		}
 		return pojos;
 	}
+	
+	
 
 //	public List<PojoEventResGetByCategoryId> getByCategoryId(final String id) {
 //		final List<PojoEventResGetByCategoryId> pojos = new ArrayList<>();
@@ -299,8 +305,20 @@ public class EventService {
 			ConnHandler.getManager().detach(userEvent);
 			
 			pojo.setId(userEvent.getId());
+			
 			pojo.setUserId(userEvent.getUser().getProfile().getFullName());
-			pojo.setEventId(userEvent.getEvent().getEventName());
+			
+			pojo.setFileId(userEvent.getEvent().getFile().getId());
+			pojo.setEventCode(userEvent.getEvent().getEventCode());
+			pojo.setEventName(userEvent.getEvent().getEventName());
+			pojo.setProvider(userEvent.getEvent().getProvider());
+			pojo.setLocationName(userEvent.getEvent().getLocationName());
+			pojo.setCategoryId(userEvent.getEvent().getCategory().getCategoryName());
+			
+			pojo.setStartDate(userEvent.getEvent().getStartDate());
+			pojo.setEndDate(userEvent.getEvent().getEndDate());
+			pojo.setPrice(userEvent.getEvent().getPrice());
+			pojo.setVer(userEvent.getEvent().getVersion());
 
 			pojos.add(pojo);
 		}
