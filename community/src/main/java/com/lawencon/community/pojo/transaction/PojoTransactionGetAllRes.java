@@ -9,6 +9,7 @@ public class PojoTransactionGetAllRes {
 	private String itemName;
 	private BigDecimal grandTotal;
 	private Boolean isApproved;
+	private String statusTransaction;
 	private Integer ver;
 	
 	public String getId() {
@@ -52,6 +53,12 @@ public class PojoTransactionGetAllRes {
 	}
 	public void setVer(Integer ver) {
 		this.ver = ver;
+	}
+	public String getStatusTransaction() {
+		return statusTransaction;
+	}
+	public void setStatusTransaction(String statusTransaction) {
+		this.statusTransaction = statusTransaction;
 	}
 	
 }

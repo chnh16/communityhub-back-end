@@ -247,10 +247,9 @@ public class TransactionService {
 					profitSharing(transactionUpdate);
 				}
 
-				pojoUpdate.setVer(data.getVer());
-				pojoUpdate.setMessage("Approved");
-
 			}
+			pojoUpdate.setVer(data.getVer());
+			pojoUpdate.setMessage("Approved");
 		} else if (data.getStatusTransaction().equals(StatusTransactions.REJECTED.getStatusCode())) {
 			transaction.setIsApproved(data.getIsApproved());
 			final StatusTransaction getStatus = statusTransactionDao
@@ -310,6 +309,7 @@ public class TransactionService {
 			pojo.setGrandTotal(transaction.getGrandTotal());
 			pojo.setFileId(transaction.getFile().getId());
 			pojo.setFullName(user.getProfile().getFullName());
+			pojo.setStatusTransaction(transaction.getStatusTransaction().getStatusName());
 			pojo.setIsApproved(transaction.getIsApproved());
 			pojo.setVer(transaction.getVersion());
 			pojos.add(pojo);
@@ -337,8 +337,9 @@ public class TransactionService {
 
 		pojoTransactionGetAll.setId(transaction.get().getId());
 		pojoTransactionGetAll.setFullName(transaction.get().getUser().getProfile().getFullName());
-		pojoTransactionGetAll.setItemName(transaction.get().getCourse().getCourseName());
+		//pojoTransactionGetAll.setItemName(transaction.get().getCourse().getCourseName());
 		pojoTransactionGetAll.setFileId(transaction.get().getFile().getId());
+		pojoTransactionGetAll.setStatusTransaction(transaction.get().getStatusTransaction().getId());
 		pojoTransactionGetAll.setGrandTotal(transaction.get().getGrandTotal());
 		pojoTransactionGetAll.setIsApproved(transaction.get().getIsApproved());
 		pojoTransactionGetAll.setVer(transaction.get().getVersion());
