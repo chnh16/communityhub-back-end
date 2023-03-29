@@ -28,6 +28,10 @@ public class PositionService extends ValidationService<Position> {
 
 	public Position insert(final Position data) {
 		Position positionInsert = null;
+		valIdNotNull(data);
+		valIdPresent(data);
+		valMaxLength(data);
+		valNotNullable(data);
 		try {
 			ConnHandler.begin();
 			positionInsert = positionDao.insert(data);
@@ -40,7 +44,9 @@ public class PositionService extends ValidationService<Position> {
 
 	public Position update(final Position data) {
 		Position positionUpdate = null;
-
+		valIdNull(data);
+		valMaxLength(data);
+		valNotNullable(data);
 		try {
 			ConnHandler.begin();
 			positionUpdate = positionDao.update(data);
@@ -166,14 +172,57 @@ public class PositionService extends ValidationService<Position> {
 	}
 
 	@Override
-	void valId(Position data) {
-		// TODO Auto-generated method stub
+	void valIdNull(Position data) {
+		if(data.getId() == null) {
+			throw new RuntimeException("ID kosong");
+		}
 
 	}
 
 	@Override
-	void valIdNull(Position data) {
-		// TODO Auto-generated method stub
+	void valIdNotNull(Position data) {
+		if(data.getId() != null) {
+			throw new RuntimeException("ID harus kosong");
+		}
+	}
 
+	@Override
+	void valBkNull(Position data) {
+		
+	}
+
+	@Override
+	void valFkNull(Position data) {
+		
+		
+	}
+
+	@Override
+	void valMaxLength(Position data) {
+		if(data.getPositionName().length() > 30) {
+			throw new RuntimeException("Input terlalu panjang");
+		}
+	}
+
+	@Override
+	void valMinLength(Position data) {
+		
+		
+	}
+
+	@Override
+	void valIdPresent(Position data) {
+		final Optional<Position> res = getById(data.getId());
+		if(res.isPresent()) {
+			throw new RuntimeException("ID sudah ada di database");
+		}
+		
+	}
+
+	@Override
+	void valNotNullable(Position data) {
+		if(data.getPositionName() == null) {
+			throw new RuntimeException("Tidak boleh kosong");
+		}
 	}
 }

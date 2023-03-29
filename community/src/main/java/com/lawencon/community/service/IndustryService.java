@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -23,13 +24,10 @@ import com.lawencon.community.pojo.industry.PojoIndustryUpdateReq;
 @Service
 public class IndustryService{
 	
-	private final IndustryDao industryDao;
+	@Autowired
+	private IndustryDao industryDao;
 	@PersistenceContext
 	private EntityManager em;
-	
-	public IndustryService(final IndustryDao industryDao) {
-		this.industryDao = industryDao;
-	}
 
 	private void valIdNull(final Industry data) {
 		if (data.getId() != null) {

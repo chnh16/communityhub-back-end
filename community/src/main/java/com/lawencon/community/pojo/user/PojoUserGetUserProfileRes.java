@@ -1,6 +1,5 @@
 package com.lawencon.community.pojo.user;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class PojoUserGetUserProfileRes {

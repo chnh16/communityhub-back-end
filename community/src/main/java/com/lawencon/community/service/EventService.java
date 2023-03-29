@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -33,24 +34,23 @@ import com.lawencon.security.principal.PrincipalService;
 @Service
 public class EventService {
 
+	@Autowired
 	private EventDao eventDao;
+	
+	@Autowired
 	private CategoryDao categoryDao;
+	
+	@Autowired
 	private FileDao fileDao;
+	
+	@Autowired
 	private UserService userService;
+	
+	@Autowired
 	private UserEventDao userEventDao;
 
 	@Inject
 	private PrincipalService principalService;
-
-	public EventService(EventDao eventDao, CategoryDao categoryDao, FileDao fileDao, PrincipalService principalService,
-			UserService userService, UserEventDao userEventDao) {
-		this.eventDao = eventDao;
-		this.categoryDao = categoryDao;
-		this.fileDao = fileDao;
-		this.principalService = principalService;
-		this.userService = userService;
-		this.userEventDao = userEventDao;
-	}
 
 	public Event insert(final Event data) {
 		Event eventInsert = null;
