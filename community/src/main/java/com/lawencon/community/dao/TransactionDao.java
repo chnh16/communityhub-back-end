@@ -72,7 +72,8 @@ public class TransactionDao extends BasePostDao<Transaction>{
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_transaction t")
 			.append(" WHERE t.course_id IS NOT NULL")
-			.append(" AND t.is_active = TRUE");
+			.append(" AND t.is_active = TRUE")
+			.append(" ORDER BY t.status_transaction_id ASC");
 		final List<Transaction> res = em().createNativeQuery(toStr(str), Transaction.class).getResultList();
 		return res;
 	}
@@ -108,7 +109,8 @@ public class TransactionDao extends BasePostDao<Transaction>{
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_transaction t")
 			.append(" WHERE t.event_id IS NOT NULL")
-			.append(" AND t.is_active = TRUE");
+			.append(" AND t.is_active = TRUE")
+			.append(" ORDER BY t.status_transaction_id ASC");
 		final List<Transaction> res = em().createNativeQuery(toStr(str), Transaction.class).getResultList();
 		return res;
 	}
@@ -118,7 +120,8 @@ public class TransactionDao extends BasePostDao<Transaction>{
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_transaction t")
 			.append(" WHERE t.membership_id IS NOT NULL")
-			.append(" AND t.is_active = TRUE");
+			.append(" AND t.is_active = TRUE")
+			.append(" ORDER BY t.status_transaction_id ASC");
 		final List<Transaction> res = em().createNativeQuery(toStr(str), Transaction.class).getResultList();
 		return res;
 	}
