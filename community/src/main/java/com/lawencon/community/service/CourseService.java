@@ -144,12 +144,12 @@ public class CourseService {
 
 		if (category.isEmpty() && price.isEmpty()) {
 			res = courseDao.getCourse(limit, offset);
-		} else if (category.equals(categoryId.getId())) {
-			res = courseDao.getByCategoryId(categoryId.getId(), limit, offset);
-		} else if (category.isEmpty() && price.equals("ASC")) {
+		} else if (price.equals("ASC")) {
 			res = courseDao.getByPriceAsc();
-		} else if (category.isEmpty() && price.equals("DESC")) {
+		} else if (price.equals("DESC")) {
 			res = courseDao.getByPriceDesc();
+		}else if (category.equals(categoryId.getId())) {
+			res = courseDao.getByCategoryId(categoryId.getId(), limit, offset);
 		}
 
 		for (int i = 0; i < res.size(); i++) {

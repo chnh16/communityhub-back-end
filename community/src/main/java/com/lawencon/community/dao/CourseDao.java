@@ -104,7 +104,7 @@ public class CourseDao extends MasterDao<Course>{
 	
 	public int getTotalCourse() {
 		final StringBuilder str = new StringBuilder();
-		str.append("SELECT COUNT(c.id) FROM course c ")
+		str.append("SELECT COUNT(c.id) FROM course c")
 			.append(" WHERE c.is_active = true");
 		
 		final int totalCourse = Integer.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str)
