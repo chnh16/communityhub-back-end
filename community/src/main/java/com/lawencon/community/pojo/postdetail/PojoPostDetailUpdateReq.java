@@ -6,7 +6,6 @@ public class PojoPostDetailUpdateReq {
 
 	private String id;
 	private String postId;
-	private PojoFileInsertReq file;
 	private String detailContent;
 	private Integer ver;
 
@@ -43,14 +42,4 @@ public class PojoPostDetailUpdateReq {
 	public void setVer(Integer ver) {
 		this.ver = ver;
 	}
-
-	public PojoFileInsertReq getFile() {
-		return file;
-	}
-
-	public void setFile(PojoFileInsertReq file) {
-		this.file = file;
-	}
-
-
 }
