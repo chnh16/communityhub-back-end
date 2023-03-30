@@ -44,7 +44,7 @@ public class EventService {
 	@Autowired
 	private FileDao fileDao;
 
-  @Autowired
+	@Autowired
 	private UserDao userDao;
 	
 	@Autowired
@@ -86,10 +86,6 @@ public class EventService {
 	public Optional<Event> getById(final String id) {
 		return eventDao.getById(id);
 	}
-
-//	public List<Event> getAll() {
-//		return eventDao.getAll();
-//	}
 
 	public boolean deleteById(final String id) {
 		boolean eventDelete = false;
