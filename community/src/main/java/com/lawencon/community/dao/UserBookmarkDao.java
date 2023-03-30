@@ -33,6 +33,18 @@ public class UserBookmarkDao extends BasePostDao<UserBookmark> {
 		return res;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<UserBookmark> getAllByUserId(final String userId, final Integer limit, final Integer offset){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM user_bookmark ")
+			.append("WHERE user_id = :userId AND is_active = true ");
+		final List<UserBookmark> res = em().createNativeQuery(toStr(str), UserBookmark.class)
+				.setParameter("userId", userId).setMaxResults(limit)
+				.setFirstResult((offset-1)*limit)
+				.getResultList();
+		return res;
+	}
+	
 	public Long getCount(final String postId) {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT COUNT(ub.post_id) FROM user_bookmark ub ")

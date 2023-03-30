@@ -78,8 +78,8 @@ private final EventService eventService;
 	}
 	
 	@GetMapping("user-event")
-	public ResponseEntity<List<PojoUserEventGetByUserIdRes>> getByUserId(final String id) {
-		final List<PojoUserEventGetByUserIdRes> res = eventService.getByUserId(id);
+	public ResponseEntity<List<PojoUserEventGetByUserIdRes>> getByUserId(@RequestParam("category") String category, @RequestParam("price") String price, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+		final List<PojoUserEventGetByUserIdRes> res = eventService.getByUserId(category, price, limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	

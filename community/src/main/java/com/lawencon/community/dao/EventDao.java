@@ -97,7 +97,6 @@ public class EventDao extends MasterDao<Event>{
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT COUNT(e.id) FROM t_event e ")
 			.append(" WHERE e.is_active = true");
-		
 		final int totalEvent = Integer.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str)
 				.toString())
 				.getSingleResult().toString());

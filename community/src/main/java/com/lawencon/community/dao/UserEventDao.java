@@ -21,11 +21,12 @@ public class UserEventDao extends BasePostDao<UserEvent>{
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<UserEvent> getByUserId (final String userId){
+	public List<UserEvent> getByUserId (final String userId, final Integer limit, final Integer offset){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM user_event ue ")
 		.append("WHERE ue.user_id = :userId");
-		final List<UserEvent> res = em().createNativeQuery(toStr(str), UserEvent.class).setParameter("userId", userId).getResultList();
+		final List<UserEvent> res = em().createNativeQuery(toStr(str), UserEvent.class).setParameter("userId", userId)	.setMaxResults(limit)
+				.setFirstResult((offset-1)*limit).getResultList();
 		return res;
 	}
 	

@@ -295,9 +295,9 @@ public class EventService {
 		return pojoInsertRes;
 	}
 	
-	public List<PojoUserEventGetByUserIdRes> getByUserId(final String id) {
+	public List<PojoUserEventGetByUserIdRes> getByUserId(String category, String price, Integer limit, Integer offset) {
 		final List<PojoUserEventGetByUserIdRes> pojos = new ArrayList<>();
-		final List<UserEvent> res = userEventDao.getByUserId(principalService.getAuthPrincipal());
+		final List<UserEvent> res = userEventDao.getByUserId(principalService.getAuthPrincipal(), limit, offset);
 
 		for (int i = 0; i < res.size(); i++) {
 			final PojoUserEventGetByUserIdRes pojo = new PojoUserEventGetByUserIdRes();
