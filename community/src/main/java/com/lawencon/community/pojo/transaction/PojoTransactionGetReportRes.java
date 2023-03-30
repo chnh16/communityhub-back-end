@@ -5,6 +5,7 @@ public class PojoTransactionGetReportRes {
 	private String itemName;
 	private String startDate;
 	private Integer totalParticipants;
+	
 	public String getActivityType() {
 		return activityType;
 	}

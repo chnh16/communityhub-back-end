@@ -19,6 +19,7 @@ import com.lawencon.community.model.Course;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.UserCourse;
+import com.lawencon.community.model.UserEvent;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -28,6 +29,7 @@ import com.lawencon.community.pojo.course.PojoCourseUpdateReq;
 import com.lawencon.community.pojo.course.PojoCourserGetAllResData;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseGetByUserIdRes;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseInsertReq;
+import com.lawencon.community.pojo.userevent.PojoUserEventGetByUserIdRes;
 import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 
@@ -278,19 +280,32 @@ public class CourseService {
 
 		for (int i = 0; i < res.size(); i++) {
 			final PojoUserCourseGetByUserIdRes pojo = new PojoUserCourseGetByUserIdRes();
-			final UserCourse userCourse = res.get(i);
+			final UserCourse course = res.get(i);
 
-			ConnHandler.getManager().detach(userCourse);
+			ConnHandler.getManager().detach(course);
 
-			pojo.setId(userCourse.getId());
-			pojo.setUserId(userCourse.getUser().getProfile().getFullName());
-			pojo.setCourseId(userCourse.getCourse().getCourseName());
+			pojo.setId(course.getId());
+			pojo.setUserId(course.getUser().getProfile().getFullName());
+			
+			
+			pojo.setFileId(course.getCourse().getFile().getId());
+			
+			pojo.setCourseName(course.getCourse().getCourseName());
+			pojo.setTrainer(course.getCourse().getTrainer());
+			pojo.setProvider(course.getCourse().getProvider());
+			pojo.setLocationName(course.getCourse().getLocationName());
+			pojo.setCategoryId(course.getCourse().getCategory().getCategoryName());
+			pojo.setStartDate(course.getCourse().getStartDate());
+			pojo.setEndDate(course.getCourse().getEndDate());
+			pojo.setPrice(course.getCourse().getPrice());
+			pojo.setVer(course.getCourse().getVersion());
 
 			pojos.add(pojo);
 		}
 
 		return pojos;
 	}
+	
 
 	public PojoDeleteRes deleteUserEvent(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
@@ -300,6 +315,7 @@ public class CourseService {
 		res.setMessage("Berhasil Dihapus");
 		return res;
 	}
+	
   public PojoCourseGetAllRes getCourseById(final String id) {
 		final Optional<Course> course = courseDao.getCourseById(id);
 		final PojoCourseGetAllRes pojoCourseResGetAll = new PojoCourseGetAllRes();
