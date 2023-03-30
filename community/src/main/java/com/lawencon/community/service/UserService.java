@@ -224,7 +224,7 @@ public class UserService implements UserDetailsService, Runnable {
 	
 //		emailService.sendSimpleMail(email);
 		try {
-			emailService.sendMail(registerVerification);			
+			emailService.sendMail(registerVerification, userInsert);			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
