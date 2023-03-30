@@ -87,7 +87,7 @@ public class UserController {
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 	
-	@PutMapping
+	@PutMapping("verify")
 	public ResponseEntity<PojoUpdateRes> verification(@RequestBody PojoVerificationUpdateReq data) {
 		final PojoUpdateRes res = userService.verification(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
@@ -111,14 +111,9 @@ public class UserController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-
 	@PutMapping("change-password")
 	public ResponseEntity<PojoUpdateRes> changePass(@RequestBody PojoUserChangePasswordReq data) {
 		final PojoUpdateRes res = userService.changePass(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
-	
-	
-
 }

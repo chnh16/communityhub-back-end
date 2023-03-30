@@ -215,16 +215,16 @@ public class UserService implements UserDetailsService, Runnable {
 		registerVerificationDao.saveNoLogin(registerVerification, () -> getUserSystem.getId());
 		ConnHandler.commit();
 
-		final EmailDetails email = new EmailDetails();
-		email.setMsgBody("Halo " + userInsert.getProfile().getFullName() + "\nAkun anda " + " email : "
-				+ userInsert.getEmail() + "\nKode Verifikasi : " + generatePass
-				+ "\nMohon lakukan verifkasi untuk akun anda, menggunakan kode verifikasi diatas, lakukan verifikasi dalam 5 menit \n TerimaKasih");
-		email.setRecipient(userInsert.getEmail());
-		email.setSubject("Berhasil ");
+//		final EmailDetails email = new EmailDetails();
+//		email.setMsgBody("Halo " + userInsert.getProfile().getFullName() + "\nAkun anda " + " email : "
+//				+ userInsert.getEmail() + "\nKode Verifikasi : " + generatePass
+//				+ "\nMohon lakukan verifkasi untuk akun anda, menggunakan kode verifikasi diatas, lakukan verifikasi dalam 5 menit \n TerimaKasih");
+//		email.setRecipient(userInsert.getEmail());
+//		email.setSubject("Berhasil ");
 	
 //		emailService.sendSimpleMail(email);
 		try {
-			emailService.sendMail(registerVerification);			
+			emailService.sendMail(registerVerification, userInsert);			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
