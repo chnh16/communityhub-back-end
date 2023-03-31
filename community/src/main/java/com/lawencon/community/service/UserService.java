@@ -252,42 +252,33 @@ public class UserService implements UserDetailsService, Runnable {
 		return pojoUpdate;
 	}
 
-	public PojoInsertRes generateNewCode(final PojoVerificationCodeUpdateReq email) {
+	public PojoUpdateRes generateNewCode(final PojoVerificationCodeUpdateReq email) {
 		final User getUserSystem = userDao.getUserSystem(RoleList.SYSTEM.getRoleCode()).get();
-		final PojoInsertRes pojo = new PojoInsertRes();
+		final PojoUpdateRes pojo = new PojoUpdateRes();
 		final Optional<RegisterVerification> verification = registerVerificationDao.getIdByEmail(email.getEmail());
 		final Optional<User> userId = userDao.getIdByEmail(email.getEmail());
-		final RegisterVerification verif = registerVerificationDao.getByIdRef(RegisterVerification.class, verification.get().getId());
+		final RegisterVerification registerVerif = registerVerificationDao.getByIdAndDetach(RegisterVerification.class, verification.get().getId());
 		final User user = getByRefId(userId.get().getId());
-		deleteVerificationCode(verif);
-
-		final RegisterVerification registerVerification = new RegisterVerification();
 		final String generatePass = Generate.generateCode(8);
 
-		registerVerification.setEmail(user.getEmail());
-		registerVerification.setCodeVerifcation(generatePass);
-		registerVerification.setExpired(LocalDateTime.now().plusMinutes(5));
+		registerVerif.setEmail(email.getEmail());
+		registerVerif.setCodeVerifcation(generatePass);
+		registerVerif.setExpired(LocalDateTime.now().plusMinutes(5));
 
 		RegisterVerification verificationInsert = null;
 		ConnHandler.begin();
-		verificationInsert = registerVerificationDao.saveNoLogin(registerVerification, () -> getUserSystem.getId());
+		verificationInsert = registerVerificationDao.saveNoLogin(registerVerif, () -> getUserSystem.getId());
 		ConnHandler.commit();
 
 		try {
-			emailService.sendMail(registerVerification, user);
+			emailService.sendMail(registerVerif, user);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		pojo.setId(verificationInsert.getId());
+		pojo.setVer(verificationInsert.getVersion());
 		pojo.setMessage("Kode baru berhasil dikirim ke email anda");
 		return pojo;
-	}
-
-	private void deleteVerificationCode(final RegisterVerification verification) {
-		ConnHandler.begin();
-		registerVerificationDao.delete(verification);
-		ConnHandler.commit();
 	}
 
 	public PojoInsertRes createAdmin(final PojoUserRegisterReq data) {

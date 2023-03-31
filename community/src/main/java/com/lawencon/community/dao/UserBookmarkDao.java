@@ -78,4 +78,10 @@ public class UserBookmarkDao extends BasePostDao<UserBookmark> {
 		return Optional.ofNullable(userBookmark);
 	}
 
+	@Override
+	UserBookmark getByIdAndDetach(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

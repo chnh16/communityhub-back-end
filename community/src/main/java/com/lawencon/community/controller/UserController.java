@@ -93,8 +93,8 @@ public class UserController {
 	}
 
 	@PostMapping("verify/generate")
-	public ResponseEntity<PojoInsertRes> updateCodeVerification(@RequestBody PojoVerificationCodeUpdateReq email) {
-		final PojoInsertRes res = userService.generateNewCode(email);
+	public ResponseEntity<PojoUpdateRes> updateCodeVerification(@RequestBody PojoVerificationCodeUpdateReq email) {
+		final PojoUpdateRes res = userService.generateNewCode(email);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 

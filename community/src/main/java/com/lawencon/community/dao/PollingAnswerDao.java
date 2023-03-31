@@ -112,4 +112,10 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer> {
 		return listPollingAnswer;
 	}
 
+	@Override
+	PollingAnswer getByIdAndDetach(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

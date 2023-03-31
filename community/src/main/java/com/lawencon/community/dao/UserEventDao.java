@@ -65,4 +65,10 @@ public class UserEventDao extends BasePostDao<UserEvent>{
 				.setFirstResult((offset-1)*limit).getResultList();
 		return res;
 	}
+
+	@Override
+	UserEvent getByIdAndDetach(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

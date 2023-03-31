@@ -66,4 +66,10 @@ public class UserCourseDao extends BasePostDao<UserCourse>{
 		return res;
 	}
 
+	@Override
+	UserCourse getByIdAndDetach(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
