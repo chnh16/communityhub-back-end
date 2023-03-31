@@ -54,8 +54,8 @@ public class UserDao extends MasterDao<User> {
 		return saveNoLogin(data, idFunc);
 	}
 
-	public String getIdByEmail(final String email) {
-		String res = null;
+	public Optional<User> getIdByEmail(final String email) {
+		User res = null;
 
 		try {
 			final StringBuilder str = new StringBuilder();
@@ -64,12 +64,13 @@ public class UserDao extends MasterDao<User> {
 					.append("WHERE tu.email = :email AND tu.is_active = TRUE ");
 			final Object result = em().createNativeQuery(toStr(str)).setParameter("email", email).getSingleResult();
 			if(result != null) {
-				res = (String) result;
+				res = new User();
+				res.setId(result.toString());
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		return res;
+		return Optional.ofNullable(res);
 	}
 
 	public Optional<User> getByEmail(final String email) {
