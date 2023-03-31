@@ -29,6 +29,7 @@ import com.lawencon.community.pojo.user.PojoProfileUpdateReq;
 import com.lawencon.community.pojo.user.PojoUserChangePasswordReq;
 import com.lawencon.community.pojo.user.PojoUserGetUserProfileRes;
 import com.lawencon.community.pojo.user.PojoUserRegisterReq;
+import com.lawencon.community.pojo.user.PojoVerificationCodeUpdateReq;
 import com.lawencon.community.pojo.user.PojoVerificationReq;
 import com.lawencon.community.service.JwtService;
 import com.lawencon.community.service.UserService;
@@ -92,7 +93,7 @@ public class UserController {
 	}
 
 	@PostMapping("verify/generate")
-	public ResponseEntity<PojoInsertRes> updateCodeVerification(@RequestBody String email) {
+	public ResponseEntity<PojoInsertRes> updateCodeVerification(@RequestBody PojoVerificationCodeUpdateReq email) {
 		final PojoInsertRes res = userService.generateNewCode(email);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}

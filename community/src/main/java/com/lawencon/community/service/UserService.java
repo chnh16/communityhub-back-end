@@ -34,6 +34,7 @@ import com.lawencon.community.pojo.user.PojoProfileUpdateReq;
 import com.lawencon.community.pojo.user.PojoUserChangePasswordReq;
 import com.lawencon.community.pojo.user.PojoUserGetUserProfileRes;
 import com.lawencon.community.pojo.user.PojoUserRegisterReq;
+import com.lawencon.community.pojo.user.PojoVerificationCodeUpdateReq;
 import com.lawencon.community.pojo.user.PojoVerificationReq;
 import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
@@ -227,34 +228,36 @@ public class UserService implements UserDetailsService, Runnable {
 	public PojoUpdateRes verification(final PojoVerificationReq data) {
 		final User getUserSystem = userDao.getUserSystem(RoleList.SYSTEM.getRoleCode()).get();
 		PojoUpdateRes pojoUpdate = null;
-		if (registerVerificationDao.getVerification(data.getEmail(), data.getCodeVerifcation()).isEmpty()) {
+		final Optional<RegisterVerification> verification = registerVerificationDao.getVerification(data.getEmail(), data.getCodeVerification());
+		if (verification.isEmpty()) {
 			throw new RuntimeException("Kode verifikasi anda tidak cocok");
-		} else {
-			pojoUpdate = new PojoUpdateRes();
-			User userVerification = null;
-			final String userId = userDao.getIdByEmail(data.getEmail());
-			userVerification = getByIdAndDetach(userId);
-			if(userVerification.getIsVerified()) {
-				throw new RuntimeException("Sudah pernah melakukan verifikasi");
-			}
-
-			User userUpdate = null;
-
-			ConnHandler.begin();
-			userVerification.setIsVerified(true);
-			userUpdate = userDao.saveNoLogin(userVerification, () -> getUserSystem.getId());
-			ConnHandler.commit();
-			pojoUpdate.setVer(userUpdate.getVersion());
-			pojoUpdate.setMessage("Berhasil melakukan verifikasi");
 		}
+		
+		pojoUpdate = new PojoUpdateRes();
+		User userVerification = null;
+		final String userId = userDao.getIdByEmail(data.getEmail());
+		userVerification = getByIdAndDetach(userId);
+		if(userVerification.getIsVerified()) {
+			throw new RuntimeException("Sudah pernah melakukan verifikasi");
+		}
+
+		User userUpdate = null;
+
+		ConnHandler.begin();
+		userVerification.setIsVerified(true);
+		userUpdate = userDao.saveNoLogin(userVerification, () -> getUserSystem.getId());
+		ConnHandler.commit();
+		pojoUpdate.setVer(userUpdate.getVersion());
+		pojoUpdate.setMessage("Berhasil melakukan verifikasi");
+		
 		return pojoUpdate;
 	}
 
-	public PojoInsertRes generateNewCode(final String email) {
+	public PojoInsertRes generateNewCode(final PojoVerificationCodeUpdateReq email) {
 		final User getUserSystem = userDao.getUserSystem(RoleList.SYSTEM.getRoleCode()).get();
 		final PojoInsertRes pojo = new PojoInsertRes();
-		final String verificationId = registerVerificationDao.getIdByEmail(email);
-		final String userId = userDao.getIdByEmail(email);
+		final String verificationId = registerVerificationDao.getIdByEmail(email.getEmail());
+		final String userId = userDao.getIdByEmail(email.getEmail());
 		final User user = getByRefId(userId);
 		ConnHandler.begin();
 		registerVerificationDao.delete(verificationId);
