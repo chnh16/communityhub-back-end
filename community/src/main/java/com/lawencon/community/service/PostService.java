@@ -149,7 +149,7 @@ public class PostService {
 		final Post post = new Post();
 		PostType type = postTypeDao.getByPostTypeCode(com.lawencon.community.constant.PostType.NORMAL.getTypeCode())
 				.get();
-		if (data.getPolling() != null) {
+		if (!data.getPolling().isEmpty()) {
 			type = postTypeDao.getByPostTypeCode(com.lawencon.community.constant.PostType.POLLING.getTypeCode()).get();
 
 		}

@@ -54,12 +54,31 @@ public class UserDao extends MasterDao<User> {
 		return saveNoLogin(data, idFunc);
 	}
 
+	public String getIdByEmail(final String email) {
+		String res = null;
+
+		try {
+			final StringBuilder str = new StringBuilder();
+			str.append("SELECT tu.id ")
+					.append("FROM t_user tu ")
+					.append("WHERE tu.email = :email AND tu.is_active = TRUE ");
+			final Object result = em().createNativeQuery(toStr(str)).setParameter("email", email).getSingleResult();
+			if(result != null) {
+				res = (String) result;
+			}
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
 	public Optional<User> getByEmail(final String email) {
 		User user = null;
 
 		try {
 			final StringBuilder str = new StringBuilder();
-			str.append(" SELECT tu.id, tu.email, tu.password_user, tu.role_id, tr.role_code ,tu.profile_id, tu.created_by, tu.updated_by, tu.created_at, tu.updated_at, tu.ver, tu.is_active, p.full_name ")
+			str.append(
+					" SELECT tu.id, tu.email, tu.password_user, tu.role_id, tr.role_code ,tu.profile_id, tu.created_by, tu.updated_by, tu.created_at, tu.updated_at, tu.ver, tu.is_active, p.full_name ")
 					.append("FROM t_user tu INNER JOIN t_role tr ON tu.role_id = tr.id ")
 					.append("INNER JOIN profile p ON tu.profile_id = p.id ")
 					.append("WHERE tu.email = :email AND tu.is_active = TRUE ");
@@ -120,14 +139,15 @@ public class UserDao extends MasterDao<User> {
 
 		try {
 			final StringBuilder str = new StringBuilder();
-			str.append(" SELECT tu.id, tu.created_by, tu.updated_by, tu.created_at, tu.updated_at, tu.ver, tu.is_active ")
-					.append("FROM t_user tu ")
-					.append("INNER JOIN t_role tr ON tu.role_id = tr.id ")
-					.append("INNER JOIN profile p ON tu.profile_id = p.id " )
+			str.append(
+					" SELECT tu.id, tu.created_by, tu.updated_by, tu.created_at, tu.updated_at, tu.ver, tu.is_active ")
+					.append("FROM t_user tu ").append("INNER JOIN t_role tr ON tu.role_id = tr.id ")
+					.append("INNER JOIN profile p ON tu.profile_id = p.id ")
 					.append("INNER JOIN t_role r ON tu.role_id = r.id ")
 					.append("WHERE r.role_code = :roleCode AND tu.is_active = TRUE ");
 
-			final Object result = em().createNativeQuery(toStr(str)).setParameter("roleCode", roleCode).getSingleResult();
+			final Object result = em().createNativeQuery(toStr(str)).setParameter("roleCode", roleCode)
+					.getSingleResult();
 
 			if (result != null) {
 

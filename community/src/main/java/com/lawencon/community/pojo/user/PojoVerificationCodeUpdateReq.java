@@ -1,7 +1,7 @@
 package com.lawencon.community.pojo.user;
 
 public class PojoVerificationCodeUpdateReq {
-	
+	private String email;
 	private String registerVerificationId;
 
 	public String getRegisterVerificationId() {
@@ -11,7 +11,4 @@ public class PojoVerificationCodeUpdateReq {
 	public void setRegisterVerificationId(String registerVerificationId) {
 		this.registerVerificationId = registerVerificationId;
 	}
-	
-	
-
 }
