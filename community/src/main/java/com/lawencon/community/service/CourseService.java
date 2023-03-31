@@ -175,6 +175,44 @@ public class CourseService {
 		}
 		return pojos;
 	}
+	
+	public List<PojoCourseGetAllRes> getMyCourse(String category, String price, Integer limit, Integer offset) {
+		final List<PojoCourseGetAllRes> pojos = new ArrayList<>();
+		List<Course> res = new ArrayList<>();
+
+		final Category categoryId = categoryDao.getRefById(category);
+		
+		if(category.isEmpty() && price.isEmpty()) {
+			res = courseDao.getMyCourse(principalService.getAuthPrincipal(),limit, offset);
+		}else if(price.equals("ASC")){
+			res = courseDao.getByPriceAscMyCourse(principalService.getAuthPrincipal(),limit, offset);
+		}else if(price.equals("DESC")){
+			res = courseDao.getByPriceDescMyCourse(principalService.getAuthPrincipal(),limit, offset);
+		}else if(category.equals(categoryId.getId())) {
+			res = courseDao.getByCategoryIdMyCourse(categoryId.getId(),principalService.getAuthPrincipal() ,limit, offset);
+		}
+
+		for (int i = 0; i < res.size(); i++) {
+			final PojoCourseGetAllRes pojo = new PojoCourseGetAllRes();
+			final Course course = res.get(i);
+
+			ConnHandler.getManager().detach(course);
+			pojo.setFile(course.getFile().getId());
+			pojo.setId(course.getId());
+			pojo.setCourseName(course.getCourseName());
+			pojo.setTrainer(course.getTrainer());
+			pojo.setProvider(course.getProvider());
+			pojo.setLocationName(course.getLocationName());
+			pojo.setCategoryId(course.getCategory().getCategoryName());
+			pojo.setStartDate(course.getStartDate());
+			pojo.setEndDate(course.getEndDate());
+			pojo.setPrice(course.getPrice());
+			pojo.setVer(course.getVersion());
+
+			pojos.add(pojo);
+		}
+		return pojos;
+	}
 
 //	public List<PojoCourseResGetByCategoryId> getByCategoryId(final String id) {
 //		final List<PojoCourseResGetByCategoryId> pojos = new ArrayList<>();
@@ -276,7 +314,19 @@ public class CourseService {
 
 	public List<PojoUserCourseGetByUserIdRes> getByUserId(String category, String price, Integer limit, Integer offset) {
 		final List<PojoUserCourseGetByUserIdRes> pojos = new ArrayList<>();
-		final List<UserCourse> res = userCourseDao.getByUserId(principalService.getAuthPrincipal(), limit, offset);
+		
+		List<UserCourse> res = new ArrayList<>();
+		final Category categoryId = categoryDao.getRefById(category);
+		
+		if(category.isEmpty() && price.isEmpty()) {
+			res = userCourseDao.getByUserId(principalService.getAuthPrincipal(),limit, offset);
+		}else if(price.equals("ASC")){
+			res = userCourseDao.getByPriceAsc(principalService.getAuthPrincipal(),limit, offset);
+		}else if(price.equals("DESC")){
+			res = userCourseDao.getByPriceDesc(principalService.getAuthPrincipal(),limit, offset);
+		}else if(category.equals(categoryId.getId())) {
+			res = userCourseDao.getByCategoryId(categoryId.getId(),principalService.getAuthPrincipal() ,limit, offset);
+		}
 
 		for (int i = 0; i < res.size(); i++) {
 			final PojoUserCourseGetByUserIdRes pojo = new PojoUserCourseGetByUserIdRes();
@@ -288,7 +338,7 @@ public class CourseService {
 			pojo.setUserId(course.getUser().getProfile().getFullName());
 			
 			
-			pojo.setFileId(course.getCourse().getFile().getId());
+			pojo.setFile(course.getCourse().getFile().getId());
 			
 			pojo.setCourseName(course.getCourse().getCourseName());
 			pojo.setTrainer(course.getCourse().getTrainer());

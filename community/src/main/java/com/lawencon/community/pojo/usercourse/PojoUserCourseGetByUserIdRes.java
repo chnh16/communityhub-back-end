@@ -16,7 +16,7 @@ public class PojoUserCourseGetByUserIdRes {
 	private LocalDateTime endDate;
 	private BigDecimal price;
 	private String categoryId;
-	private String fileId;
+	private String file;
 	private Integer ver;
 
 	public String getId() {
@@ -99,12 +99,12 @@ public class PojoUserCourseGetByUserIdRes {
 		this.categoryId = categoryId;
 	}
 
-	public String getFileId() {
-		return fileId;
+	public String getFile() {
+		return file;
 	}
 
-	public void setFileId(String fileId) {
-		this.fileId = fileId;
+	public void setFile(String file) {
+		this.file = file;
 	}
 
 	public Integer getVer() {

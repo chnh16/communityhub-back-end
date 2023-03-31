@@ -332,7 +332,21 @@ public class EventService {
 	
 	public List<PojoUserEventGetByUserIdRes> getByUserId(String category, String price, Integer limit, Integer offset) {
 		final List<PojoUserEventGetByUserIdRes> pojos = new ArrayList<>();
-		final List<UserEvent> res = userEventDao.getByUserId(principalService.getAuthPrincipal(), limit, offset);
+
+		List<UserEvent> res = new ArrayList<>();
+		
+		final Category categoryId = categoryDao.getRefById(category);
+		
+		
+		if(category.isEmpty() && price.isEmpty()) {
+			res = userEventDao.getByUserId(principalService.getAuthPrincipal(),limit, offset);
+		}else if(price.equals("ASC")){
+			res = userEventDao.getByPriceAsc(principalService.getAuthPrincipal(),limit, offset);
+		}else if(price.equals("DESC")){
+			res = userEventDao.getByPriceDesc(principalService.getAuthPrincipal(),limit, offset);
+		}else if(category.equals(categoryId.getId())) {
+			res = userEventDao.getByCategoryId(categoryId.getId(),principalService.getAuthPrincipal() ,limit, offset);
+		}
 		
 		for (int i = 0; i < res.size(); i++) {
 			final PojoUserEventGetByUserIdRes pojo = new PojoUserEventGetByUserIdRes();
