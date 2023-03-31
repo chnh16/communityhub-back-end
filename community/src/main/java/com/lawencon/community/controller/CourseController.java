@@ -21,6 +21,7 @@ import com.lawencon.community.pojo.course.PojoCourseGetAllRes;
 import com.lawencon.community.pojo.course.PojoCourseInsertReq;
 import com.lawencon.community.pojo.course.PojoCourseUpdateReq;
 import com.lawencon.community.pojo.course.PojoCourserGetAllResData;
+import com.lawencon.community.pojo.event.PojoEventResGetAll;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseGetByUserIdRes;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseInsertReq;
 import com.lawencon.community.pojo.userevent.PojoUserEventGetByUserIdRes;
@@ -90,6 +91,10 @@ private final CourseService courseService;
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	
+	@GetMapping("my-course	")
+	private ResponseEntity<List<PojoCourseGetAllRes>> getMyCourse(@RequestParam("category") String category, @RequestParam("price") String price, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset){
+		final List<PojoCourseGetAllRes> res = courseService.getMyCourse(category, price, limit, offset);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
 
 }

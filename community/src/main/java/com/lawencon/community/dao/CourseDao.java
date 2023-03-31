@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Course;
+import com.lawencon.community.model.Event;
 
 @Repository
 public class CourseDao extends MasterDao<Course>{
@@ -127,5 +128,48 @@ public class CourseDao extends MasterDao<Course>{
 	@Override
 	public Course getByIdAndDetach(final String id) {
 		return super.getByIdAndDetach(Course.class, id);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Course> getMyCourse(final String userId, final Integer limit, final Integer offset){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM course")
+		.append(" WHERE user_id = :userId AND is_active = TRUE");
+		final List<Course> res = em().createNativeQuery(toStr(str), Course.class).setParameter("userId", userId).setMaxResults(limit)
+				.setFirstResult((offset-1)*limit).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Course> getByPriceAscMyCourse(String userId, final Integer limit, final Integer offset){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM course")
+		.append(" WHERE user_id = :userId AND is_active = TRUE")
+		.append(" ORDER BY price ASC");
+		final List<Course> res = em().createNativeQuery(toStr(str), Course.class).setParameter("userId", userId).setMaxResults(limit)
+				.setFirstResult((offset-1)*limit).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Course> getByPriceDescMyCourse(String userId, final Integer limit, final Integer offset){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM course")
+		.append(" WHERE user_id = :userId AND is_active = TRUE")
+		.append(" ORDER BY price DESC");
+		final List<Course> res = em().createNativeQuery(toStr(str), Course.class).setParameter("userId", userId).setMaxResults(limit)
+				.setFirstResult((offset-1)*limit).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Course> getByCategoryIdMyCourse (String id, String userId, final Integer limit, final Integer offset){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM course c ")
+		.append("WHERE c.category_id = :id AND c.user_id = :userId")
+		.append(" AND c.is_active = TRUE");
+		final List<Course> res = em().createNativeQuery(toStr(str), Course.class).setParameter("id", id).setParameter("userId", userId).setMaxResults(limit)
+				.setFirstResult((offset-1)*limit).getResultList();
+		return res;
 	}
 }
