@@ -2,7 +2,7 @@ package com.lawencon.community.pojo.user;
 
 public class PojoVerificationReq {
 	private String email;
-	private String codeVerifcation;
+	private String codeVerification;
 
 	
 	public String getEmail() {
@@ -13,12 +13,12 @@ public class PojoVerificationReq {
 		this.email = email;
 	}
 
-	public String getCodeVerifcation() {
-		return codeVerifcation;
+	public String getCodeVerification() {
+		return codeVerification;
 	}
 
-	public void setCodeVerifcation(String codeVerifcation) {
-		this.codeVerifcation = codeVerifcation;
+	public void setCodeVerification(String codeVerification) {
+		this.codeVerification = codeVerification;
 	}
 	
 
