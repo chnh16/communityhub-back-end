@@ -26,8 +26,8 @@ public class RegisterVerificationDao extends BasePostDao<RegisterVerification> {
 		return deleteById(RegisterVerification.class, id);
 	}
 	
-	public String getIdByEmail(final String email) {
-		String res = null;
+	public Optional<RegisterVerification> getIdByEmail(final String email) {
+		RegisterVerification res = null;
 		
 		try {
 			final StringBuilder str = new StringBuilder();
@@ -35,16 +35,17 @@ public class RegisterVerificationDao extends BasePostDao<RegisterVerification> {
 			.append("FROM register_verification rv ")
 			.append("WHERE email = :email AND is_active = TRUE ");
 			
-			final Object result = em().createNativeQuery(res).setParameter("email", email).getFirstResult();
+			final Object result = em().createNativeQuery(toStr(str)).setParameter("email", email).getFirstResult();
 			
 			if(result != null) {
-				res = (String) result;
+				res = new RegisterVerification();
+				res.setId(result.toString());
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 		
-		return res;
+		return Optional.ofNullable(res);
 	}
 	
 	public Optional<RegisterVerification> getVerification(String email, String codeVerifcation) {
