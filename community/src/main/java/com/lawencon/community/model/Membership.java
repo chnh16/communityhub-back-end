@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.lawencon.base.BaseEntity;
@@ -24,6 +26,17 @@ public class Membership extends BaseEntity{
 	@Column (nullable = false)
 	private BigDecimal amount;
 	
+	@OneToOne
+	@JoinColumn(name = "type_product_id", nullable = false)
+	private TypeProduct typeProduct;
+
+	public TypeProduct getTypeProduct() {
+		return typeProduct;
+	}
+
+	public void setTypeProduct(TypeProduct typeProduct) {
+		this.typeProduct = typeProduct;
+	}
 
 	public String getMembershipCode() {
 		return membershipCode;

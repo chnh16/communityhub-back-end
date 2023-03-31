@@ -220,17 +220,25 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PojoTransactionGetReportRes> getCourseReport(final LocalDate startDate, final LocalDate endDate){
+	public List<PojoTransactionGetReportRes> getMemberReportParticipant(final String userId, final LocalDate startDate, final LocalDate endDate){
 		final List<PojoTransactionGetReportRes> transactions = new ArrayList<>();
 		
 		try {
 			final StringBuilder str = new StringBuilder();
-			str.append("SELECT 'Course' AS activity_type, c.course_name, DATE(c.start_date), COUNT(tt.user_id) AS total_participants FROM t_transaction tt ")
-			.append("INNER JOIN course c ON tt.course_id = c.id ")
-			.append("WHERE DATE(c.start_date) >= DATE(:startDate) AND DATE(c.end_date) <= DATE(:endDate) AND tt.is_approved = true ")
-			.append("GROUP BY c.course_name, c.start_date ");
+			str.append("SELECT tp.type_name, c.course_name AS title , DATE(c.start_date) AS start_date, COUNT(tt.user_id) AS total_participants FROM t_transaction tt ")
+			.append(" INNER JOIN course c ON tt.course_id = c.id ")
+			.append(" INNER JOIN type_product tp ON tp.id = c.type_product_id ")
+			.append(" WHERE c.user_id = :userId AND DATE(c.start_date) >= DATE(:startDate) AND DATE(c.end_date) <= DATE(:endDate) AND tt.is_approved = true ")
+			.append(" GROUP BY c.course_name, c.start_date, tp.type_name ")
+			.append(" UNION ALL ")
+			.append(" SELECT tp.type_name, te.event_name AS title , DATE(te.start_date) AS start_date, COUNT(tt.user_id) AS total_participants FROM t_transaction tt ")
+			.append(" INNER JOIN t_event te ON tt.event_id = te.id ")
+			.append(" INNER JOIN type_product tp ON tp.id = te.type_product_id ")
+			.append(" WHERE te.user_id = :userId AND DATE(te.start_date) >= DATE(:startDate) AND DATE(te.end_date) <= DATE(:endDate) AND tt.is_approved = true ")
+			.append(" GROUP BY te.event_name, te.start_date, tp.type_name ");
 			
 			final List<Object> result = em().createNativeQuery(toStr(str))
+					.setParameter("userId", userId)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
 					.getResultList();
@@ -254,17 +262,26 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PojoTransactionGetReportParticipantSuperAdminRes> getCourseReportSuperAdmin(final LocalDate startDate, final LocalDate endDate){
+	public List<PojoTransactionGetReportParticipantSuperAdminRes> getReportSuperAdminParticipant(final LocalDate startDate, final LocalDate endDate){
 		final List<PojoTransactionGetReportParticipantSuperAdminRes> transactions = new ArrayList<>();
 		
 		try {
 			final StringBuilder str = new StringBuilder();
-			str.append("SELECT p.full_name, c.provider, 'Course' AS activity_type, c.course_name, DATE(c.start_date), COUNT(tt.user_id) AS total_participants FROM t_transaction tt ")
-			.append("INNER JOIN course c ON tt.course_id = c.id ")
-			.append("INNER JOIN t_user tu ON tt.user_id = tu.id ")
-			.append("INNER JOIN profile p ON tu.profile_id = p.id ")
-			.append("WHERE DATE(c.start_date) >= DATE(:startDate) AND DATE(c.end_date) <= DATE(:endDate) AND tt.is_approved = true AND tu.is_verified = true ")
-			.append("GROUP BY c.course_name, c.start_date, p.full_name, c.provider ");
+			str.append("SELECT p.full_name, c.provider, tp.type_name, c.course_name AS title , DATE(c.start_date) AS start_date, COUNT(tt.user_id) AS total_participants FROM t_transaction tt ")
+			.append(" INNER JOIN course c ON tt.course_id = c.id ")
+			.append(" INNER JOIN type_product tp ON tp.id = c.type_product_id ")
+			.append(" INNER JOIN t_user tu ON tu.id = c.user_id ")
+			.append(" INNER JOIN profile p ON p.id = tu.profile_id ")
+			.append(" WHERE DATE(c.start_date) >= DATE(:startDate) AND DATE(c.end_date) <= DATE(:endDate) AND tt.is_approved = true ")
+			.append(" GROUP BY p.full_name, c.provider, c.course_name, c.start_date, tp.type_name ")
+			.append(" UNION ALL ")
+			.append(" SELECT p.full_name, te.provider, tp.type_name, te.event_name AS title , DATE(te.start_date) AS start_date, COUNT(tt.user_id) AS total_participants FROM t_transaction tt ")
+			.append(" INNER JOIN t_event te ON tt.event_id = te.id ")
+			.append(" INNER JOIN type_product tp ON tp.id = te.type_product_id ")
+			.append(" INNER JOIN t_user tu ON tu.id = te.user_id ")
+			.append(" INNER JOIN profile p ON p.id = tu.profile_id ")
+			.append(" WHERE DATE(te.start_date) >= DATE(:startDate) AND DATE(te.end_date) <= DATE(:endDate) AND tt.is_approved = true ")
+			.append(" GROUP BY p.full_name, te.provider, te.event_name, te.start_date, tp.type_name ");
 			
 			final List<Object> result = em().createNativeQuery(toStr(str))
 					.setParameter("startDate", startDate)
@@ -293,20 +310,29 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PojoTransactionGetReportIncomeMemberRes> getCourseReportIncomeMember(final LocalDate startDate, final LocalDate endDate){
+	public List<PojoTransactionGetReportIncomeMemberRes> getReportIncomeMember(final String userId, final LocalDate startDate, final LocalDate endDate){
 		final List<PojoTransactionGetReportIncomeMemberRes> transactions = new ArrayList<>();
 		
 		try {
 			final StringBuilder str = new StringBuilder();
-			str.append("SELECT 'Course' AS activity_type, c.course_name, SUM(c.price) AS total_incomes FROM t_transaction tt  ")
+			str.append("SELECT tp.type_name, c.course_name, SUM(tt.grand_total * 100/80) AS total_incomes FROM t_transaction tt ")
 			.append("INNER JOIN course c ON tt.course_id = c.id ")
-			.append("WHERE DATE(tt.updated_at) >= DATE(:startDate) AND DATE(tt.updated_at) <= DATE(:endDate) AND tt.is_approved = true  ")
-			.append("GROUP BY c.course_name, c.start_date ");
+			.append("INNER JOIN type_product tp ON tp.id = c.type_product_id ")
+			.append("WHERE c.user_id = :userId AND DATE(tt.updated_at) >= DATE(:startDate) AND DATE(tt.updated_at) <= DATE(:endDate) AND tt.is_approved = true  ")
+			.append("GROUP BY c.course_name, tp.type_name ")
+			.append("UNION ALL ")
+			.append("SELECT tp.type_name, te.event_name, SUM(tt.grand_total * 100/80) AS total_incomes FROM t_transaction tt ")
+			.append("INNER JOIN t_event te ON tt.event_id = te.id ")
+			.append("INNER JOIN type_product tp ON tp.id = te.type_product_id ")
+			.append("WHERE te.user_id = :userId AND DATE(tt.updated_at) >= DATE(:startDate) AND DATE(tt.updated_at) <= DATE(:endDate) AND tt.is_approved = true  ")
+			.append("GROUP BY te.event_name, tp.type_name ");
 			
 			final List<Object> result = em().createNativeQuery(toStr(str))
+					.setParameter("userId", userId)
 					.setParameter("startDate", startDate)
 					.setParameter("endDate", endDate)
 					.getResultList();
+			
 			for(final Object objs :  result) {
 				final Object[] obj = (Object[]) objs;
 				
@@ -325,17 +351,26 @@ public class TransactionDao extends BasePostDao<Transaction>{
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<PojoTransactionGetReportIncomeSuperAdminRes> getCourseReportIncomeSuperAdmin(final LocalDate startDate, final LocalDate endDate){
+	public List<PojoTransactionGetReportIncomeSuperAdminRes> getReportIncomeSuperAdmin(final LocalDate startDate, final LocalDate endDate){
 		final List<PojoTransactionGetReportIncomeSuperAdminRes> transactions = new ArrayList<>();
 		
 		try {
 			final StringBuilder str = new StringBuilder();
-			str.append("SELECT p.full_name, 'Course' AS activity_type, c.course_name, SUM(c.price) AS total_incomes FROM t_transaction tt ")
+			str.append("SELECT p.full_name, tp.type_name, SUM(tt.grand_total * 100/80) AS total_incomes FROM t_transaction tt ")
 			.append("INNER JOIN course c ON tt.course_id = c.id ")
-			.append("INNER JOIN t_user tu ON tt.user_id = tu.id ")
-			.append("INNER JOIN profile p ON tu.profile_id = p.id ")
-			.append("WHERE DATE(c.start_date) >= DATE(:startDate) AND DATE(c.end_date) <= DATE(:endDate) AND tt.is_approved = true AND tu.is_verified = true ")
-			.append("GROUP BY c.course_name, c.start_date, p.full_name ");
+			.append("INNER JOIN type_product tp ON tp.id = c.type_product_id ")
+			.append("INNER JOIN t_user tu ON tu.id = c.user_id ")
+			.append("INNER JOIN profile p ON p.id = tu.profile_id ")
+			.append("WHERE DATE(tt.updated_at) >= DATE(:startDate) AND DATE(tt.updated_at) <= DATE(:endDate) AND tt.is_approved = true  ")
+			.append("GROUP BY p.full_name, tp.type_name ")
+			.append("UNION ALL ")
+			.append("SELECT p.full_name, tp.type_name, SUM(tt.grand_total * 100/80) AS total_incomes FROM t_transaction tt ")
+			.append("INNER JOIN t_event te ON tt.event_id = te.id ")
+			.append("INNER JOIN type_product tp ON tp.id = te.type_product_id ")
+			.append("INNER JOIN t_user tu ON tu.id = te.user_id ")
+			.append("INNER JOIN profile p ON p.id = tu.profile_id ")
+			.append("WHERE DATE(tt.updated_at) >= DATE(:startDate) AND DATE(tt.updated_at) <= DATE(:endDate) AND tt.is_approved = true  ")
+			.append("GROUP BY p.full_name, tp.type_name ");
 			
 			final List<Object> result = em().createNativeQuery(toStr(str))
 					.setParameter("startDate", startDate)
@@ -358,143 +393,6 @@ public class TransactionDao extends BasePostDao<Transaction>{
 		return transactions;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<PojoTransactionGetReportRes> getEventReport(final LocalDate startDate, final LocalDate endDate){
-		final List<PojoTransactionGetReportRes> transactions = new ArrayList<>();
-		
-		try {
-			final StringBuilder str = new StringBuilder();
-			str.append("SELECT 'Event' AS activity_type, te.event_name, DATE(te.start_date), COUNT(tt.user_id) AS total_participants FROM t_transaction tt ")
-			.append("INNER JOIN t_event te ON tt.event_id = te.id ")
-			.append("WHERE DATE(te.start_date) >= DATE(:startDate) AND DATE(te.end_date) <= DATE(:endDate) AND tt.is_approved = true ")
-			.append("GROUP BY te.event_name, te.start_date ");
-			
-			final List<Object> result = em().createNativeQuery(toStr(str))
-					.setParameter("startDate", startDate)
-					.setParameter("endDate", endDate)
-					.getResultList();
-			for(final Object objs :  result) {
-				final Object[] obj = (Object[]) objs;
-				
-				final PojoTransactionGetReportRes transactionReport = new PojoTransactionGetReportRes();
-				transactionReport.setActivityType(obj[0].toString());
-				transactionReport.setItemName(obj[1].toString());
-				transactionReport.setStartDate(DateUtil.localDateToStr(Date.valueOf(obj[2].toString()).toLocalDate()));
-				transactionReport.setTotalParticipants(Long.valueOf(obj[3].toString()).intValue());
-				
-				transactions.add(transactionReport);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-		return transactions;
-	}
 	
-	@SuppressWarnings("unchecked")
-	public List<PojoTransactionGetReportParticipantSuperAdminRes> getEventReportSuperAdmin(final LocalDate startDate, final LocalDate endDate){
-		final List<PojoTransactionGetReportParticipantSuperAdminRes> transactions = new ArrayList<>();
-		
-		try {
-			final StringBuilder str = new StringBuilder();
-			str.append("SELECT p.full_name, te.provider, 'Event' AS activity_type, te.event_name, DATE(te.start_date), COUNT(tt.user_id) AS total_participants FROM t_transaction tt ")
-			.append("INNER JOIN t_event te ON tt.event_id = te.id ")
-			.append("INNER JOIN t_user tu ON tt.user_id = tu.id ")
-			.append("INNER JOIN profile p ON tu.profile_id = p.id ")
-			.append("WHERE DATE(te.start_date) >= DATE(:startDate) AND DATE(te.end_date) <= DATE(:endDate) AND tt.is_approved = true AND tu.is_verified = true ")
-			.append("GROUP BY te.event_name, te.start_date, p.full_name, te.provider ");
-			
-			final List<Object> result = em().createNativeQuery(toStr(str))
-					.setParameter("startDate", startDate)
-					.setParameter("endDate", endDate)
-					.getResultList();
-			for(final Object objs :  result) {
-				final Object[] obj = (Object[]) objs;
-				
-				final PojoTransactionGetReportParticipantSuperAdminRes reportSuperAdmin = new PojoTransactionGetReportParticipantSuperAdminRes();
-				reportSuperAdmin.setMemberName(obj[0].toString());
-				reportSuperAdmin.setProviderName(obj[1].toString());
-				
-				reportSuperAdmin.setActivityType(obj[2].toString());
-				reportSuperAdmin.setItemName(obj[3].toString());
-				reportSuperAdmin.setStartDate(DateUtil.localDateToStr(Date.valueOf(obj[4].toString()).toLocalDate()));
-				reportSuperAdmin.setTotalParticipants(Long.valueOf(obj[5].toString()).intValue());
-				
-				transactions.add(reportSuperAdmin);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-		return transactions;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<PojoTransactionGetReportIncomeMemberRes> getEventReportIncomeMember(final LocalDate startDate, final LocalDate endDate){
-		final List<PojoTransactionGetReportIncomeMemberRes> transactions = new ArrayList<>();
-		
-		try {
-			final StringBuilder str = new StringBuilder();
-			str.append("SELECT 'Event' AS activity_type, te.event_name, SUM(te.price) AS total_incomes FROM t_transaction tt  ")
-			.append("INNER JOIN t_event te ON tt.event_id = te.id ")
-			.append("WHERE DATE(tt.updated_at) >= DATE(:startDate) AND DATE(tt.updated_at) <= DATE(:endDate) AND tt.is_approved = true  ")
-			.append("GROUP BY te.event_name, te.start_date ");
-			
-			final List<Object> result = em().createNativeQuery(toStr(str))
-					.setParameter("startDate", startDate)
-					.setParameter("endDate", endDate)
-					.getResultList();
-			for(final Object objs :  result) {
-				final Object[] obj = (Object[]) objs;
-				
-				final PojoTransactionGetReportIncomeMemberRes transactionReport = new PojoTransactionGetReportIncomeMemberRes();
-				transactionReport.setActivityType(obj[0].toString());
-				transactionReport.setItemName(obj[1].toString());
-				transactionReport.setTotalIncomes(BigDecimal.valueOf(Long.valueOf(obj[2].toString())));
-				transactions.add(transactionReport);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-		return transactions;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<PojoTransactionGetReportIncomeSuperAdminRes> getEventReportIncomeSuperAdmin(final LocalDate startDate, final LocalDate endDate){
-		final List<PojoTransactionGetReportIncomeSuperAdminRes> transactions = new ArrayList<>();
-		
-		try {
-			final StringBuilder str = new StringBuilder();
-			str.append("SELECT p.full_name, 'Event' AS activity_type, SUM(te.price) AS total_incomes FROM t_transaction tt ")
-			.append("INNER JOIN t_event te ON tt.event_id = te.id ")
-			.append("INNER JOIN t_user tu ON tt.user_id = tu.id ")
-			.append("INNER JOIN profile p ON tu.profile_id = p.id ")
-			.append("WHERE DATE(te.start_date) >= DATE(:startDate) AND DATE(te.end_date) <= DATE(:endDate) AND tt.is_approved = true AND tu.is_verified = true ")
-			.append("GROUP BY te.event_name, te.start_date, p.full_name ");
-			
-			final List<Object> result = em().createNativeQuery(toStr(str))
-					.setParameter("startDate", startDate)
-					.setParameter("endDate", endDate)
-					.getResultList();
-			for(final Object objs :  result) {
-				final Object[] obj = (Object[]) objs;
-				
-				final PojoTransactionGetReportIncomeSuperAdminRes transactionReport = new PojoTransactionGetReportIncomeSuperAdminRes();
-				transactionReport.setFullName(obj[0].toString());
-				transactionReport.setActivityType(obj[1].toString());
-				transactionReport.setTotalIncome(BigDecimal.valueOf(Long.valueOf(obj[2].toString())));
-				transactions.add(transactionReport);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-		return transactions;
-	}
 
 }

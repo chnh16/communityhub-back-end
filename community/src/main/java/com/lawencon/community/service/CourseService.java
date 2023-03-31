@@ -10,13 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.constant.TypeProductEnum;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.CourseDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.TypeProductDao;
 import com.lawencon.community.dao.UserCourseDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.Course;
 import com.lawencon.community.model.File;
+import com.lawencon.community.model.TypeProduct;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.UserCourse;
 import com.lawencon.community.pojo.PojoDeleteRes;
@@ -48,6 +51,9 @@ public class CourseService {
 	
 	@Autowired
 	private UserCourseDao userCourseDao;
+	
+	@Autowired
+	private TypeProductDao typeProductDao;
 
 	@Inject
 	private PrincipalService principalService;
@@ -107,11 +113,13 @@ public class CourseService {
 		File fileInsert = null;
 		final File file = new File();
 		final User user = userService.getByRefId(principalService.getAuthPrincipal());
+		final TypeProduct typeProduct = typeProductDao.getTypeByCode(TypeProductEnum.COURSE.getTypeCode()).get();
 
 		final Category category = categoryDao.getByIdRef(Category.class, data.getCategoryId());
 		category.setId(data.getCategoryId());
 		course.setCategory(category);
-
+		
+		
 		file.setFileName(data.getFile().getFileName());
 		file.setFileContent(data.getFile().getFileContent());
 		file.setFileExtension(data.getFile().getFileExtension());
@@ -125,6 +133,7 @@ public class CourseService {
 		course.setStartDate(data.getStartDate());
 		course.setEndDate(data.getEndDate());
 		course.setUser(user);
+		course.setTypeProduct(typeProduct);
 		course.setPrice(data.getPrice());
 		course.setProvider(data.getProvider());
 		course.setTrainer(data.getTrainer());

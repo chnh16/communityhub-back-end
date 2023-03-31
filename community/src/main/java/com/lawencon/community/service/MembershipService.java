@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.constant.TypeProductEnum;
 import com.lawencon.community.dao.MembershipDao;
+import com.lawencon.community.dao.TypeProductDao;
 import com.lawencon.community.model.Membership;
+import com.lawencon.community.model.TypeProduct;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -24,6 +27,9 @@ public class MembershipService {
 	
 	@Autowired
 	private MembershipDao membershipDao;
+	
+	@Autowired
+	private TypeProductDao typeProductDao;
 	
 
 	public Membership insert(final Membership data) {
@@ -88,9 +94,10 @@ public class MembershipService {
 	public PojoInsertRes insert(final PojoMembershipInsertReq data) {
 		final Membership membership = new Membership();
 		final String generateId = Generate.generateCode(5);
-
+		final TypeProduct typeProduct = typeProductDao.getTypeByCode(TypeProductEnum.MEMBERSHIP.getTypeCode()).get();
 		membership.setMembershipCode(generateId);
 		membership.setMembershipName(data.getMembershipName());
+		membership.setTypeProduct(typeProduct);
 		membership.setDuration(data.getDuration());
 		membership.setAmount(data.getAmount());
 

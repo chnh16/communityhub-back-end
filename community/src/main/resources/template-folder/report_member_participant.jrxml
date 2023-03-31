@@ -8,10 +8,19 @@
 	<parameter name="Parameter1" class="java.lang.String"/>
 	<parameter name="Parameter2" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT 'Course' AS activityType, c.course_name AS itemName, DATE(c.start_date) AS startDate, COUNT(tt.user_id) AS totalParticipants FROM t_transaction tt 
+		<![CDATA[SELECT tp.type_name AS activityType, c.course_name AS itemName, DATE(c.start_date) AS startDate, COUNT(tt.user_id) AS totalParticipants 
+FROM t_transaction tt 
 INNER JOIN course c ON tt.course_id = c.id 
-WHERE DATE(c.start_date) >= DATE('2023-03-15') AND DATE(c.end_date) <= DATE('2023-03-25') AND tt.is_approved = true 
-GROUP BY c.course_name, c.start_date]]>
+INNER JOIN type_product tp ON tp.id = c.type_product_id 
+WHERE c.user_id = '3ec78228-7128-4ffc-bfbe-2f2fd77655b1' AND DATE(c.start_date) >= DATE('2023-03-15') AND DATE(c.end_date) <= DATE('2023-03-25') AND tt.is_approved = true 
+GROUP BY c.course_name, c.start_date, tp.type_name
+UNION ALL
+SELECT tp.type_name AS activityType, te.event_name AS itemName , DATE(te.start_date) AS startDate, COUNT(tt.user_id) AS totalParticipants 
+FROM t_transaction tt 
+INNER JOIN t_event te ON tt.event_id = te.id  
+INNER JOIN type_product tp ON tp.id = te.type_product_id 
+WHERE te.user_id = '3ec78228-7128-4ffc-bfbe-2f2fd77655b1' AND DATE(te.start_date) >= DATE('2023-03-15') AND DATE(te.end_date) <= DATE('2023-03-25') AND tt.is_approved = true 
+GROUP BY te.event_name, te.start_date, tp.type_name]]>
 	</queryString>
 	<field name="activityType" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="activitytype"/>
@@ -37,23 +46,48 @@ GROUP BY c.course_name, c.start_date]]>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<title>
-		<band height="79" splitType="Stretch"/>
-	</title>
 	<pageHeader>
-		<band height="30" splitType="Stretch">
+		<band height="152" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="80" height="30" uuid="b0056379-6926-46d3-956f-91611495b10e"/>
+				<reportElement x="0" y="117" width="80" height="30" uuid="b0056379-6926-46d3-956f-91611495b10e"/>
 				<text><![CDATA[Periode]]></text>
 			</staticText>
+			<image>
+				<reportElement x="15" y="10" width="130" height="60" uuid="701c45dc-b110-4c0f-a4af-6a2afd8c1f23">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA["https://raw.githubusercontent.com/mraAdmin110/rofa-food/4ddde1ad98db04492d33367c41c1a9571b327cd6/logo.png"]]></imageExpression>
+			</image>
 			<textField>
-				<reportElement x="80" y="0" width="120" height="30" uuid="36dc54bb-2f22-4513-9edc-31c9a13b800b"/>
+				<reportElement key="" x="80" y="118" width="64" height="30" uuid="dcc7954c-3e11-48be-8c45-23c7f579db9a"/>
 				<textFieldExpression><![CDATA[$P{Parameter1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="0" width="135" height="30" uuid="52fc4c3d-ce5d-48c1-83cd-516de8ead771"/>
+				<reportElement x="191" y="118" width="100" height="30" uuid="1ba19636-2f9b-4df6-9920-32dc3eb865a4"/>
 				<textFieldExpression><![CDATA[$P{Parameter2}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="213" y="2" width="138" height="40" uuid="ddb3ae5e-3334-4af3-af09-a6a386c69231"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COMMUNITY HUB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="155" y="40" width="288" height="30" uuid="21947370-7a2e-4d62-ba26-1a5695d67bf3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jl Casablanca No.Kav 88, Menteng Dalam, Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12870]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-1" y="94" width="561" height="1" uuid="d9f81bbf-d5ef-4dc9-b1cf-6ace47f01133"/>
+			</line>
+			<staticText>
+				<reportElement x="146" y="118" width="44" height="30" uuid="25a0fdf0-8b2a-478a-8fea-845153a7f10a"/>
+				<text><![CDATA[S / D]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>

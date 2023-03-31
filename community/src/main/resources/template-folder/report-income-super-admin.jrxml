@@ -29,23 +29,48 @@ GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<title>
-		<band height="79" splitType="Stretch"/>
-	</title>
 	<pageHeader>
-		<band height="30" splitType="Stretch">
+		<band height="155" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="80" height="30" uuid="6bccd9a0-8f57-441c-b794-47faadb42bc5"/>
+				<reportElement x="0" y="120" width="80" height="30" uuid="6bccd9a0-8f57-441c-b794-47faadb42bc5"/>
 				<text><![CDATA[Periode]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="200" y="0" width="135" height="30" uuid="db0bfe4f-647c-444e-84b2-e14d16e60a98"/>
+				<reportElement x="181" y="120" width="135" height="30" uuid="db0bfe4f-647c-444e-84b2-e14d16e60a98"/>
 				<textFieldExpression><![CDATA[$P{Parameter2}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="80" y="0" width="120" height="30" uuid="6579d481-d912-466f-9c21-e4ebe8b75b58"/>
+				<reportElement x="80" y="120" width="65" height="30" uuid="6579d481-d912-466f-9c21-e4ebe8b75b58"/>
 				<textFieldExpression><![CDATA[$P{Parameter1}]]></textFieldExpression>
 			</textField>
+			<image>
+				<reportElement x="15" y="10" width="130" height="60" uuid="3f3277af-6efa-444c-8580-a3ef2b7cbca3">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA["https://raw.githubusercontent.com/mraAdmin110/rofa-food/4ddde1ad98db04492d33367c41c1a9571b327cd6/logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="213" y="2" width="138" height="40" uuid="c97da92f-0fd7-423b-8a03-18d53eb6d0ca"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COMMUNITY HUB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="155" y="40" width="288" height="30" uuid="c7bb9942-fe29-4c1a-9cbc-1593c6dcf6bb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jl Casablanca No.Kav 88, Menteng Dalam, Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12870]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-1" y="94" width="561" height="1" uuid="db27f6cd-b5d5-4d40-bca5-274448900b21"/>
+			</line>
+			<staticText>
+				<reportElement x="147" y="120" width="34" height="30" uuid="ca587457-cda1-4d5a-84a1-bc99532081ea"/>
+				<text><![CDATA[S / D]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -101,7 +126,7 @@ GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
 	<detail>
 		<band height="31" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="30" height="30" uuid="448304f4-76d3-4ff9-b4e3-0391c42ec1ac"/>
+				<reportElement x="0" y="1" width="30" height="30" uuid="448304f4-76d3-4ff9-b4e3-0391c42ec1ac"/>
 				<box topPadding="2" leftPadding="5">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
