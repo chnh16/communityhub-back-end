@@ -497,4 +497,10 @@ public class TransactionDao extends BasePostDao<Transaction>{
 		return transactions;
 	}
 
+	@Override
+	Transaction getByIdAndDetach(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

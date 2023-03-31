@@ -90,4 +90,10 @@ public class UserLikeDao extends BasePostDao<UserLike> {
 		return Optional.ofNullable(userLike);
 	}
 
+	@Override
+	UserLike getByIdAndDetach(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -32,5 +32,11 @@ public class PostFileDao extends BasePostDao<PostFile>{
 				.getResultList();
 		return res;
 	}
+
+	@Override
+	PostFile getByIdAndDetach(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

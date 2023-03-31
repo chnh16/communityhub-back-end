@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.community.model.RegisterVerification;
-import com.lawencon.community.model.UserLike;
 
 @Repository
 public class RegisterVerificationDao extends BasePostDao<RegisterVerification> {
@@ -105,6 +104,11 @@ public class RegisterVerificationDao extends BasePostDao<RegisterVerification> {
 			e.printStackTrace();
 		}
 		return Optional.ofNullable(registerVerification);
+	}
+
+	@Override
+	RegisterVerification getByIdAndDetach(final String id) {
+		return super.getByIdAndDetach(RegisterVerification.class, id);
 	}
 
 }
