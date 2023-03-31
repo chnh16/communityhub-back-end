@@ -207,7 +207,7 @@ public class UserService implements UserDetailsService, Runnable {
 		final String generatePass = Generate.generateCode(8);
 		registerVerification.setEmail(data.getEmail());
 		registerVerification.setCodeVerifcation(generatePass);
-		registerVerification.setExpired(LocalDateTime.now().plusMinutes(5));
+		registerVerification.setExpired(LocalDateTime.now().plusMinutes(60));
 
 		ConnHandler.begin();
 		registerVerificationDao.saveNoLogin(registerVerification, () -> getUserSystem.getId());
@@ -263,7 +263,7 @@ public class UserService implements UserDetailsService, Runnable {
 
 		registerVerif.setEmail(email.getEmail());
 		registerVerif.setCodeVerifcation(generatePass);
-		registerVerif.setExpired(LocalDateTime.now().plusMinutes(5));
+		registerVerif.setExpired(LocalDateTime.now().plusMinutes(60));
 
 		RegisterVerification verificationInsert = null;
 		ConnHandler.begin();
