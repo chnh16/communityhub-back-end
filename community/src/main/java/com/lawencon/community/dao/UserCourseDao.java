@@ -21,11 +21,12 @@ public class UserCourseDao extends BasePostDao<UserCourse>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<UserCourse> getByUserId (final String userId){
+	public List<UserCourse> getByUserId (final String userId, final Integer limit, final Integer offset){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM user_course uc ")
 		.append("WHERE uc.user_id = :userId");
-		final List<UserCourse> res = em().createNativeQuery(toStr(str), UserCourse.class).setParameter("userId", userId).getResultList();
+		final List<UserCourse> res = em().createNativeQuery(toStr(str), UserCourse.class).setParameter("userId", userId).setMaxResults(limit)
+				.setFirstResult((offset-1)*limit).getResultList();
 		return res;
 	}
 

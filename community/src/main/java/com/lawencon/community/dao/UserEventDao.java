@@ -25,7 +25,7 @@ public class UserEventDao extends BasePostDao<UserEvent>{
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM user_event ue ")
 		.append("WHERE ue.user_id = :userId");
-		final List<UserEvent> res = em().createNativeQuery(toStr(str), UserEvent.class).setParameter("userId", userId)	.setMaxResults(limit)
+		final List<UserEvent> res = em().createNativeQuery(toStr(str), UserEvent.class).setParameter("userId", userId).setMaxResults(limit)
 				.setFirstResult((offset-1)*limit).getResultList();
 		return res;
 	}
