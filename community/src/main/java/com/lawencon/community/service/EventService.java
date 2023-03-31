@@ -220,6 +220,45 @@ public class EventService {
 //
 //		return pojos;
 //	}
+	
+	public List<PojoEventResGetAll> getMyEvent(String category, String price, Integer limit, Integer offset) {
+		final List<PojoEventResGetAll> pojos = new ArrayList<>();
+		List<Event> res = new ArrayList<>();
+		final Category categoryId = categoryDao.getRefById(category);
+		
+		
+		if(category.isEmpty() && price.isEmpty()) {
+			res = eventDao.getMyEvent(principalService.getAuthPrincipal(),limit, offset);
+		}else if(price.equals("ASC")){
+			res = eventDao.getByPriceAscMyEvent(principalService.getAuthPrincipal(),limit, offset);
+		}else if(price.equals("DESC")){
+			res = eventDao.getByPriceDescMyEvent(principalService.getAuthPrincipal(),limit, offset);
+		}else if(category.equals(categoryId.getId())) {
+			res = eventDao.getByCategoryIdMyEvent(categoryId.getId(),principalService.getAuthPrincipal() ,limit, offset);
+		}
+		
+		for (int i = 0; i < res.size(); i++) {
+			final PojoEventResGetAll pojo = new PojoEventResGetAll();
+			final Event event = res.get(i);
+
+			ConnHandler.getManager().detach(event);
+			pojo.setFileId(event.getFile().getId());
+			pojo.setId(event.getId());
+			pojo.setEventCode(event.getEventCode());
+			pojo.setEventName(event.getEventName());
+			pojo.setProvider(event.getProvider());
+			pojo.setLocationName(event.getLocationName());
+			pojo.setCategoryId(event.getCategory().getCategoryName());
+			
+			pojo.setStartDate(event.getStartDate());
+			pojo.setEndDate(event.getEndDate());
+			pojo.setPrice(event.getPrice());
+			pojo.setVer(event.getVersion());
+
+			pojos.add(pojo);
+		}
+		return pojos;
+	}
 
 	public PojoUpdateRes update(final PojoEventReqUpdate data) {
 		Event eventUpdate = null;
@@ -294,7 +333,7 @@ public class EventService {
 	public List<PojoUserEventGetByUserIdRes> getByUserId(String category, String price, Integer limit, Integer offset) {
 		final List<PojoUserEventGetByUserIdRes> pojos = new ArrayList<>();
 		final List<UserEvent> res = userEventDao.getByUserId(principalService.getAuthPrincipal(), limit, offset);
-
+		
 		for (int i = 0; i < res.size(); i++) {
 			final PojoUserEventGetByUserIdRes pojo = new PojoUserEventGetByUserIdRes();
 			final UserEvent userEvent = res.get(i);

@@ -274,9 +274,9 @@ public class CourseService {
 		return pojoInsertRes;
 	}
 
-	public List<PojoUserCourseGetByUserIdRes> getByUserId(final String id) {
+	public List<PojoUserCourseGetByUserIdRes> getByUserId(String category, String price, Integer limit, Integer offset) {
 		final List<PojoUserCourseGetByUserIdRes> pojos = new ArrayList<>();
-		final List<UserCourse> res = userCourseDao.getByUserId(principalService.getAuthPrincipal());
+		final List<UserCourse> res = userCourseDao.getByUserId(principalService.getAuthPrincipal(), limit, offset);
 
 		for (int i = 0; i < res.size(); i++) {
 			final PojoUserCourseGetByUserIdRes pojo = new PojoUserCourseGetByUserIdRes();

@@ -89,6 +89,11 @@ private final EventService eventService;
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
+	@GetMapping("my-event")
+	private ResponseEntity<List<PojoEventResGetAll>> getMyEvent(@RequestParam("category") String category, @RequestParam("price") String price, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset){
+		final List<PojoEventResGetAll> res = eventService.getMyEvent(category, price, limit, offset);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
 	
 
 }

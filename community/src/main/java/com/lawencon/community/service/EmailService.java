@@ -84,6 +84,7 @@ public class EmailService {
 	public String sendMail(RegisterVerification registerVerification, User user) throws MessagingException{
 		Context context = new Context();
         context.setVariable("registerVerification", registerVerification);
+        context.setVariable("user", user);
 
         String process = templateEngine.process("email", context);
         javax.mail.internet.MimeMessage mimeMessage = javaMailSender.createMimeMessage();
