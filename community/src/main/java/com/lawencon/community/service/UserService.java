@@ -257,8 +257,9 @@ public class UserService implements UserDetailsService, Runnable {
 		final PojoInsertRes pojo = new PojoInsertRes();
 		final Optional<RegisterVerification> verification = registerVerificationDao.getIdByEmail(email.getEmail());
 		final Optional<User> userId = userDao.getIdByEmail(email.getEmail());
+		final RegisterVerification verif = registerVerificationDao.getByIdRef(RegisterVerification.class, verification.get().getId());
 		final User user = getByRefId(userId.get().getId());
-		deleteVerificationCode(verification.get().getId());
+		deleteVerificationCode(verif);
 
 		final RegisterVerification registerVerification = new RegisterVerification();
 		final String generatePass = Generate.generateCode(8);
@@ -283,9 +284,9 @@ public class UserService implements UserDetailsService, Runnable {
 		return pojo;
 	}
 
-	private void deleteVerificationCode(final String verificationId) {
+	private void deleteVerificationCode(final RegisterVerification verification) {
 		ConnHandler.begin();
-		registerVerificationDao.delete(verificationId);
+		registerVerificationDao.delete(verification);
 		ConnHandler.commit();
 	}
 
