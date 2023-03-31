@@ -233,9 +233,8 @@ public class UserService implements UserDetailsService, Runnable {
 		}
 
 		pojoUpdate = new PojoUpdateRes();
-		User userVerification = null;
 		final Optional<User> user = userDao.getIdByEmail(data.getEmail());
-		userVerification = getByIdAndDetach(user.get().getId());
+		User userVerification = getByIdAndDetach(user.get().getId());
 		if (userVerification.getIsVerified()) {
 			throw new RuntimeException("Sudah pernah melakukan verifikasi");
 		}

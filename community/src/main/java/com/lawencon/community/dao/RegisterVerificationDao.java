@@ -66,16 +66,16 @@ public class RegisterVerificationDao extends BasePostDao<RegisterVerification> {
 		return Optional.ofNullable(res);
 	}
 	
-	public Optional<RegisterVerification> getVerification(String email, String codeVerifcation) {
+	public Optional<RegisterVerification> getVerification(String email, String codeVerification) {
 		RegisterVerification registerVerification = null;
 		
 		try {
 			final StringBuilder str = new StringBuilder();
 			str.append("SELECT rv.id, rv.created_by, rv.updated_by, rv.created_at, rv.updated_at, rv.ver, rv.is_active ")
 			.append("FROM register_verification rv ")
-			.append("WHERE email = :email AND code_verifcation = :codeVerifcation AND expired > now() AND is_active = TRUE ");
+			.append("WHERE email = :email AND code_verifcation = :codeVerification AND expired > now() AND is_active = TRUE ");
 			
-			final Object result = em().createNativeQuery(toStr(str)).setParameter("email", email).setParameter("codeVerifcation", codeVerifcation).getSingleResult();
+			final Object result = em().createNativeQuery(toStr(str)).setParameter("email", email).setParameter("codeVerification", codeVerification).getSingleResult();
 			
 			if (result != null) {
 
