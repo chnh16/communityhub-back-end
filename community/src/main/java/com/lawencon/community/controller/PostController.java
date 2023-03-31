@@ -195,4 +195,10 @@ public class PostController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
+	@GetMapping("post-detail")
+	public ResponseEntity<List<PojoPostDetailGetAllRes>> getAllDetailByPostId(@PathVariable("postId") String postId,@RequestParam("limit") int limit, @RequestParam("offset") int offset){
+		final List<PojoPostDetailGetAllRes> res = postService.getAllDetailByPostId(postId, limit, offset);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
 }

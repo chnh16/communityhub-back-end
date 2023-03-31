@@ -1037,7 +1037,27 @@ public class PostService {
 		}
 		return pojos;
 	}
-
+	
+	public List<PojoPostDetailGetAllRes> getAllDetailByPostId(final String postId, final Integer limit, final Integer offset) {
+		final List<PojoPostDetailGetAllRes> postDetailGetAllRes = new ArrayList<>();
+		final List<PostDetail> postDetails = postDetailDao.getByPostId(postId, limit, offset);
+		
+		for (int i=0; i < postDetails.size(); i++) {
+			final PojoPostDetailGetAllRes detailGetAllRes = new PojoPostDetailGetAllRes();
+			final PostDetail postDetail = postDetails.get(i);
+			final User user = userDao.getRefById(postDetail.getUser().getId());
+			final Profile profile = profileDao.getRefById(user.getProfile().getId());
+			detailGetAllRes.setId(postDetail.getId());
+			detailGetAllRes.setFullName(profile.getFullName());
+			detailGetAllRes.setUserFileId(profile.getFile().getId());
+			detailGetAllRes.setPostedAt(postDetail.getCreatedAt());
+			detailGetAllRes.setVer(postDetail.getVersion());
+			detailGetAllRes.setDetailContent(postDetail.getDetailContent());
+			postDetailGetAllRes.add(detailGetAllRes);
+		}
+		return postDetailGetAllRes;
+	}
+	 
 	public PojoDeleteRes deletePostDetail(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deletePostDetailById(id);

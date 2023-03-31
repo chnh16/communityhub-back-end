@@ -48,7 +48,7 @@ public class PostDetailDao extends MasterDao<PostDetail> {
 		str.append("SELECT * FROM post_detail pd ").append(" WHERE pd.post_id = :postId")
 				.append(" AND pd.is_active = TRUE");
 		final List<PostDetail> res = em().createNativeQuery(toStr(str), PostDetail.class).setMaxResults(limit)
-				.setFirstResult((offset - 1) * limit).getResultList();
+				.setFirstResult(offset).getResultList();
 		return res;
 	}
 

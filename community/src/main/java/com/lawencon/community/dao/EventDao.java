@@ -24,7 +24,6 @@ public class EventDao extends MasterDao<Event>{
 	}
 
 	@SuppressWarnings("unchecked")
-	
 	public List<Event> getAll(final Integer limit, final Integer offset) {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_event")
