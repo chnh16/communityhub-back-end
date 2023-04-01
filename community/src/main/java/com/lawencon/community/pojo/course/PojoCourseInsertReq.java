@@ -69,7 +69,6 @@ public class PojoCourseInsertReq {
 	}
 	public void setFile(PojoFileInsertReq file) {
 		this.file = file;
-	}
-	
+	}	
 	
 }

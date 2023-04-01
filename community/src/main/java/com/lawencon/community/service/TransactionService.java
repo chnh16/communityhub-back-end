@@ -477,10 +477,10 @@ public class TransactionService {
 		ConnHandler.commit();
 	}
 
-	public List<PojoTransactionGetReportRes> getReportByDate(final String startDate, final String endDate) {
+	public List<PojoTransactionGetReportRes> getMemberReportParticipantByDate(final String userId, final String startDate, final String endDate) {
 
 		final List<PojoTransactionGetReportRes> transactions = transactionDao
-				.getCourseReport(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+				.getMemberReportParticipant(userId,DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
 
 		for (int i = 0; i < transactions.size(); i++) {
 			final PojoTransactionGetReportRes transactionReport = new PojoTransactionGetReportRes();
@@ -493,11 +493,11 @@ public class TransactionService {
 		return transactions;
 	}
 
-	public List<PojoTransactionGetReportIncomeMemberRes> getReportIncomeMemberByDate(final String startDate,
+	public List<PojoTransactionGetReportIncomeMemberRes> getReportIncomeMemberByDate(final String userId, final String startDate,
 			final String endDate) {
 
 		final List<PojoTransactionGetReportIncomeMemberRes> transactions = transactionDao
-				.getCourseReportIncomeMember(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+				.getReportIncomeMember(userId,DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
 
 		for (int i = 0; i < transactions.size(); i++) {
 			final PojoTransactionGetReportIncomeMemberRes transactionReport = new PojoTransactionGetReportIncomeMemberRes();
@@ -514,7 +514,7 @@ public class TransactionService {
 			final String startDate, final String endDate) {
 
 		final List<PojoTransactionGetReportParticipantSuperAdminRes> transactions = transactionDao
-				.getCourseReportSuperAdmin(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+				.getReportSuperAdminParticipant(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
 
 		for (int i = 0; i < transactions.size(); i++) {
 			final PojoTransactionGetReportParticipantSuperAdminRes reportSuperAdmin = new PojoTransactionGetReportParticipantSuperAdminRes();
@@ -535,7 +535,7 @@ public class TransactionService {
 			final String endDate) {
 
 		final List<PojoTransactionGetReportIncomeSuperAdminRes> transactions = transactionDao
-				.getCourseReportIncomeSuperAdmin(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+				.getReportIncomeSuperAdmin(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
 
 		for (int i = 0; i < transactions.size(); i++) {
 			final PojoTransactionGetReportIncomeSuperAdminRes reportSuperAdmin = new PojoTransactionGetReportIncomeSuperAdminRes();
@@ -549,76 +549,5 @@ public class TransactionService {
 		return transactions;
 	}
 
-	public List<PojoTransactionGetReportRes> getEventReportByDate(final String startDate, final String endDate) {
-
-		final List<PojoTransactionGetReportRes> transactions = transactionDao
-				.getEventReport(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
-
-		for (int i = 0; i < transactions.size(); i++) {
-			final PojoTransactionGetReportRes transactionReport = new PojoTransactionGetReportRes();
-			transactionReport.setActivityType(transactions.get(i).getActivityType());
-			transactionReport.setItemName(transactions.get(i).getItemName());
-			transactionReport.setStartDate(transactions.get(i).getStartDate());
-			transactionReport.setTotalParticipants(transactions.get(i).getTotalParticipants());
-
-		}
-
-		return transactions;
-	}
-
-	public List<PojoTransactionGetReportIncomeMemberRes> getEventReportIncomeMemberByDate(final String startDate,
-			final String endDate) {
-
-		final List<PojoTransactionGetReportIncomeMemberRes> transactions = transactionDao
-				.getEventReportIncomeMember(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
-
-		for (int i = 0; i < transactions.size(); i++) {
-			final PojoTransactionGetReportIncomeMemberRes transactionReport = new PojoTransactionGetReportIncomeMemberRes();
-			transactionReport.setActivityType(transactions.get(i).getActivityType());
-			transactionReport.setItemName(transactions.get(i).getItemName());
-			transactionReport.setTotalIncomes(transactions.get(i).getTotalIncomes());
-
-		}
-
-		return transactions;
-	}
-
-	public List<PojoTransactionGetReportParticipantSuperAdminRes> getEventReportParticipantSuperAdminByDate(
-			final String startDate, final String endDate) {
-
-		final List<PojoTransactionGetReportParticipantSuperAdminRes> transactions = transactionDao
-				.getEventReportSuperAdmin(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
-
-		for (int i = 0; i < transactions.size(); i++) {
-			final PojoTransactionGetReportParticipantSuperAdminRes reportSuperAdmin = new PojoTransactionGetReportParticipantSuperAdminRes();
-			reportSuperAdmin.setMemberName(transactions.get(i).getMemberName());
-			reportSuperAdmin.setProviderName(transactions.get(i).getProviderName());
-
-			reportSuperAdmin.setActivityType(transactions.get(i).getActivityType());
-			reportSuperAdmin.setItemName(transactions.get(i).getItemName());
-			reportSuperAdmin.setStartDate(transactions.get(i).getStartDate());
-			reportSuperAdmin.setTotalParticipants(transactions.get(i).getTotalParticipants());
-
-		}
-
-		return transactions;
-	}
-
-	public List<PojoTransactionGetReportIncomeSuperAdminRes> getEventReportIncomeSuperAdminByDate(
-			final String startDate, final String endDate) {
-
-		final List<PojoTransactionGetReportIncomeSuperAdminRes> transactions = transactionDao
-				.getEventReportIncomeSuperAdmin(DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
-
-		for (int i = 0; i < transactions.size(); i++) {
-			final PojoTransactionGetReportIncomeSuperAdminRes reportSuperAdmin = new PojoTransactionGetReportIncomeSuperAdminRes();
-			reportSuperAdmin.setFullName(transactions.get(i).getFullName());
-
-			reportSuperAdmin.setActivityType(transactions.get(i).getActivityType());
-			reportSuperAdmin.setTotalIncome(transactions.get(i).getTotalIncome());
-
-		}
-
-		return transactions;
-	}
+	
 }

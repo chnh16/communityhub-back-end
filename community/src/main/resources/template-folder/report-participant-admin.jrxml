@@ -8,13 +8,23 @@
 	<parameter name="Parameter1" class="java.lang.String"/>
 	<parameter name="Parameter2" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT p.full_name AS memberName, c.provider AS providerName, 'Course' AS activityType, c.course_name AS itemName, DATE(c.start_date)  AS startDate , COUNT(tt.user_id) AS totalParticipants 
+		<![CDATA[SELECT p.full_name AS memberName, c.provider AS providerName, tp.type_name AS activityType, c.course_name AS itemName, DATE(c.start_date)  AS startDate , COUNT(tt.user_id) AS totalParticipants 
 FROM t_transaction tt 
 INNER JOIN course c ON tt.course_id = c.id
-INNER JOIN t_user tu ON tt.user_id = tu.id 
-INNER JOIN profile p ON tu.profile_id = p.id
+INNER JOIN type_product tp ON tp.id = c.type_product_id 
+INNER JOIN t_user tu ON tu.id = c.user_id 
+INNER JOIN profile p ON p.id = tu.profile_id 
 WHERE DATE(c.start_date) >= DATE('2023-03-15') AND DATE(c.end_date) <= DATE('2023-03-25') AND tt.is_approved = true AND tu.is_verified = true
-GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
+GROUP BY c.course_name, c.start_date, p.full_name, c.provider, tp.type_name
+UNION ALL
+SELECT p.full_name AS memberName, te.provider AS providerName, tp.type_name AS activityType, te.event_name AS itemName, DATE(te.start_date)  AS startDate , COUNT(tt.user_id) AS totalParticipants 
+FROM t_transaction tt 
+INNER JOIN t_event te ON tt.event_id = te.id
+INNER JOIN type_product tp ON tp.id = te.type_product_id 
+INNER JOIN t_user tu ON tu.id = te.user_id 
+INNER JOIN profile p ON p.id = tu.profile_id 
+WHERE DATE(te.start_date) >= DATE('2023-03-15') AND DATE(te.end_date) <= DATE('2023-03-25') AND tt.is_approved = true AND tu.is_verified = true
+GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 	</queryString>
 	<field name="memberName" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="membername"/>
@@ -47,23 +57,48 @@ GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<title>
-		<band height="79" splitType="Stretch"/>
-	</title>
 	<pageHeader>
-		<band height="30" splitType="Stretch">
+		<band height="144" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="80" height="30" uuid="6d5f4b26-1e84-46f5-b5e6-38825a79e9df"/>
+				<reportElement x="0" y="109" width="80" height="30" uuid="6d5f4b26-1e84-46f5-b5e6-38825a79e9df"/>
 				<text><![CDATA[Periode]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="200" y="0" width="135" height="30" uuid="74a7de5d-e086-4bea-bd10-940c3baefac7"/>
+				<reportElement x="182" y="109" width="135" height="30" uuid="74a7de5d-e086-4bea-bd10-940c3baefac7"/>
 				<textFieldExpression><![CDATA[$P{Parameter2}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="80" y="0" width="120" height="30" uuid="cddb9320-09c1-42d2-9789-7bf88f8b3ab5"/>
+				<reportElement x="80" y="109" width="70" height="30" uuid="cddb9320-09c1-42d2-9789-7bf88f8b3ab5"/>
 				<textFieldExpression><![CDATA[$P{Parameter1}]]></textFieldExpression>
 			</textField>
+			<image>
+				<reportElement x="20" y="16" width="367" height="59" uuid="55ecb8dc-2b0d-42ad-bdd3-f34838e37b85">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA["https://raw.githubusercontent.com/mraAdmin110/rofa-food/4ddde1ad98db04492d33367c41c1a9571b327cd6/logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="221" y="8" width="375" height="39" uuid="5c985c60-43bd-4bba-b7d4-6b757d7ba14c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COMMUNITY HUB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="46" width="313" height="29" uuid="7024137a-0be6-4512-8d92-04673219cdd3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jl Casablanca No.Kav 88, Menteng Dalam, Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12870]]></text>
+			</staticText>
+			<line>
+				<reportElement x="4" y="100" width="798" height="1" uuid="9f459938-9f10-4842-94a8-0abb86a7af89"/>
+			</line>
+			<staticText>
+				<reportElement x="150" y="109" width="32" height="30" uuid="11ed67b1-7791-401b-a316-e98ce3b9ddaf"/>
+				<text><![CDATA[S / D]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>

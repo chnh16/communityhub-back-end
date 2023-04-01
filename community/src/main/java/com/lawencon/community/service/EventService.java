@@ -10,14 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.constant.TypeProductEnum;
 import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.EventDao;
 import com.lawencon.community.dao.FileDao;
+import com.lawencon.community.dao.TypeProductDao;
 import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.dao.UserEventDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.Event;
 import com.lawencon.community.model.File;
+import com.lawencon.community.model.TypeProduct;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.UserEvent;
 import com.lawencon.community.pojo.PojoDeleteRes;
@@ -46,6 +49,9 @@ public class EventService {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private TypeProductDao typeProductDao;
 	
 	@Autowired
 	private UserService userService;
@@ -115,7 +121,7 @@ public class EventService {
 	public PojoInsertRes insert(final PojoEventReqInsert data) {
 		final Event event = new Event();
 		final String generateId = Generate.generateCode(5);
-
+		final TypeProduct typeProduct = typeProductDao.getTypeByCode(TypeProductEnum.EVENT.getTypeCode()).get();
 		final User user = userService.getByRefId(principalService.getAuthPrincipal());
 		user.setId(principalService.getAuthPrincipal());
 		event.setUser(user);
@@ -123,6 +129,7 @@ public class EventService {
 		event.setEventCode(generateId);
 		event.setEventName(data.getEventName());
 		event.setProvider(data.getProvider());
+		event.setTypeProduct(typeProduct);
 		event.setLocationName(data.getLocationName());
 		event.setStartDate(data.getStartDate());
 		event.setEndDate(data.getEndDate());

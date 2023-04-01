@@ -15,7 +15,7 @@ import com.lawencon.base.BaseEntity;
 @Entity
 @Table(name = "t_event",
 uniqueConstraints = {
-		@UniqueConstraint(name = "event_ck", columnNames = {"category_id", "file_id", "user_id"}
+		@UniqueConstraint(name = "event_ck", columnNames = {"category_id", "file_id", "user_id", "type_product_id"}
 )})
 
 public class Event extends BaseEntity {
@@ -52,6 +52,18 @@ public class Event extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "file_id", nullable = false)
 	private File file;
+	
+	@OneToOne
+	@JoinColumn(name = "type_product_id", nullable = false)
+	private TypeProduct typeProduct;
+
+	public TypeProduct getTypeProduct() {
+		return typeProduct;
+	}
+
+	public void setTypeProduct(TypeProduct typeProduct) {
+		this.typeProduct = typeProduct;
+	}
 
 	public String getEventName() {
 		return eventName;
