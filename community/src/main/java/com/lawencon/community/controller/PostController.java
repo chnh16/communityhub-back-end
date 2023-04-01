@@ -27,8 +27,10 @@ import com.lawencon.community.pojo.postdetail.PojoPostDetailInsertReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailUpdateReq;
 import com.lawencon.community.pojo.postfile.PojoPostFileInsertListReq;
 import com.lawencon.community.pojo.posttype.PojoPostTypeGetAllRes;
+import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkGetAllByUser;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkGetAllRes;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkInsertReq;
+import com.lawencon.community.pojo.userlike.PojoUserLikeGetAllByUser;
 import com.lawencon.community.pojo.userlike.PojoUserLikeGetAllRes;
 import com.lawencon.community.pojo.userlike.PojoUserLikeInsertReq;
 import com.lawencon.community.service.PostService;
@@ -180,4 +182,23 @@ public class PostController {
 		final List<PojoPollingAnswerGetCountRes> res = postService.getAnswerByChoiceId(postId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
+	
+	@GetMapping("post-bookmark")
+	public ResponseEntity<List<PojoUserBookmarkGetAllByUser>> getAllByUserBookmark(@RequestParam("limit") int limit, @RequestParam("offset") int offset){
+		final List<PojoUserBookmarkGetAllByUser> res = postService.getAllByUserBookmark(limit, offset);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("post-like")
+	public ResponseEntity<List<PojoUserLikeGetAllByUser>> getAllByUserLike(@RequestParam("limit") int limit, @RequestParam("offset") int offset){
+		final List<PojoUserLikeGetAllByUser> res = postService.getAllByUserLike(limit, offset);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("post-detail")
+	public ResponseEntity<List<PojoPostDetailGetAllRes>> getAllDetailByPostId(@PathVariable("postId") String postId,@RequestParam("limit") int limit, @RequestParam("offset") int offset){
+		final List<PojoPostDetailGetAllRes> res = postService.getAllDetailByPostId(postId, limit, offset);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
 }

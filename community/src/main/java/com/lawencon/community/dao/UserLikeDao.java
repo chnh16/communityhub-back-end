@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.community.model.UserBookmark;
 import com.lawencon.community.model.UserLike;
 
 @Repository
@@ -25,6 +26,18 @@ public class UserLikeDao extends BasePostDao<UserLike> {
 				.getResultList();
 		return res;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<UserLike> getLikeByUser(final String userId, final Integer limit, final Integer offset) {
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM user_like ul ").append("WHERE ul.user_id = :userId AND is_active = true");
+		final List<UserLike> res = em().createNativeQuery(toStr(str), UserLike.class).setParameter("userId", userId)
+				.setMaxResults(limit)
+				.setFirstResult((offset-1)*limit).getResultList();
+		return res;
+	}
+	
+	
 
 	@Override
 	public boolean delete(final String id) {
@@ -75,6 +88,12 @@ public class UserLikeDao extends BasePostDao<UserLike> {
 			e.printStackTrace();
 		}
 		return Optional.ofNullable(userLike);
+	}
+
+	@Override
+	UserLike getByIdAndDetach(String id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -49,9 +49,11 @@ import com.lawencon.community.pojo.postdetail.PojoPostDetailInsertReq;
 import com.lawencon.community.pojo.postdetail.PojoPostDetailUpdateReq;
 import com.lawencon.community.pojo.postfile.PojoPostFileInsertListReq;
 import com.lawencon.community.pojo.userbookmark.PojoPostBookmarkRes;
+import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkGetAllByUser;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkGetAllRes;
 import com.lawencon.community.pojo.userbookmark.PojoUserBookmarkInsertReq;
 import com.lawencon.community.pojo.userlike.PojoPostLikeRes;
+import com.lawencon.community.pojo.userlike.PojoUserLikeGetAllByUser;
 import com.lawencon.community.pojo.userlike.PojoUserLikeGetAllRes;
 import com.lawencon.community.pojo.userlike.PojoUserLikeInsertReq;
 import com.lawencon.security.principal.PrincipalService;
@@ -147,7 +149,7 @@ public class PostService {
 		final Post post = new Post();
 		PostType type = postTypeDao.getByPostTypeCode(com.lawencon.community.constant.PostType.NORMAL.getTypeCode())
 				.get();
-		if (data.getPolling() != null) {
+		if (!data.getPolling().isEmpty()) {
 			type = postTypeDao.getByPostTypeCode(com.lawencon.community.constant.PostType.POLLING.getTypeCode()).get();
 
 		}
@@ -675,6 +677,201 @@ public class PostService {
 		}
 		return userBookmarkGetAllRes;
 	}
+	
+	public List<PojoUserBookmarkGetAllByUser> getAllByUserBookmark(final Integer limit, final Integer offset){
+		final List<PojoUserBookmarkGetAllByUser> userBookmarkGetAllRes = new ArrayList<>();
+		final List<UserBookmark> bookmarks = userBookmarkDao.getAllByUserId(principalService.getAuthPrincipal(), limit, offset);
+
+		for (int i = 0; i < bookmarks.size(); i++) {
+			Boolean isPremium = false;
+			List<PojoPollingAnswerGetCountRes> pollingAnswers = new ArrayList<>();
+			final PojoUserBookmarkGetAllByUser pojoUserBookmark = new PojoUserBookmarkGetAllByUser();
+			final PostType postType = postTypeDao.getRefById(bookmarks.get(i).getPost().getPostType().getId());
+			if(postType.getTypeCode().equals(com.lawencon.community.constant.PostType.POLLING.getTypeCode())) {
+				pollingAnswers = getAnswerByChoiceId(bookmarks.get(i).getPost().getId());
+			}
+			if (postType.getTypeCode().equals(com.lawencon.community.constant.PostType.PREMIUM.getTypeCode())) {
+				isPremium = true;
+				pollingAnswers = getAnswerByChoiceId(bookmarks.get(i).getPost().getId());
+			}
+			final List<String> postFileId = new ArrayList<>();
+			final List<PojoPollingChoiceGetAllRes> pollingPojos = new ArrayList<>();
+			final List<PojoPostDetailGetAllRes> pojoDetails = new ArrayList<>();
+			
+			final List<PostFile> postFiles = postFileDao.getAllPostFile(bookmarks.get(i).getPost().getId());
+			final List<PollingChoice> pollingChoices = pollingChoiceDao.getChoiceByPost(bookmarks.get(i).getPost().getId());
+			final Profile userProfile = profileDao.getRefById(bookmarks.get(i).getUser().getProfile().getId());
+			final Optional<PollingAnswer> pollingAnswer = pollingAnswerDao.getByPostIdAndUserId(bookmarks.get(i).getPost().getId(),
+					principalService.getAuthPrincipal());
+			PojoPostLikeRes pojoLike = null;
+			PojoPostBookmarkRes pojoBookmark = null;
+			PojoPollingAnswerRes pojoAnswer = null;
+			
+			final List<PostDetail> postDetails = getPostDetailByPostId(bookmarks.get(i).getPost().getId());
+			if (postFiles.size() > 0) {
+				for (int j = 0; j < postFiles.size(); j++) {
+					final PostFile postFile = postFiles.get(j);
+					final String fileId = postFile.getFile().getId();
+					postFileId.add(fileId);
+				}
+			}
+			if (pollingChoices.size() > 0) {
+				for (int j = 0; j < pollingChoices.size(); j++) {
+					final PollingChoice pollingChoice = pollingChoices.get(j);
+					final PojoPollingChoiceGetAllRes pollingPojo = new PojoPollingChoiceGetAllRes();
+					pollingPojo.setPollingChoiceId(pollingChoice.getId());
+					pollingPojo.setChoiceContent(pollingChoice.getChoiceContent());
+					pollingPojo.setVer(pollingChoice.getVersion());
+
+					pollingPojos.add(pollingPojo);
+				}
+			}
+			if (pollingAnswer.isPresent()) {
+				final PollingAnswer answer = pollingAnswer.get();
+				pojoAnswer = new PojoPollingAnswerRes();
+				pojoAnswer.setId(answer.getId());
+				pojoAnswer.setChoiceId(answer.getPollingChoice().getId());
+			}
+			final Optional<UserLike> postLike = userLikeDao.getLikeByPostId(bookmarks.get(i).getPost().getId(),
+					principalService.getAuthPrincipal());
+			final Optional<UserBookmark> postBookmark = userBookmarkDao.getBookmarkByPostId(bookmarks.get(i).getPost().getId(),
+					principalService.getAuthPrincipal());
+			if (postLike.isPresent()) {
+				final UserLike userLike = postLike.get();
+				pojoLike = new PojoPostLikeRes();
+				pojoLike.setId(userLike.getId());
+				pojoLike.setStatus(true);
+			}
+			if (postBookmark.isPresent()) {
+				pojoBookmark = new PojoPostBookmarkRes();
+				pojoBookmark.setId(postBookmark.get().getId());
+				pojoBookmark.setStatus(false);
+			}
+			
+			pojoUserBookmark.setId(bookmarks.get(i).getId());
+			pojoUserBookmark.setUserFileId(bookmarks.get(i).getPost().getUser().getProfile().getFile().getId());
+			pojoUserBookmark.setFullName(bookmarks.get(i).getPost().getUser().getProfile().getFullName());
+			pojoUserBookmark.setPostTitle(bookmarks.get(i).getPost().getPostTitle());
+			pojoUserBookmark.setPostContent(bookmarks.get(i).getPost().getPostContent());
+			pojoUserBookmark.setCategoryName(bookmarks.get(i).getPost().getCategory().getCategoryName());
+			pojoUserBookmark.setPostTypeId(bookmarks.get(i).getPost().getPostType().getId());
+			pojoUserBookmark.setVer(bookmarks.get(i).getPost().getVersion());
+			pojoUserBookmark.setPostDetail(pojoDetails);
+			pojoUserBookmark.setDetailCount(postDetails.size());
+			pojoUserBookmark.setIsLiked(pojoLike);
+			pojoUserBookmark.setIsBookmarked(pojoBookmark);
+			pojoUserBookmark.setLikeCount(userLikeDao.getCount(bookmarks.get(i).getPost().getId()));
+			pojoUserBookmark.setPostedAt(bookmarks.get(i).getPost().getCreatedAt());
+			pojoUserBookmark.setFileId(postFileId);
+			pojoUserBookmark.setPollingChoice(pollingPojos);
+			pojoUserBookmark.setIsAnswered(pojoAnswer);
+			pojoUserBookmark.setIsPremium(isPremium);
+			pojoUserBookmark.setPollingAnswer(pollingAnswers);
+
+			userBookmarkGetAllRes.add(pojoUserBookmark);
+		}
+		
+		
+		
+		return userBookmarkGetAllRes;
+	}
+	
+	public List<PojoUserLikeGetAllByUser> getAllByUserLike(final Integer limit, final Integer offset){
+		final List<PojoUserLikeGetAllByUser> userLikeGetAllRes = new ArrayList<>();
+		final List<UserLike> likes = userLikeDao.getLikeByUser(principalService.getAuthPrincipal(), limit, offset);
+
+		for (int i = 0; i < likes.size(); i++) {
+			Boolean isPremium = false;
+			List<PojoPollingAnswerGetCountRes> pollingAnswers = new ArrayList<>();
+			final PojoUserLikeGetAllByUser pojoUserLike = new PojoUserLikeGetAllByUser();
+			final PostType postType = postTypeDao.getRefById(likes.get(i).getPost().getPostType().getId());
+			if(postType.getTypeCode().equals(com.lawencon.community.constant.PostType.POLLING.getTypeCode())) {
+				pollingAnswers = getAnswerByChoiceId(likes.get(i).getPost().getId());
+			}
+			if (postType.getTypeCode().equals(com.lawencon.community.constant.PostType.PREMIUM.getTypeCode())) {
+				isPremium = true;
+				pollingAnswers = getAnswerByChoiceId(likes.get(i).getPost().getId());
+			}
+			final List<String> postFileId = new ArrayList<>();
+			final List<PojoPollingChoiceGetAllRes> pollingPojos = new ArrayList<>();
+			final List<PojoPostDetailGetAllRes> pojoDetails = new ArrayList<>();
+			
+			final List<PostFile> postFiles = postFileDao.getAllPostFile(likes.get(i).getPost().getId());
+			final List<PollingChoice> pollingChoices = pollingChoiceDao.getChoiceByPost(likes.get(i).getPost().getId());
+			final Profile userProfile = profileDao.getRefById(likes.get(i).getUser().getProfile().getId());
+			final Optional<PollingAnswer> pollingAnswer = pollingAnswerDao.getByPostIdAndUserId(likes.get(i).getPost().getId(),
+					principalService.getAuthPrincipal());
+			PojoPostLikeRes pojoLike = null;
+			PojoPostBookmarkRes pojoBookmark = null;
+			PojoPollingAnswerRes pojoAnswer = null;
+			
+			final List<PostDetail> postDetails = getPostDetailByPostId(likes.get(i).getPost().getId());
+
+			if (postFiles.size() > 0) {
+				for (int j = 0; j < postFiles.size(); j++) {
+					final PostFile postFile = postFiles.get(j);
+					final String fileId = postFile.getFile().getId();
+					postFileId.add(fileId);
+				}
+			}
+			if (pollingChoices.size() > 0) {
+				for (int j = 0; j < pollingChoices.size(); j++) {
+					final PollingChoice pollingChoice = pollingChoices.get(j);
+					final PojoPollingChoiceGetAllRes pollingPojo = new PojoPollingChoiceGetAllRes();
+					pollingPojo.setPollingChoiceId(pollingChoice.getId());
+					pollingPojo.setChoiceContent(pollingChoice.getChoiceContent());
+					pollingPojo.setVer(pollingChoice.getVersion());
+
+					pollingPojos.add(pollingPojo);
+				}
+			}
+			if (pollingAnswer.isPresent()) {
+				final PollingAnswer answer = pollingAnswer.get();
+				pojoAnswer = new PojoPollingAnswerRes();
+				pojoAnswer.setId(answer.getId());
+				pojoAnswer.setChoiceId(answer.getPollingChoice().getId());
+			}
+			final Optional<UserLike> postLike = userLikeDao.getLikeByPostId(likes.get(i).getPost().getId(),
+					principalService.getAuthPrincipal());
+			final Optional<UserBookmark> postBookmark = userBookmarkDao.getBookmarkByPostId(likes.get(i).getPost().getId(),
+					principalService.getAuthPrincipal());
+			if (postLike.isPresent()) {
+				final UserLike userLike = postLike.get();
+				pojoLike = new PojoPostLikeRes();
+				pojoLike.setId(userLike.getId());
+				pojoLike.setStatus(true);
+			}
+			if (postBookmark.isPresent()) {
+				pojoBookmark = new PojoPostBookmarkRes();
+				pojoBookmark.setId(postBookmark.get().getId());
+				pojoBookmark.setStatus(false);
+			}
+			
+			pojoUserLike.setId(likes.get(i).getId());
+			pojoUserLike.setUserFileId(likes.get(i).getPost().getUser().getProfile().getFile().getId());
+			pojoUserLike.setFullName(likes.get(i).getPost().getUser().getProfile().getFullName());
+			pojoUserLike.setPostTitle(likes.get(i).getPost().getPostTitle());
+			pojoUserLike.setPostContent(likes.get(i).getPost().getPostContent());
+			pojoUserLike.setCategoryName(likes.get(i).getPost().getCategory().getCategoryName());
+			pojoUserLike.setPostTypeId(likes.get(i).getPost().getPostType().getId());
+			pojoUserLike.setVer(likes.get(i).getPost().getVersion());
+			pojoUserLike.setPostDetail(pojoDetails);
+			pojoUserLike.setDetailCount(postDetails.size());
+			pojoUserLike.setIsLiked(pojoLike);
+			pojoUserLike.setIsBookmarked(pojoBookmark);
+			pojoUserLike.setLikeCount(userLikeDao.getCount(likes.get(i).getPost().getId()));
+			pojoUserLike.setPostedAt(likes.get(i).getPost().getCreatedAt());
+			pojoUserLike.setFileId(postFileId);
+			pojoUserLike.setPollingChoice(pollingPojos);
+			pojoUserLike.setIsAnswered(pojoAnswer);
+			pojoUserLike.setIsPremium(isPremium);
+			pojoUserLike.setPollingAnswer(pollingAnswers);
+
+			userLikeGetAllRes.add(pojoUserLike);
+		}
+		
+		return userLikeGetAllRes;
+	}
 
 	public PojoUserBookmarkGetAllRes getCountBookmark(final String postId) {
 		final PojoUserBookmarkGetAllRes bookmark = new PojoUserBookmarkGetAllRes();
@@ -715,6 +912,7 @@ public class PostService {
 			final User user = userDao.getById(principalService.getAuthPrincipal()).get();
 			final PostDetail postDetail = data;
 			postDetail.setUser(user);
+			ConnHandler.begin();
 			postDetailInsert = postDetailDao.insert(postDetail);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -839,7 +1037,27 @@ public class PostService {
 		}
 		return pojos;
 	}
-
+	
+	public List<PojoPostDetailGetAllRes> getAllDetailByPostId(final String postId, final Integer limit, final Integer offset) {
+		final List<PojoPostDetailGetAllRes> postDetailGetAllRes = new ArrayList<>();
+		final List<PostDetail> postDetails = postDetailDao.getByPostId(postId, limit, offset);
+		
+		for (int i=0; i < postDetails.size(); i++) {
+			final PojoPostDetailGetAllRes detailGetAllRes = new PojoPostDetailGetAllRes();
+			final PostDetail postDetail = postDetails.get(i);
+			final User user = userDao.getRefById(postDetail.getUser().getId());
+			final Profile profile = profileDao.getRefById(user.getProfile().getId());
+			detailGetAllRes.setId(postDetail.getId());
+			detailGetAllRes.setFullName(profile.getFullName());
+			detailGetAllRes.setUserFileId(profile.getFile().getId());
+			detailGetAllRes.setPostedAt(postDetail.getCreatedAt());
+			detailGetAllRes.setVer(postDetail.getVersion());
+			detailGetAllRes.setDetailContent(postDetail.getDetailContent());
+			postDetailGetAllRes.add(detailGetAllRes);
+		}
+		return postDetailGetAllRes;
+	}
+	 
 	public PojoDeleteRes deletePostDetail(final String id) {
 		final PojoDeleteRes res = new PojoDeleteRes();
 		deletePostDetailById(id);
@@ -884,7 +1102,7 @@ public class PostService {
 		for (int i = 0; i < listAnswer.size(); i++) {
 			final PojoPollingAnswerGetCountRes pojoAnswerCount = listAnswer.get(i);
 			float percent = (listAnswer.get(i).getCountPollAnswer() * (100 / totalChoice));
-			pojoAnswerCount.setChoiceContent(null);
+			pojoAnswerCount.setChoiceContent(listAnswer.get(i).getChoiceContent());
 			pojoAnswerCount.setPercent(percent);
 		}
 		return listAnswer;

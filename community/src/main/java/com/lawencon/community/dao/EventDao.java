@@ -24,7 +24,6 @@ public class EventDao extends MasterDao<Event>{
 	}
 
 	@SuppressWarnings("unchecked")
-	
 	public List<Event> getAll(final Integer limit, final Integer offset) {
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_event")
@@ -62,6 +61,17 @@ public class EventDao extends MasterDao<Event>{
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<Event> getByCategoryIdMyEvent (String id, String userId, final Integer limit, final Integer offset){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM t_event e ")
+		.append("WHERE e.category_id = :id AND e.user_id = :userId")
+		.append(" AND e.is_active = TRUE");
+		final List<Event> res = em().createNativeQuery(toStr(str), Event.class).setParameter("id", id).setParameter("userId", userId).setMaxResults(limit)
+				.setFirstResult((offset-1)*limit).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Event> getByPriceAsc(){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_event")
@@ -72,12 +82,34 @@ public class EventDao extends MasterDao<Event>{
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<Event> getByPriceAscMyEvent(String userId, final Integer limit, final Integer offset){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM t_event")
+		.append(" WHERE user_id = :userId AND is_active = TRUE")
+		.append(" ORDER BY price ASC");
+		final List<Event> res = em().createNativeQuery(toStr(str), Event.class).setParameter("userId", userId).setMaxResults(limit)
+				.setFirstResult((offset-1)*limit).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Event> getByPriceDesc(){
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT * FROM t_event")
 		.append(" WHERE is_active = TRUE")
 		.append(" ORDER BY price DESC");
 		final List<Event> res = em().createNativeQuery(toStr(str), Event.class).getResultList();
+		return res;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Event> getByPriceDescMyEvent(String userId, final Integer limit, final Integer offset){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM t_event")
+		.append(" WHERE user_id = :userId AND is_active = TRUE")
+		.append(" ORDER BY price DESC");
+		final List<Event> res = em().createNativeQuery(toStr(str), Event.class).setParameter("userId", userId).setMaxResults(limit)
+				.setFirstResult((offset-1)*limit).getResultList();
 		return res;
 	}
 	
@@ -97,7 +129,6 @@ public class EventDao extends MasterDao<Event>{
 		final StringBuilder str = new StringBuilder();
 		str.append("SELECT COUNT(e.id) FROM t_event e ")
 			.append(" WHERE e.is_active = true");
-		
 		final int totalEvent = Integer.valueOf(ConnHandler.getManager().createNativeQuery(toStr(str)
 				.toString())
 				.getSingleResult().toString());
@@ -113,6 +144,16 @@ public class EventDao extends MasterDao<Event>{
 				.setParameter("id", id)
 				.getResultList();
 		return Optional.ofNullable(res.get(0));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Event> getMyEvent(final String userId, final Integer limit, final Integer offset){
+		final StringBuilder str = new StringBuilder();
+		str.append("SELECT * FROM t_event")
+		.append(" WHERE user_id = :userId AND is_active = TRUE");
+		final List<Event> res = em().createNativeQuery(toStr(str), Event.class).setParameter("userId", userId).setMaxResults(limit)
+				.setFirstResult((offset-1)*limit).getResultList();
+		return res;
 	}
 
 	@Override

@@ -1,4 +1,4 @@
- package com.lawencon.community.service;
+package com.lawencon.community.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -35,45 +35,43 @@ import com.lawencon.community.pojo.user.PojoUserChangePasswordReq;
 import com.lawencon.community.pojo.user.PojoUserGetUserProfileRes;
 import com.lawencon.community.pojo.user.PojoUserRegisterReq;
 import com.lawencon.community.pojo.user.PojoVerificationCodeUpdateReq;
-import com.lawencon.community.pojo.user.PojoVerificationUpdateReq;
+import com.lawencon.community.pojo.user.PojoVerificationReq;
 import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class UserService implements UserDetailsService, Runnable {
-	
-	
+
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Autowired
 	private FileDao fileDao;
-	
+
 	@Autowired
 	private ProfileDao profileDao;
-	
+
 	@Autowired
 	private RoleDao roleDao;
-	
+
 	@Autowired
 	private RegisterVerificationDao registerVerificationDao;
-	
+
 	@Autowired
 	private PasswordEncoder encoder;
-	
+
 	@Autowired
 	private PositionService positionService;
-	
+
 	@Autowired
 	private IndustryService industryService;
-	
+
 	@Autowired
 	private EmailService emailService;
-	
+
 	@Autowired
 	private PrincipalService principalService;
 	private EmailDetails emailDetails;
-
 
 	public User insert(final User data) {
 		User userInsert = null;
@@ -190,7 +188,7 @@ public class UserService implements UserDetailsService, Runnable {
 
 		}
 		profile.setFile(fileInsert);
-		
+
 		ConnHandler.begin();
 		profileInsert = profileDao.saveNoLogin(profile, () -> getUserSystem.getId());
 		ConnHandler.commit();
@@ -209,22 +207,14 @@ public class UserService implements UserDetailsService, Runnable {
 		final String generatePass = Generate.generateCode(8);
 		registerVerification.setEmail(data.getEmail());
 		registerVerification.setCodeVerifcation(generatePass);
-		registerVerification.setExpired(LocalDateTime.now().plusMinutes(5));
+		registerVerification.setExpired(LocalDateTime.now().plusMinutes(60));
 
 		ConnHandler.begin();
 		registerVerificationDao.saveNoLogin(registerVerification, () -> getUserSystem.getId());
 		ConnHandler.commit();
 
-		final EmailDetails email = new EmailDetails();
-		email.setMsgBody("Halo " + userInsert.getProfile().getFullName() + "\nAkun anda " + " email : "
-				+ userInsert.getEmail() + "\nKode Verifikasi : " + generatePass
-				+ "\nMohon lakukan verifkasi untuk akun anda, menggunakan kode verifikasi diatas, lakukan verifikasi dalam 5 menit \n TerimaKasih");
-		email.setRecipient(userInsert.getEmail());
-		email.setSubject("Berhasil ");
-	
-//		emailService.sendSimpleMail(email);
 		try {
-			emailService.sendMail(registerVerification);			
+			emailService.sendMail(registerVerification, userInsert);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -233,54 +223,61 @@ public class UserService implements UserDetailsService, Runnable {
 		return pojo;
 	}
 
-	public PojoUpdateRes verification(final PojoVerificationUpdateReq data) {
-
-		final User userEmail = userDao.getRefById(principalService.getAuthPrincipal());
-
-		if (registerVerificationDao.getVerification(userEmail.getEmail(), data.getCodeVerifcation()).isEmpty()) {
+	public PojoUpdateRes verification(final PojoVerificationReq data) {
+		final User getUserSystem = userDao.getUserSystem(RoleList.SYSTEM.getRoleCode()).get();
+		PojoUpdateRes pojoUpdate = null;
+		final Optional<RegisterVerification> verification = registerVerificationDao.getVerification(data.getEmail(),
+				data.getCodeVerification());
+		if (verification.isEmpty()) {
 			throw new RuntimeException("Kode verifikasi anda tidak cocok");
 		}
 
-		User userVerification = null;
+		pojoUpdate = new PojoUpdateRes();
+		final Optional<User> user = userDao.getIdByEmail(data.getEmail());
+		User userVerification = getByIdAndDetach(user.get().getId());
+		if (userVerification.getIsVerified()) {
+			throw new RuntimeException("Sudah pernah melakukan verifikasi");
+		}
 
-		userVerification = getByIdAndDetach(principalService.getAuthPrincipal());
-
-		final User user = userVerification;
-
-		user.setIsVerified(true);
+		User userUpdate = null;
 
 		ConnHandler.begin();
-		userDao.update(user);
+		userVerification.setIsVerified(true);
+		userUpdate = userDao.saveNoLogin(userVerification, () -> getUserSystem.getId());
 		ConnHandler.commit();
+		pojoUpdate.setVer(userUpdate.getVersion());
+		pojoUpdate.setMessage("Berhasil melakukan verifikasi");
 
-		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
-
-		pojoUpdate.setMessage("Anda Berhasil Melakukan Verifikasi");
 		return pojoUpdate;
 	}
 
-	public PojoUpdateRes updateCodeVerification(final PojoVerificationCodeUpdateReq data) {
-		RegisterVerification registerVerification = null;
-		registerVerification = registerVerificationDao.getByIdAndDetach(RegisterVerification.class,
-				data.getRegisterVerificationId());
-
-		final User userEmail = userDao.getRefById(principalService.getAuthPrincipal());
-
-		final RegisterVerification registerVerificationUpdate = registerVerification;
+	public PojoUpdateRes generateNewCode(final PojoVerificationCodeUpdateReq email) {
+		final User getUserSystem = userDao.getUserSystem(RoleList.SYSTEM.getRoleCode()).get();
+		final PojoUpdateRes pojo = new PojoUpdateRes();
+		final Optional<RegisterVerification> verification = registerVerificationDao.getIdByEmail(email.getEmail());
+		final Optional<User> userId = userDao.getIdByEmail(email.getEmail());
+		final RegisterVerification registerVerif = registerVerificationDao.getByIdAndDetach(RegisterVerification.class, verification.get().getId());
+		final User user = getByRefId(userId.get().getId());
 		final String generatePass = Generate.generateCode(8);
 
-		registerVerificationUpdate.setEmail(userEmail.getEmail());
-		registerVerificationUpdate.setCodeVerifcation(generatePass);
-		registerVerificationUpdate.setExpired(LocalDateTime.now().plusMinutes(5));
+		registerVerif.setEmail(email.getEmail());
+		registerVerif.setCodeVerifcation(generatePass);
+		registerVerif.setExpired(LocalDateTime.now().plusMinutes(60));
 
+		RegisterVerification verificationInsert = null;
 		ConnHandler.begin();
-		registerVerificationDao.update(registerVerificationUpdate);
+		verificationInsert = registerVerificationDao.saveNoLogin(registerVerif, () -> getUserSystem.getId());
 		ConnHandler.commit();
 
-		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
+		try {
+			emailService.sendMail(registerVerif, user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		pojoUpdate.setMessage("Code Baru Berhasil Dikirim");
-		return pojoUpdate;
+		pojo.setVer(verificationInsert.getVersion());
+		pojo.setMessage("Kode baru berhasil dikirim ke email anda");
+		return pojo;
 	}
 
 	public PojoInsertRes createAdmin(final PojoUserRegisterReq data) {
@@ -330,18 +327,18 @@ public class UserService implements UserDetailsService, Runnable {
 
 		ConnHandler.commit();
 
-		emailDetails.setMsgBody("Halo " + data.getProfile().getFullName() + "\nAkun anda " + " Email : " + data.getEmail()
-				+ "\nPassword : " + data.getPasswordUser() + "\n TerimaKasih");
+		emailDetails.setMsgBody("Halo " + data.getProfile().getFullName() + "\nAkun anda " + " Email : "
+				+ data.getEmail() + "\nPassword : " + data.getPasswordUser() + "\n TerimaKasih");
 		emailDetails.setRecipient(userInsert.getEmail());
 		emailDetails.setSubject("Berhasil ");
 
 		final Runnable runnable = () -> {
 			emailService.sendSimpleMail(emailDetails);
 		};
-		
+
 		final Thread thread = new Thread(runnable);
 		thread.start();
-		
+
 		pojo.setId(userInsert.getId());
 		pojo.setMessage("Create Akun Admin Berhasil");
 		return pojo;

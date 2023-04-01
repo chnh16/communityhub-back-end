@@ -29,5 +29,11 @@ public class PostUserDao extends BasePostDao<PostUser>{
 		return res;
 	}
 
+	@Override
+	PostUser getByIdAndDetach(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }

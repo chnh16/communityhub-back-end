@@ -21,8 +21,10 @@ import com.lawencon.community.pojo.course.PojoCourseGetAllRes;
 import com.lawencon.community.pojo.course.PojoCourseInsertReq;
 import com.lawencon.community.pojo.course.PojoCourseUpdateReq;
 import com.lawencon.community.pojo.course.PojoCourserGetAllResData;
+import com.lawencon.community.pojo.event.PojoEventResGetAll;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseGetByUserIdRes;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseInsertReq;
+import com.lawencon.community.pojo.userevent.PojoUserEventGetByUserIdRes;
 import com.lawencon.community.service.CourseService;
 
 @RestController
@@ -72,8 +74,8 @@ private final CourseService courseService;
 	}
 	
 	@GetMapping("user-course")
-	public ResponseEntity<List<PojoUserCourseGetByUserIdRes>> getByUserId(final String id) {
-		final List<PojoUserCourseGetByUserIdRes> res = courseService.getByUserId(id);
+	public ResponseEntity<List<PojoUserCourseGetByUserIdRes>> getByUserId(@RequestParam("category") String category, @RequestParam("price") String price, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+		final List<PojoUserCourseGetByUserIdRes> res = courseService.getByUserId(category, price, limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 
@@ -86,6 +88,12 @@ private final CourseService courseService;
 	@DeleteMapping("/user-course/{id}")
 	public ResponseEntity<PojoDeleteRes> deleteUserEvent(@PathVariable final String id){
 		final PojoDeleteRes res = courseService.deleteUserEvent(id);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("my-course	")
+	private ResponseEntity<List<PojoCourseGetAllRes>> getMyCourse(@RequestParam("category") String category, @RequestParam("price") String price, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset){
+		final List<PojoCourseGetAllRes> res = courseService.getMyCourse(category, price, limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 

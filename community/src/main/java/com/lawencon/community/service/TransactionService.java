@@ -488,7 +488,6 @@ public class TransactionService {
 			transactionReport.setItemName(transactions.get(i).getItemName());
 			transactionReport.setStartDate(transactions.get(i).getStartDate());
 			transactionReport.setTotalParticipants(transactions.get(i).getTotalParticipants());
-
 		}
 
 		return transactions;

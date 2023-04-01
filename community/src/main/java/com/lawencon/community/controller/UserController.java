@@ -30,95 +30,89 @@ import com.lawencon.community.pojo.user.PojoUserChangePasswordReq;
 import com.lawencon.community.pojo.user.PojoUserGetUserProfileRes;
 import com.lawencon.community.pojo.user.PojoUserRegisterReq;
 import com.lawencon.community.pojo.user.PojoVerificationCodeUpdateReq;
-import com.lawencon.community.pojo.user.PojoVerificationUpdateReq;
+import com.lawencon.community.pojo.user.PojoVerificationReq;
 import com.lawencon.community.service.JwtService;
 import com.lawencon.community.service.UserService;
-
 
 @RestController
 @RequestMapping("users")
 public class UserController {
-	
+
 	private final UserService userService;
 	private final AuthenticationManager authenticationManager;
 	private final JwtService jwtService;
-	
-	public UserController (UserService userService, AuthenticationManager authenticationManager, JwtService jwtService) {
+
+	public UserController(UserService userService, AuthenticationManager authenticationManager, JwtService jwtService) {
 		this.userService = userService;
 		this.authenticationManager = authenticationManager;
 		this.jwtService = jwtService;
 	}
-	
+
 	@PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody @Valid final PojoLoginReq user){
-        final Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPasswordUser());
+	public ResponseEntity<?> login(@RequestBody @Valid final PojoLoginReq user) {
+		final Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPasswordUser());
 
-        authenticationManager.authenticate(auth);
-        final Optional<User> userOptional = userService.getByEmail(user.getEmail());
+		authenticationManager.authenticate(auth);
+		final Optional<User> userOptional = userService.getByEmail(user.getEmail());
 
-        final Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(Calendar.HOUR_OF_DAY, 1);
+		final Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.HOUR_OF_DAY, 1);
 
-        final Map<String, Object> claims = new HashMap<>();
-        claims.put("exp", cal.getTime());
-        claims.put("id", userOptional.get().getId());
+		final Map<String, Object> claims = new HashMap<>();
+		claims.put("exp", cal.getTime());
+		claims.put("id", userOptional.get().getId());
 
-        final PojoLoginRes loginRes = new PojoLoginRes();
-        
-        loginRes.setToken(jwtService.generateJwt(claims));
-        loginRes.setIdUser(userOptional.get().getId()) ;
-        loginRes.setRoleCode(userOptional.get().getRole().getRoleCode());
-        loginRes.setFullName(userOptional.get().getProfile().getFullName());
-        loginRes.setPremiumUntil(userOptional.get().getProfile().getPremiumUntil());
+		final PojoLoginRes loginRes = new PojoLoginRes();
 
-        return new ResponseEntity<>(loginRes, HttpStatus.OK);
-    }
-	
+		loginRes.setToken(jwtService.generateJwt(claims));
+		loginRes.setIdUser(userOptional.get().getId());
+		loginRes.setRoleCode(userOptional.get().getRole().getRoleCode());
+		loginRes.setFullName(userOptional.get().getProfile().getFullName());
+		loginRes.setPremiumUntil(userOptional.get().getProfile().getPremiumUntil());
+
+		return new ResponseEntity<>(loginRes, HttpStatus.OK);
+	}
+
 	@PostMapping("regis")
-	public ResponseEntity<PojoInsertRes> register(@Valid @RequestBody final PojoUserRegisterReq data){
+	public ResponseEntity<PojoInsertRes> register(@Valid @RequestBody final PojoUserRegisterReq data) {
 		final PojoInsertRes res = userService.register(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
 
 	@PostMapping("regis-admin")
-	public ResponseEntity<PojoInsertRes> createAdmin(@Valid @RequestBody final PojoUserRegisterReq data){
+	public ResponseEntity<PojoInsertRes> createAdmin(@Valid @RequestBody final PojoUserRegisterReq data) {
 		final PojoInsertRes res = userService.createAdmin(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
-	
-	@PutMapping
-	public ResponseEntity<PojoUpdateRes> verification(@RequestBody PojoVerificationUpdateReq data) {
+
+	@PutMapping("verify")
+	public ResponseEntity<PojoUpdateRes> verification(@RequestBody PojoVerificationReq data) {
 		final PojoUpdateRes res = userService.verification(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
-	@PutMapping("code")
-	public ResponseEntity<PojoUpdateRes> updateCodeVerification(@RequestBody PojoVerificationCodeUpdateReq data) {
-		final PojoUpdateRes res = userService.updateCodeVerification(data);
+
+	@PostMapping("verify/generate")
+	public ResponseEntity<PojoUpdateRes> updateCodeVerification(@RequestBody PojoVerificationCodeUpdateReq email) {
+		final PojoUpdateRes res = userService.generateNewCode(email);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("user-profile")
-	public ResponseEntity<PojoUserGetUserProfileRes> getUserProfile(){
+	public ResponseEntity<PojoUserGetUserProfileRes> getUserProfile() {
 		final PojoUserGetUserProfileRes res = userService.getUserProfile();
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
+
 	@PutMapping("update-profile")
 	public ResponseEntity<PojoUpdateRes> updateProfile(@RequestBody PojoProfileUpdateReq data) {
 		final PojoUpdateRes res = userService.updateProfile(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
 
 	@PutMapping("change-password")
 	public ResponseEntity<PojoUpdateRes> changePass(@RequestBody PojoUserChangePasswordReq data) {
 		final PojoUpdateRes res = userService.changePass(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
-	
-	
-
 }

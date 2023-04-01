@@ -81,14 +81,15 @@ public class EmailService {
 	}
 
 	
-	public String sendMail(RegisterVerification registerVerification) throws MessagingException{
+	public String sendMail(RegisterVerification registerVerification, User user) throws MessagingException{
 		Context context = new Context();
         context.setVariable("registerVerification", registerVerification);
+        context.setVariable("user", user);
 
         String process = templateEngine.process("email", context);
         javax.mail.internet.MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
-        helper.setSubject("Welcome " + registerVerification.getEmail() );
+        helper.setSubject("Welcome " + user.getProfile().getFullName() );
         helper.setText(process, true);
         helper.setTo(registerVerification.getEmail());
         javaMailSender.send(mimeMessage);
