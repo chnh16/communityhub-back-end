@@ -6,12 +6,21 @@
 	<parameter name="Parameter1" class="java.lang.String"/>
 	<parameter name="Parameter2" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT p.full_name AS fullName , 'Course' AS activityType, SUM(c.price) AS totalIncome FROM t_transaction tt 
-INNER JOIN course c ON tt.course_id = c.id
-INNER JOIN t_user tu ON tt.user_id = tu.id 
-INNER JOIN profile p ON tu.profile_id = p.id
-WHERE DATE(tt.updated_at) >= DATE('2023-03-15') AND DATE(tt.updated_at) <= DATE('2023-03-25') AND tt.is_approved = true AND tu.is_verified = true
-GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
+		<![CDATA[SELECT p.full_name AS fullName, tp.type_name AS activityType, SUM(tt.grand_total * 100/80) AS totalIncome FROM t_transaction tt 
+INNER JOIN course c ON tt.course_id = c.id 
+INNER JOIN type_product tp ON tp.id = c.type_product_id 
+INNER JOIN t_user tu ON tu.id = c.user_id 
+INNER JOIN profile p ON p.id = tu.profile_id 
+WHERE DATE(tt.updated_at) >= DATE('2023-03-15') AND DATE(tt.updated_at) <= DATE('2023-03-25') AND tt.is_approved = true  
+GROUP BY p.full_name, tp.type_name 
+UNION ALL 
+SELECT p.full_name AS fullName, tp.type_name AS activityType, SUM(tt.grand_total * 100/80) AS totalIncome FROM t_transaction tt 
+INNER JOIN t_event te ON tt.event_id = te.id 
+INNER JOIN type_product tp ON tp.id = te.type_product_id 
+INNER JOIN t_user tu ON tu.id = te.user_id 
+INNER JOIN profile p ON p.id = tu.profile_id 
+WHERE DATE(tt.updated_at) >= DATE('2023-03-15') AND DATE(tt.updated_at) <= DATE('2023-03-25') AND tt.is_approved = true  
+GROUP BY p.full_name, tp.type_name]]>
 	</queryString>
 	<field name="fullName" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="membername"/>
@@ -62,14 +71,14 @@ GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Jl Casablanca No.Kav 88, Menteng Dalam, Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12870]]></text>
+				<text><![CDATA[Jl Casablanca No.Kav 88, Menteng Dalam, Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12870 Telp 021-2854-2549]]></text>
 			</staticText>
 			<line>
 				<reportElement x="-1" y="94" width="561" height="1" uuid="db27f6cd-b5d5-4d40-bca5-274448900b21"/>
 			</line>
 			<staticText>
 				<reportElement x="147" y="120" width="34" height="30" uuid="ca587457-cda1-4d5a-84a1-bc99532081ea"/>
-				<text><![CDATA[S / D]]></text>
+				<text><![CDATA[s/d]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
@@ -83,6 +92,9 @@ GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[No.]]></text>
 			</staticText>
 			<staticText>
@@ -95,7 +107,10 @@ GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<text><![CDATA[membername]]></text>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama Member]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="185" y="0" width="185" height="30" uuid="4020b1db-ffa0-4dd1-b8e2-65471897a061">
@@ -107,7 +122,10 @@ GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<text><![CDATA[activitytype]]></text>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipe]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="370" y="0" width="185" height="30" uuid="a3b1b0d1-4cb5-4f9d-afbf-3363ae7f46da">
@@ -119,7 +137,10 @@ GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<text><![CDATA[totalincomes]]></text>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Pendapatan]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -133,6 +154,7 @@ GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -145,6 +167,7 @@ GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{fullName}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -157,9 +180,10 @@ GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{activityType}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="¤ #,##0.##;¤-#,##0.##">
 				<reportElement x="370" y="1" width="185" height="30" uuid="2db9d2c9-bcc8-4fb7-a538-b88de91d7222">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="053d76c5-d4fa-4557-8b4b-cb4cebe318fc"/>
 				</reportElement>
@@ -169,6 +193,7 @@ GROUP BY c.course_name, c.start_date, p.full_name, c.provider]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{totalIncome}]]></textFieldExpression>
 			</textField>
 		</band>

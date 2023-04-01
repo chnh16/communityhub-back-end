@@ -90,14 +90,14 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Jl Casablanca No.Kav 88, Menteng Dalam, Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12870]]></text>
+				<text><![CDATA[Jl Casablanca No.Kav 88, Menteng Dalam, Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12870 Telp 021-2854-2549]]></text>
 			</staticText>
 			<line>
 				<reportElement x="4" y="100" width="798" height="1" uuid="9f459938-9f10-4842-94a8-0abb86a7af89"/>
 			</line>
 			<staticText>
 				<reportElement x="150" y="109" width="32" height="30" uuid="11ed67b1-7791-401b-a316-e98ce3b9ddaf"/>
-				<text><![CDATA[S / D]]></text>
+				<text><![CDATA[s/d]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
@@ -113,6 +113,9 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Nama Member]]></text>
 			</staticText>
 			<staticText>
@@ -125,6 +128,9 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Nama Provider]]></text>
 			</staticText>
 			<staticText>
@@ -137,6 +143,9 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Tipe]]></text>
 			</staticText>
 			<staticText>
@@ -149,6 +158,9 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Judul]]></text>
 			</staticText>
 			<staticText>
@@ -161,6 +173,9 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Tanggal Mulai]]></text>
 			</staticText>
 			<staticText>
@@ -173,6 +188,9 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[Total Peserta]]></text>
 			</staticText>
 			<staticText>
@@ -183,6 +201,9 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[No]]></text>
 			</staticText>
 		</band>
@@ -199,6 +220,7 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{memberName}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -211,6 +233,7 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{providerName}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -223,6 +246,7 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{activityType}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -235,6 +259,7 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{itemName}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -247,6 +272,7 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{startDate}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -259,6 +285,7 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{totalParticipants}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -269,6 +296,7 @@ GROUP BY te.event_name, te.start_date, p.full_name, te.provider, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
 			</textField>
 		</band>
