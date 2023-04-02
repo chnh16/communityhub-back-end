@@ -91,7 +91,7 @@ private final CourseService courseService;
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-	@GetMapping("my-course	")
+	@GetMapping("my-course")
 	private ResponseEntity<List<PojoCourseGetAllRes>> getMyCourse(@RequestParam("category") String category, @RequestParam("price") String price, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset){
 		final List<PojoCourseGetAllRes> res = courseService.getMyCourse(category, price, limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);

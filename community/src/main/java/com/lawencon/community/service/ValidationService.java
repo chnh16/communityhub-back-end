@@ -14,7 +14,5 @@ public abstract class ValidationService<T> {
 	
 	abstract void valMaxLength(T data);
 	
-	abstract void valMinLength(T data);
-	
 	abstract void valIdPresent(T data);
 }

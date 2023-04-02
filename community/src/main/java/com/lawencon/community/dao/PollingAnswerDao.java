@@ -88,7 +88,8 @@ public class PollingAnswerDao extends BasePostDao<PollingAnswer> {
 			final StringBuilder str = new StringBuilder();
 			str.append("SELECT pc.id, pc.choice_content, COUNT(pa.polling_choice_id) FROM polling_answer pa ")
 					.append(" RIGHT JOIN polling_choice pc ON pc.id = pa.polling_choice_id ").append("GROUP BY pc.id, pc.choice_content ")
-					.append(" HAVING pc.post_id = :postId");
+					.append(" HAVING pc.post_id = :postId")
+					.append(" ORDER BY pc.created_at ASC");
 
 			final List<Object> result = em().createNativeQuery(toStr(str)).setParameter("postId", postId)
 					.getResultList();

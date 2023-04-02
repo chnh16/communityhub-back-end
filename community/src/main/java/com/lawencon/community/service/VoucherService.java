@@ -67,8 +67,8 @@ public class VoucherService {
 			ConnHandler.begin();
 			valIdNull(data);
 			valNotNullable(data);
-			data.setCreatedAt(LocalDateTime.now());
-			data.setIsActive(true);
+//			data.setCreatedAt(LocalDateTime.now());
+//			data.setIsActive(true);
 			voucherInsert = voucherDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {

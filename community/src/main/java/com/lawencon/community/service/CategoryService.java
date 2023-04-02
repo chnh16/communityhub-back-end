@@ -17,6 +17,7 @@ import com.lawencon.community.pojo.category.PojoCategoryGetAllResData;
 import com.lawencon.community.pojo.category.PojoCategoryGetAllRes;
 import com.lawencon.community.pojo.category.PojoCategoryInsertReq;
 import com.lawencon.community.pojo.category.PojoCategoryUpdateReq;
+import com.lawencon.community.util.Generate;
 
 @Service
 public class CategoryService extends ValidationService<Category> {
@@ -28,8 +29,9 @@ public class CategoryService extends ValidationService<Category> {
 		Category categoryInsert = null;
 		try {
 			ConnHandler.begin();
-			valIdNull(data);
+		
 			valNotNullable(data);
+			valMaxLength(data);
 			categoryInsert = categoryDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -40,8 +42,10 @@ public class CategoryService extends ValidationService<Category> {
 
 	public PojoInsertRes insertCategory(final PojoCategoryInsertReq data) {
 		final Category category = new Category();
+		
+		final String generateId = Generate.generateCode(5);
 
-		category.setCategoryCode(data.getCategoryCode());
+		category.setCategoryCode(generateId);
 		category.setCategoryName(data.getCategoryName());
 
 		category.setIsActive(true);
@@ -57,9 +61,11 @@ public class CategoryService extends ValidationService<Category> {
 
 	public Category updateIndustry(final Category data) {
 		Category categoryUpdate = null;
-		valIdNotNull(data);
+		
 		try {
 			ConnHandler.begin();
+			valNotNullable(data);
+			valMaxLength(data);
 			categoryUpdate = categoryDao.update(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -190,24 +196,20 @@ public class CategoryService extends ValidationService<Category> {
 
 	@Override
 	void valFkNull(Category data) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	void valMaxLength(Category data) {
 		if(data.getCategoryCode().length() > 5) {
-			throw new RuntimeException("Input terlalu panjang");
+			
+			throw new RuntimeException("Kode terlalu panjang");
+			
 		}
 		if(data.getCategoryName().length() > 30) {
-			throw new RuntimeException("Input terlalu panjang");
+			throw new RuntimeException("Category terlalu panjang");
 		}
-	}
-
-	@Override
-	void valMinLength(Category data) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -235,7 +237,7 @@ public class CategoryService extends ValidationService<Category> {
 		if (data.getCategoryCode() == null) {
 			throw new RuntimeException("Kode Kategori Kosong");
 		}
-		if (data.getCategoryName() == null) {
+		if (data.getCategoryName().length() == 0) {
 			throw new RuntimeException("Nama Kategori Kosong");
 		}
 	}

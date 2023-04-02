@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -46,20 +47,47 @@ import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
-public class TransactionService {
+public class TransactionService extends ValidationService<Transaction>{
+	
+	@Autowired
 	private final TransactionDao transactionDao;
+	
+	@Autowired
 	private final FileDao fileDao;
+	
+	@Autowired
 	private final VoucherDao voucherDao;
+	
+	@Autowired
 	private final ProfileDao profileDao;
+	
+	@Autowired
 	private final UserEventDao userEventDao;
+	
+	@Autowired
 	private final UserCourseDao userCourseDao;
+	
+	@Autowired
 	private final StatusTransactionDao statusTransactionDao;
+	
+	@Autowired
 	private final UserService userService;
+	
+	@Autowired
 	private final EventService eventService;
+	
+	@Autowired
 	private final MembershipService membershipService;
+	
+	@Autowired
 	private final CourseService courseService;
+	
+	@Autowired
 	private final PrincipalService principalService;
+	
+	@Autowired
 	private final VoucherService voucherService;
+	
 	private static final BigDecimal userShare = new BigDecimal(0.8);
 	private static final BigDecimal systemShare = new BigDecimal(0.2);
 
@@ -547,6 +575,48 @@ public class TransactionService {
 		}
 
 		return transactions;
+	}
+
+	@Override
+	void valNotNullable(Transaction data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valIdNull(Transaction data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valIdNotNull(Transaction data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valBkNull(Transaction data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valFkNull(Transaction data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valMaxLength(Transaction data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valIdPresent(Transaction data) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

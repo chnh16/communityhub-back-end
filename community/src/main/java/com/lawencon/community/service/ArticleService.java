@@ -11,6 +11,7 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.ArticleDao;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.model.Article;
+import com.lawencon.community.model.Category;
 import com.lawencon.community.model.File;
 import com.lawencon.community.model.User;
 import com.lawencon.community.pojo.PojoDeleteRes;
@@ -23,7 +24,7 @@ import com.lawencon.community.pojo.article.PojoArticleUpdateReq;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
-public class ArticleService {
+public class ArticleService extends ValidationService<Article>{
 	
 	@Autowired
 	private ArticleDao articleDao;
@@ -42,6 +43,8 @@ public class ArticleService {
 
 		try {
 			ConnHandler.begin();
+			valNotNullable(data);
+			valMaxLength(data);
 			articleInsert = articleDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -231,5 +234,61 @@ public class ArticleService {
 		pojoArticle.setVer(article.get().getVersion());
 
 		return pojoArticle;
+	}
+
+	@Override
+	void valNotNullable(Article data) {
+		if (data.getArticleTitle().length() == 0) {
+			throw new RuntimeException("Title Article Kosong");
+		}
+		if (data.getArticleContent().length() == 0) {
+			throw new RuntimeException("Content Article Kosong");
+		}
+
+	}
+
+	@Override
+	void valIdNull(Article data) {
+		if (data.getId() == null) {
+			throw new RuntimeException("ID kosong");
+		}
+		
+	}
+
+	@Override
+	void valIdNotNull(Article data) {
+		if (data.getId() != null) {
+			throw new RuntimeException("ID harus kosong");
+		}
+		
+	}
+
+	@Override
+	void valBkNull(Article data) {
+	
+		
+	}
+
+	@Override
+	void valFkNull(Article data) {
+		
+		
+	}
+
+	@Override
+	void valMaxLength(Article data) {
+		if(data.getArticleTitle().length() > 30) {
+			throw new RuntimeException("Title terlalu panjang");
+		}
+		
+	}
+
+	@Override
+	void valIdPresent(Article data) {
+		final Optional<Article> res = getById(data.getId());
+		if(res.isPresent()) {
+			throw new RuntimeException("ID sudah ada di database");
+		}
+		
 	}
 }

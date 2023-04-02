@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -20,6 +21,7 @@ import com.lawencon.community.pojo.position.PojoPositionUpdateReq;
 @Service
 public class PositionService extends ValidationService<Position> {
 
+	@Autowired
 	private final PositionDao positionDao;
 
 	public PositionService(PositionDao positionDao) {
@@ -28,12 +30,13 @@ public class PositionService extends ValidationService<Position> {
 
 	public Position insert(final Position data) {
 		Position positionInsert = null;
-		valIdNotNull(data);
-		valIdPresent(data);
-		valMaxLength(data);
-		valNotNullable(data);
+		
 		try {
 			ConnHandler.begin();
+			
+			
+			valMaxLength(data);
+			valNotNullable(data);
 			positionInsert = positionDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -44,11 +47,12 @@ public class PositionService extends ValidationService<Position> {
 
 	public Position update(final Position data) {
 		Position positionUpdate = null;
-		valIdNull(data);
-		valMaxLength(data);
-		valNotNullable(data);
+		
 		try {
 			ConnHandler.begin();
+			valIdNull(data);
+			valMaxLength(data);
+			valNotNullable(data);
 			positionUpdate = positionDao.update(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -204,11 +208,6 @@ public class PositionService extends ValidationService<Position> {
 		}
 	}
 
-	@Override
-	void valMinLength(Position data) {
-		
-		
-	}
 
 	@Override
 	void valIdPresent(Position data) {
