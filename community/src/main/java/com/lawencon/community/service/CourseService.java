@@ -22,7 +22,6 @@ import com.lawencon.community.model.File;
 import com.lawencon.community.model.TypeProduct;
 import com.lawencon.community.model.User;
 import com.lawencon.community.model.UserCourse;
-import com.lawencon.community.model.UserEvent;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
 import com.lawencon.community.pojo.PojoUpdateRes;
@@ -32,7 +31,6 @@ import com.lawencon.community.pojo.course.PojoCourseUpdateReq;
 import com.lawencon.community.pojo.course.PojoCourserGetAllResData;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseGetByUserIdRes;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseInsertReq;
-import com.lawencon.community.pojo.userevent.PojoUserEventGetByUserIdRes;
 import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 

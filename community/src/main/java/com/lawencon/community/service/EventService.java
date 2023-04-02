@@ -15,7 +15,6 @@ import com.lawencon.community.dao.CategoryDao;
 import com.lawencon.community.dao.EventDao;
 import com.lawencon.community.dao.FileDao;
 import com.lawencon.community.dao.TypeProductDao;
-import com.lawencon.community.dao.UserDao;
 import com.lawencon.community.dao.UserEventDao;
 import com.lawencon.community.model.Category;
 import com.lawencon.community.model.Event;
@@ -46,9 +45,6 @@ public class EventService {
 	
 	@Autowired
 	private FileDao fileDao;
-
-	@Autowired
-	private UserDao userDao;
 	
 	@Autowired
 	private TypeProductDao typeProductDao;
