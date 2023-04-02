@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
@@ -47,42 +48,47 @@ import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class TransactionService {
-	private final TransactionDao transactionDao;
-	private final FileDao fileDao;
-	private final VoucherDao voucherDao;
-	private final ProfileDao profileDao;
-	private final UserEventDao userEventDao;
-	private final UserCourseDao userCourseDao;
-	private final StatusTransactionDao statusTransactionDao;
-	private final UserService userService;
-	private final EventService eventService;
-	private final MembershipService membershipService;
-	private final CourseService courseService;
-	private final PrincipalService principalService;
-	private final VoucherService voucherService;
+
+	@Autowired
+	private TransactionDao transactionDao;
+
+	@Autowired
+	private FileDao fileDao;
+
+	@Autowired
+	private VoucherDao voucherDao;
+
+	@Autowired
+	private ProfileDao profileDao;
+
+	@Autowired
+	private UserEventDao userEventDao;
+
+	@Autowired
+	private UserCourseDao userCourseDao;
+
+	@Autowired
+	private StatusTransactionDao statusTransactionDao;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private EventService eventService;
+
+	@Autowired
+	private MembershipService membershipService;
+
+	@Autowired
+	private CourseService courseService;
+
+	@Autowired
+	private PrincipalService principalService;
+
+	@Autowired
+	private VoucherService voucherService;
 	private static final BigDecimal userShare = new BigDecimal(0.8);
 	private static final BigDecimal systemShare = new BigDecimal(0.2);
-
-	public TransactionService(final TransactionDao transactionDao, final UserService userService,
-			final EventService eventService, final MembershipService membershipService,
-			final CourseService courseService, final PrincipalService principalService,
-			final VoucherService voucherService, final FileDao fileDao, final VoucherDao voucherDao,
-			final ProfileDao profileDao, final StatusTransactionDao statusTransactionDao,
-			final UserEventDao userEventDao, UserCourseDao userCourseDao) {
-		this.transactionDao = transactionDao;
-		this.userService = userService;
-		this.eventService = eventService;
-		this.membershipService = membershipService;
-		this.courseService = courseService;
-		this.principalService = principalService;
-		this.voucherService = voucherService;
-		this.fileDao = fileDao;
-		this.voucherDao = voucherDao;
-		this.profileDao = profileDao;
-		this.statusTransactionDao = statusTransactionDao;
-		this.userEventDao = userEventDao;
-		this.userCourseDao = userCourseDao;
-	}
 
 	private Transaction insert(final Transaction data) {
 		Transaction transInsert = null;
@@ -477,10 +483,11 @@ public class TransactionService {
 		ConnHandler.commit();
 	}
 
-	public List<PojoTransactionGetReportRes> getMemberReportParticipantByDate(final String userId, final String startDate, final String endDate) {
+	public List<PojoTransactionGetReportRes> getMemberReportParticipantByDate(final String userId,
+			final String startDate, final String endDate) {
 
-		final List<PojoTransactionGetReportRes> transactions = transactionDao
-				.getMemberReportParticipant(userId,DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+		final List<PojoTransactionGetReportRes> transactions = transactionDao.getMemberReportParticipant(userId,
+				DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
 
 		for (int i = 0; i < transactions.size(); i++) {
 			final PojoTransactionGetReportRes transactionReport = new PojoTransactionGetReportRes();
@@ -493,11 +500,11 @@ public class TransactionService {
 		return transactions;
 	}
 
-	public List<PojoTransactionGetReportIncomeMemberRes> getReportIncomeMemberByDate(final String userId, final String startDate,
-			final String endDate) {
+	public List<PojoTransactionGetReportIncomeMemberRes> getReportIncomeMemberByDate(final String userId,
+			final String startDate, final String endDate) {
 
-		final List<PojoTransactionGetReportIncomeMemberRes> transactions = transactionDao
-				.getReportIncomeMember(userId,DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
+		final List<PojoTransactionGetReportIncomeMemberRes> transactions = transactionDao.getReportIncomeMember(userId,
+				DateUtil.strToLocalDate(startDate), DateUtil.strToLocalDate(endDate));
 
 		for (int i = 0; i < transactions.size(); i++) {
 			final PojoTransactionGetReportIncomeMemberRes transactionReport = new PojoTransactionGetReportIncomeMemberRes();
@@ -549,5 +556,4 @@ public class TransactionService {
 		return transactions;
 	}
 
-	
 }

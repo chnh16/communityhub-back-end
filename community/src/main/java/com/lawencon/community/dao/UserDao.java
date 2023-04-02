@@ -79,7 +79,7 @@ public class UserDao extends MasterDao<User> {
 		try {
 			final StringBuilder str = new StringBuilder();
 			str.append(
-					" SELECT tu.id, tu.email, tu.password_user, tu.role_id, tr.role_code ,tu.profile_id, tu.created_by, tu.updated_by, tu.created_at, tu.updated_at, tu.ver, tu.is_active, p.full_name ")
+					" SELECT tu.id, tu.email, tu.password_user, tu.role_id, tr.role_code ,tu.profile_id, tu.created_by, tu.updated_by, tu.created_at, tu.updated_at, tu.ver, tu.is_active, p.full_name, tu.is_verified ")
 					.append("FROM t_user tu INNER JOIN t_role tr ON tu.role_id = tr.id ")
 					.append("INNER JOIN profile p ON tu.profile_id = p.id ")
 					.append("WHERE tu.email = :email AND tu.is_active = TRUE ");
@@ -106,6 +106,7 @@ public class UserDao extends MasterDao<User> {
 				profile.setId(objArr[5].toString());
 				profile.setFullName(objArr[12].toString());
 				user.setProfile(profile);
+				user.setIsVerified(Boolean.valueOf(objArr[13].toString()));
 
 				user.setCreatedBy(objArr[6].toString());
 				if (objArr[7] != null) {

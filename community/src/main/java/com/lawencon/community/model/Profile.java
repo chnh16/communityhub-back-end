@@ -38,7 +38,7 @@ public class Profile extends BaseEntity {
 	private LocalDateTime premiumUntil;
 
 	@OneToOne
-	@JoinColumn(name = "file_id", nullable = false)
+	@JoinColumn(name = "file_id")
 	private File file;
 	
 	@OneToOne

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.model.Course;
-import com.lawencon.community.model.Event;
 
 @Repository
 public class CourseDao extends MasterDao<Course>{

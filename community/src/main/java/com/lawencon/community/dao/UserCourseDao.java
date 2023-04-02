@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.community.model.UserCourse;
-import com.lawencon.community.model.UserEvent;
 
 @Repository
 public class UserCourseDao extends BasePostDao<UserCourse>{

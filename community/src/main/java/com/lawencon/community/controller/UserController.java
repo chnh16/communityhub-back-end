@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,6 +70,7 @@ public class UserController {
 		loginRes.setIdUser(userOptional.get().getId());
 		loginRes.setRoleCode(userOptional.get().getRole().getRoleCode());
 		loginRes.setFullName(userOptional.get().getProfile().getFullName());
+		loginRes.setIsVerified(userOptional.get().getIsVerified());
 		loginRes.setPremiumUntil(userOptional.get().getProfile().getPremiumUntil());
 
 		return new ResponseEntity<>(loginRes, HttpStatus.OK);
@@ -92,7 +94,7 @@ public class UserController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 
-	@PostMapping("verify/generate")
+	@PatchMapping("verify/generate")
 	public ResponseEntity<PojoUpdateRes> updateCodeVerification(@RequestBody PojoVerificationCodeUpdateReq email) {
 		final PojoUpdateRes res = userService.generateNewCode(email);
 		return new ResponseEntity<>(res, HttpStatus.OK);

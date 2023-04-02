@@ -178,7 +178,7 @@ public class PostController {
 	}
 	
 	@GetMapping("polling/{id}")
-	public ResponseEntity<List<PojoPollingAnswerGetCountRes>> getTotalAnswerByChoiceId(@PathVariable("postId") String postId) {
+	public ResponseEntity<List<PojoPollingAnswerGetCountRes>> getTotalAnswerByChoiceId(@PathVariable("id") final String postId) {
 		final List<PojoPollingAnswerGetCountRes> res = postService.getAnswerByChoiceId(postId);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
