@@ -26,12 +26,13 @@ public class PositionService extends ValidationService<Position> {
 
 	public Position insert(final Position data) {
 		Position positionInsert = null;
-		valIdNotNull(data);
-		valIdPresent(data);
-		valMaxLength(data);
-		valNotNullable(data);
+		
 		try {
 			ConnHandler.begin();
+			
+			
+			valMaxLength(data);
+			valNotNullable(data);
 			positionInsert = positionDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -42,11 +43,12 @@ public class PositionService extends ValidationService<Position> {
 
 	public Position update(final Position data) {
 		Position positionUpdate = null;
-		valIdNull(data);
-		valMaxLength(data);
-		valNotNullable(data);
+		
 		try {
 			ConnHandler.begin();
+			valIdNull(data);
+			valMaxLength(data);
+			valNotNullable(data);
 			positionUpdate = positionDao.update(data);
 			ConnHandler.commit();
 		} catch (Exception e) {

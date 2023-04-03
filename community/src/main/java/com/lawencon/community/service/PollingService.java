@@ -9,13 +9,15 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.PollingAnswerDao;
 import com.lawencon.community.dao.PollingChoiceDao;
+import com.lawencon.community.model.Industry;
+import com.lawencon.community.model.PollingAnswer;
 import com.lawencon.community.model.PollingChoice;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.pollinganswer.PojoPollingAnswerGetCountRes;
 import com.lawencon.community.pojo.pollingchoice.PojoPollingChoiceGetAllRes;
 
 @Service
-public class PollingService {
+public class PollingService{
 	
 	@Autowired
 	private PollingChoiceDao pollingChoiceDao;
@@ -26,6 +28,7 @@ public class PollingService {
 	public PollingChoice insertPollingChoice(final PollingChoice pollingChoice) {
 		PollingChoice insertChoice = null;
 		ConnHandler.begin();
+		valNotNullable(pollingChoice);
 		insertChoice = pollingChoiceDao.insert(pollingChoice);
 		ConnHandler.commit();
 		return insertChoice;
@@ -86,5 +89,17 @@ public class PollingService {
 		}
 		return listAnswer;
 	}
+	
+
+
+	
+
+	private void valNotNullable(final PollingChoice data) {
+		if (data.getChoiceContent().length() == 0) {
+			throw new RuntimeException("Choice Content Kosong");
+		}
+	}
+	
+	
 
 }

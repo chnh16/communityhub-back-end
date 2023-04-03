@@ -35,7 +35,7 @@ import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
-public class CourseService {
+public class CourseService extends ValidationService<Course>{
 	
 	@Autowired
 	private CourseDao courseDao;
@@ -61,6 +61,8 @@ public class CourseService {
 	public Course insert(final Course data) {
 		Course insertCourse = null;
 		ConnHandler.begin();
+		valNotNullable(data);
+		valMaxLength(data);
 		insertCourse = courseDao.insert(data);
 		ConnHandler.commit();
 		return insertCourse;
@@ -69,6 +71,8 @@ public class CourseService {
 	public Course update(final Course data) {
 		Course updateCourse = null;
 		ConnHandler.begin();
+		valNotNullable(data);
+		valMaxLength(data);
 		updateCourse = courseDao.update(data);
 		ConnHandler.commit();
 		return updateCourse;
@@ -220,34 +224,6 @@ public class CourseService {
 		}
 		return pojos;
 	}
-
-//	public List<PojoCourseResGetByCategoryId> getByCategoryId(final String id) {
-//		final List<PojoCourseResGetByCategoryId> pojos = new ArrayList<>();
-//		final List<Course> res = courseDao.getByCategoryId(id);
-//
-//		for (int i = 0; i < res.size(); i++) {
-//			final PojoCourseResGetByCategoryId pojo = new PojoCourseResGetByCategoryId();
-//			final Course course = res.get(i);
-//
-//			ConnHandler.getManager().detach(course);
-//			pojo.setFileId(course.getFile().getFileName());
-//			pojo.setId(course.getId());
-//			pojo.setCourseCode(course.getCourseCode());
-//			pojo.setCourseName(course.getCourseName());
-//			pojo.setTrainer(course.getTrainer());
-//			pojo.setProvider(course.getProvider());
-//			pojo.setLocationName(course.getLocationName());
-//			pojo.setCategoryId(course.getCategory().getCategoryName());
-//			pojo.setStartDate(course.getStartDate());
-//			pojo.setEndDate(course.getEndDate());
-//			pojo.setPrice(course.getPrice());
-//			pojo.setVer(course.getVersion());
-//
-//			pojos.add(pojo);
-//		}
-//
-//		return pojos;
-//	}
 
 	public PojoUpdateRes update(final PojoCourseUpdateReq data) {
 		Course courseUpdate = null;
@@ -421,6 +397,97 @@ public class CourseService {
 		pojoCourseData.setTotal(courseDao.getTotalCourse());
 		
 		return pojoCourseData;
+	}
+
+	@Override
+	void valNotNullable(Course data) {
+		
+		if (data.getCourseName().length() == 0) {
+			throw new RuntimeException("Nama Course Kosong");
+		}
+		
+		if (data.getProvider().length() == 0) {
+			throw new RuntimeException("Provider Kosong");
+		}
+
+		if (data.getTrainer().length() == 0) {
+			throw new RuntimeException("Trainer Kosong");
+		}
+		
+		if (data.getLocationName().length() == 0) {
+			throw new RuntimeException("Nama Lokasi Kosong");
+		}
+		
+		if (data.getStartDate() == null) {
+			throw new RuntimeException("Tanggal Start Kosong");
+		}
+		
+		if (data.getEndDate() == null) {
+			throw new RuntimeException("Tanggal End Kosong");
+		}
+		
+		if (data.getPrice() == null) {
+			throw new RuntimeException("Price Kosong");
+		}
+		
+		if (data.getCategory() == null) {
+			throw new RuntimeException("Category Kosong");
+		}
+	}
+
+	@Override
+	void valIdNull(Course data) {
+		if (data.getId() == null) {
+			throw new RuntimeException("ID kosong");
+		}
+	}
+
+	@Override
+	void valIdNotNull(Course data) {
+		if (data.getId() != null) {
+			throw new RuntimeException("ID harus kosong");
+		}	
+	}
+
+	@Override
+	void valBkNull(Course data) {
+		
+		
+	}
+
+	@Override
+	void valFkNull(Course data) {
+	
+		
+	}
+
+	@Override
+	void valMaxLength(Course data) {
+		if(data.getCourseName().length() > 100) {
+			throw new RuntimeException("Name Course terlalu panjang");
+		}
+		
+		if(data.getProvider().length() > 50) {
+			throw new RuntimeException("Name Provider terlalu panjang");
+		}
+		
+		if(data.getTrainer().length() > 50) {
+			throw new RuntimeException("Name Trainer terlalu panjang");
+		}
+		
+		if(data.getLocationName().length() > 50) {
+			throw new RuntimeException("Name Lokasi terlalu panjang");
+		}
+		
+	}
+
+	@Override
+	void valIdPresent(Course data) {
+		final Optional<Course> res = getById(data.getId());
+		if(res.isPresent()) {
+			throw new RuntimeException("ID sudah ada di database");
+		}
+		
 	}
 	
 	

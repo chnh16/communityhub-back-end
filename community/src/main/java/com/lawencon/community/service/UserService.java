@@ -390,15 +390,17 @@ public class UserService implements UserDetailsService, Runnable {
 		profile.setPosition(position);
 		industry.setId(data.getIndustryId());
 		profile.setIndustry(industry);
-		final File fileUpdate = new File();
-		fileUpdate.setFileName(data.getFile().getFileName());
-		fileUpdate.setFileExtension(data.getFile().getFileExtension());
-		fileUpdate.setFileContent(data.getFile().getFileContent());
-
-		ConnHandler.begin();
-		final File file = fileDao.update(fileUpdate);
-		ConnHandler.commit();
-		profile.setFile(file);
+		if(data.getFile() != null) {			
+			final File fileUpdate = new File();
+			fileUpdate.setFileName(data.getFile().getFileName());
+			fileUpdate.setFileExtension(data.getFile().getFileExtension());
+			fileUpdate.setFileContent(data.getFile().getFileContent());
+			
+			ConnHandler.begin();
+			final File file = fileDao.update(fileUpdate);
+			ConnHandler.commit();
+			profile.setFile(file);
+		}
 
 		ConnHandler.begin();
 		final Profile userProfileUpdate = profileDao.update(profile);

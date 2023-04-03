@@ -47,46 +47,47 @@ import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
-public class TransactionService {
-
+public class TransactionService extends ValidationService<Transaction>{
+	
 	@Autowired
-	private TransactionDao transactionDao;
-
+	private final TransactionDao transactionDao;
+	
 	@Autowired
-	private FileDao fileDao;
-
+	private final FileDao fileDao;
+	
 	@Autowired
-	private VoucherDao voucherDao;
-
+	private final VoucherDao voucherDao;
+	
 	@Autowired
-	private ProfileDao profileDao;
-
+	private final ProfileDao profileDao;
+	
 	@Autowired
-	private UserEventDao userEventDao;
-
+	private final UserEventDao userEventDao;
+	
 	@Autowired
-	private UserCourseDao userCourseDao;
-
+	private final UserCourseDao userCourseDao;
+	
 	@Autowired
-	private StatusTransactionDao statusTransactionDao;
-
+	private final StatusTransactionDao statusTransactionDao;
+	
 	@Autowired
-	private UserService userService;
-
+	private final UserService userService;
+	
 	@Autowired
-	private EventService eventService;
-
+	private final EventService eventService;
+	
 	@Autowired
-	private MembershipService membershipService;
-
+	private final MembershipService membershipService;
+	
 	@Autowired
-	private CourseService courseService;
-
+	private final CourseService courseService;
+	
 	@Autowired
-	private PrincipalService principalService;
-
+	private final PrincipalService principalService;
+	
 	@Autowired
-	private VoucherService voucherService;
+	private final VoucherService voucherService;
+	
 	private static final BigDecimal userShare = new BigDecimal(0.8);
 	private static final BigDecimal systemShare = new BigDecimal(0.2);
 
@@ -556,4 +557,47 @@ public class TransactionService {
 		return transactions;
 	}
 
+	@Override
+	void valNotNullable(Transaction data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valIdNull(Transaction data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valIdNotNull(Transaction data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valBkNull(Transaction data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valFkNull(Transaction data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valMaxLength(Transaction data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	void valIdPresent(Transaction data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }

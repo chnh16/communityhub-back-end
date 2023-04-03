@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.community.dao.IndustryDao;
+import com.lawencon.community.model.Category;
 import com.lawencon.community.model.Industry;
 import com.lawencon.community.pojo.PojoDeleteRes;
 import com.lawencon.community.pojo.PojoInsertRes;
@@ -20,6 +21,7 @@ import com.lawencon.community.pojo.industry.PojoIndustryGetAllRes;
 import com.lawencon.community.pojo.industry.PojoIndustryGetAllResData;
 import com.lawencon.community.pojo.industry.PojoIndustryInsertReq;
 import com.lawencon.community.pojo.industry.PojoIndustryUpdateReq;
+import com.lawencon.community.util.Generate;
 
 @Service
 public class IndustryService{
@@ -42,13 +44,18 @@ public class IndustryService{
 	}
 
 	private void valNotNullable(final Industry data) {
-		if (data.getIndustryCode() == null) {
-			throw new RuntimeException("Kode Industry Kosong");
-		}
-		if (data.getIndustryName() == null) {
+		if (data.getIndustryName().length() == 0) {
 			throw new RuntimeException("Nama Industry Kosong");
 		}
 	}
+	
+	private void valMaxLength(Industry data) {
+		if(data.getIndustryName().length() > 30) {
+			throw new RuntimeException("Nama Industry terlalu panjang");
+		}
+	}
+	
+	
 	
 	
 	public Industry insertIndustry(final Industry data) {
@@ -57,6 +64,7 @@ public class IndustryService{
 			ConnHandler.begin();
 			valIdNull(data);
 			valNotNullable(data);
+			valMaxLength(data);
 			industryInsert = industryDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -68,7 +76,9 @@ public class IndustryService{
 	public PojoInsertRes insertIndustry(final PojoIndustryInsertReq data) {
 		final Industry industry = new Industry();
 		
-		industry.setIndustryCode(data.getIndustryCode());
+		final String generateId = Generate.generateCode(5);
+		
+		industry.setIndustryCode(generateId);
 		industry.setIndustryName(data.getIndustryName());
 		
 		industry.setIsActive(true);
@@ -83,10 +93,11 @@ public class IndustryService{
 	
 	public Industry updateIndustry(final Industry data) {
 		Industry industryUpdate = null;
-		valIdNotNull(data);
 		
 		try {
 			ConnHandler.begin();
+			valIdNotNull(data);
+			valMaxLength(data);
 			industryUpdate = industryDao.update(data);
 			ConnHandler.commit();
 		} catch (Exception e) {

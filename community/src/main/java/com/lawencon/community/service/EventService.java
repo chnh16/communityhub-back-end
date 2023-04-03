@@ -35,7 +35,7 @@ import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
-public class EventService {
+public class EventService extends ValidationService<Event>{
 
 	@Autowired
 	private EventDao eventDao;
@@ -63,6 +63,8 @@ public class EventService {
 
 		try {
 			ConnHandler.begin();
+			valNotNullable(data);
+			valMaxLength(data);
 			eventInsert = eventDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -76,6 +78,8 @@ public class EventService {
 
 		try {
 			ConnHandler.begin();
+			valNotNullable(data);
+			valMaxLength(data);
 			eventUpdate = eventDao.update(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -194,35 +198,6 @@ public class EventService {
 		}
 		return pojos;
 	}
-	
-	
-
-//	public List<PojoEventResGetByCategoryId> getByCategoryId(final String id) {
-//		final List<PojoEventResGetByCategoryId> pojos = new ArrayList<>();
-//		final List<Event> res = eventDao.getByCategoryId(id);
-//
-//		for (int i = 0; i < res.size(); i++) {
-//			final PojoEventResGetByCategoryId pojo = new PojoEventResGetByCategoryId();
-//			final Event event = res.get(i);
-//
-//			ConnHandler.getManager().detach(event);
-//			pojo.setFileId(event.getFile().getFileName());
-//			pojo.setId(event.getId());
-//			pojo.setEventCode(event.getEventCode());
-//			pojo.setEventName(event.getEventName());
-//			pojo.setProvider(event.getProvider());
-//			pojo.setLocationName(event.getLocationName());
-//			pojo.setCategoryId(event.getCategory().getCategoryName());
-//			pojo.setStartDate(event.getStartDate());
-//			pojo.setEndDate(event.getEndDate());
-//			pojo.setPrice(event.getPrice());
-//			pojo.setVer(event.getVersion());
-//
-//			pojos.add(pojo);
-//		}
-//
-//		return pojos;
-//	}
 	
 	public List<PojoEventResGetAll> getMyEvent(String category, String price, Integer limit, Integer offset) {
 		final List<PojoEventResGetAll> pojos = new ArrayList<>();
@@ -435,6 +410,89 @@ public class EventService {
 		pojoEventData.setTotal(eventDao.getTotalEvent());
 		
 		return pojoEventData;
+	}
+
+	@Override
+	void valNotNullable(Event data) {
+		
+		if (data.getEventName().length() == 0) {
+			throw new RuntimeException("Nama Event Kosong");
+		}
+		
+		if (data.getProvider().length() == 0) {
+			throw new RuntimeException("Provider Kosong");
+		}
+		
+		if (data.getLocationName().length() == 0) {
+			throw new RuntimeException("Trainer Kosong");
+		}
+		
+		if (data.getStartDate() == null) {
+			throw new RuntimeException("Tanggal Start Kosong");
+		}
+		
+		if (data.getEndDate() == null) {
+			throw new RuntimeException("Tanggal End Kosong");
+		}
+		
+		if (data.getPrice() == null) {
+			throw new RuntimeException("Price Kosong");
+		}
+		
+		if (data.getCategory() == null) {
+			throw new RuntimeException("Category Kosong");
+		}
+	}
+
+	@Override
+	void valIdNull(Event data) {
+		if (data.getId() == null) {
+			throw new RuntimeException("ID kosong");
+		}
+	}
+
+	@Override
+	void valIdNotNull(Event data) {
+		if (data.getId() != null) {
+			throw new RuntimeException("ID harus kosong");
+		}	
+	}
+
+	@Override
+	void valBkNull(Event data) {
+		
+		
+	}
+
+	@Override
+	void valFkNull(Event data) {
+	
+		
+	}
+
+	@Override
+	void valMaxLength(Event data) {
+		if(data.getEventName().length() > 100) {
+			throw new RuntimeException("Name Course terlalu panjang");
+		}
+		
+		if(data.getProvider().length() > 50) {
+			throw new RuntimeException("Name Provider terlalu panjang");
+		}
+		
+		if(data.getLocationName().length() > 50) {
+			throw new RuntimeException("Name Lokasi terlalu panjang");
+		}
+		
+	}
+
+	@Override
+	void valIdPresent(Event data) {
+		final Optional<Event> res = getById(data.getId());
+		if(res.isPresent()) {
+			throw new RuntimeException("ID sudah ada di database");
+		}
+		
 	}
 
 }

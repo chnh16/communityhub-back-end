@@ -23,7 +23,7 @@ import com.lawencon.community.pojo.membership.PojoMembershipUpdateReq;
 import com.lawencon.community.util.Generate;
 
 @Service
-public class MembershipService {
+public class MembershipService extends ValidationService<Membership>{
 	
 	@Autowired
 	private MembershipDao membershipDao;
@@ -37,6 +37,8 @@ public class MembershipService {
 
 		try {
 			ConnHandler.begin();
+			valNotNullable(data);
+			valMaxLength(data);
 			membershipInsert = membershipDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -50,6 +52,9 @@ public class MembershipService {
 
 		try {
 			ConnHandler.begin();
+			valNotNullable(data);
+			valMaxLength(data);
+			
 			membershipUpdate = membershipDao.update(data);
 			ConnHandler.commit();
 		} catch (Exception e) {
@@ -197,5 +202,66 @@ public class MembershipService {
 		pojoMembershipData.setData(pojos);
 		pojoMembershipData.setTotal(membershipDao.getTotalMembership());
 		return pojoMembershipData;
+	}
+
+	@Override
+	void valNotNullable(Membership data) {
+		if (data.getMembershipCode().length() == 0) {
+			throw new RuntimeException("Kode Membership Kosong");
+		}
+		if (data.getMembershipName().length() == 0) {
+			throw new RuntimeException("Nama Membership Kosong");
+		}
+		
+		if (data.getAmount() == null) {
+			throw new RuntimeException("Amount Kosong");
+		}
+		
+		if (data.getDuration() == null) {
+			throw new RuntimeException("Duration Kosong");
+		}
+		
+	}
+
+	@Override
+	void valIdNull(Membership data) {
+		if (data.getId() == null) {
+			throw new RuntimeException("ID kosong");
+		}
+		
+	}
+
+	@Override
+	void valIdNotNull(Membership data) {
+		if (data.getId() != null) {
+			throw new RuntimeException("ID harus kosong");
+		}
+		
+	}
+
+	@Override
+	void valBkNull(Membership data) {
+			
+	}
+
+	@Override
+	void valFkNull(Membership data) {
+		
+	}
+
+	@Override
+	void valMaxLength(Membership data) {
+		if(data.getMembershipName().length() > 30) {
+			throw new RuntimeException("Nama Membership terlalu panjang");
+		}
+		
+	}
+
+	@Override
+	void valIdPresent(Membership data) {
+		final Optional<Membership> res = getById(data.getId());
+		if(res.isPresent()) {
+			throw new RuntimeException("ID sudah ada di database");
+		}
 	}
 }
