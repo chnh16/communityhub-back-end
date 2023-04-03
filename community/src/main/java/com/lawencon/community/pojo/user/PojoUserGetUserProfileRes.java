@@ -1,5 +1,6 @@
 package com.lawencon.community.pojo.user;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class PojoUserGetUserProfileRes {
@@ -16,6 +17,7 @@ public class PojoUserGetUserProfileRes {
 	private String industryId;
 	private String company;
 	private String file;
+	private BigDecimal balance;
 	private Integer ver;
 
 	public String getId() {
@@ -128,6 +130,14 @@ public class PojoUserGetUserProfileRes {
 
 	public void setPremiumUntil(LocalDateTime premiumUntil) {
 		this.premiumUntil = premiumUntil;
+	}
+
+	public BigDecimal getBalance() {
+		return balance;
+	}
+
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
 	}
 
 }

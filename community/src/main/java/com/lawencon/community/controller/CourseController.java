@@ -21,78 +21,83 @@ import com.lawencon.community.pojo.course.PojoCourseGetAllRes;
 import com.lawencon.community.pojo.course.PojoCourseInsertReq;
 import com.lawencon.community.pojo.course.PojoCourseUpdateReq;
 import com.lawencon.community.pojo.course.PojoCourserGetAllResData;
-import com.lawencon.community.pojo.event.PojoEventResGetAll;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseGetByUserIdRes;
 import com.lawencon.community.pojo.usercourse.PojoUserCourseInsertReq;
-import com.lawencon.community.pojo.userevent.PojoUserEventGetByUserIdRes;
 import com.lawencon.community.service.CourseService;
 
 @RestController
 @RequestMapping("courses")
 public class CourseController {
 
-private final CourseService courseService;
-	
+	private final CourseService courseService;
+
 	public CourseController(CourseService courseService) {
 		this.courseService = courseService;
 	}
-	
+
 	@PostMapping("/add")
-	private ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoCourseInsertReq data){
+	private ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoCourseInsertReq data) {
 		final PojoInsertRes res = courseService.insertRes(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping
-	private ResponseEntity<List<PojoCourseGetAllRes>> getAllRes(@RequestParam(required = false, value = "category") String category, String price, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset){
+	private ResponseEntity<List<PojoCourseGetAllRes>> getAllRes(
+			@RequestParam(required = false, value = "category") String category, String price,
+			@RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
 		final List<PojoCourseGetAllRes> res = courseService.getAllRes(category, price, limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
+
 	@PutMapping
-	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoCourseUpdateReq data){
+	private ResponseEntity<PojoUpdateRes> update(@RequestBody final PojoCourseUpdateReq data) {
 		final PojoUpdateRes res = courseService.update(data);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("{id}")
 	public ResponseEntity<PojoCourseGetAllRes> getCourseById(@PathVariable("id") final String id) {
 		final PojoCourseGetAllRes res = courseService.getCourseById(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<PojoDeleteRes> delete(@PathVariable final String id){
+	public ResponseEntity<PojoDeleteRes> delete(@PathVariable final String id) {
 		final PojoDeleteRes res = courseService.delete(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/buy-course")
-	private ResponseEntity<PojoInsertRes> inserCourseEvent(@RequestBody final PojoUserCourseInsertReq data){
+	private ResponseEntity<PojoInsertRes> inserCourseEvent(@RequestBody final PojoUserCourseInsertReq data) {
 		final PojoInsertRes res = courseService.inserCourseEvent(data);
 		return new ResponseEntity<>(res, HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping("user-course")
-	public ResponseEntity<List<PojoUserCourseGetByUserIdRes>> getByUserId(@RequestParam("category") String category, @RequestParam("price") String price, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+	public ResponseEntity<List<PojoUserCourseGetByUserIdRes>> getByUserId(@RequestParam("category") String category,
+			@RequestParam("price") String price, @RequestParam("limit") Integer limit,
+			@RequestParam("offset") Integer offset) {
 		final List<PojoUserCourseGetByUserIdRes> res = courseService.getByUserId(category, price, limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 
 	@GetMapping("/page")
-	public ResponseEntity<PojoCourserGetAllResData> getCoursePage(@RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+	public ResponseEntity<PojoCourserGetAllResData> getCoursePage(@RequestParam("limit") Integer limit,
+			@RequestParam("offset") Integer offset) {
 		final PojoCourserGetAllResData res = courseService.getCoursePage(limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("/user-course/{id}")
-	public ResponseEntity<PojoDeleteRes> deleteUserEvent(@PathVariable final String id){
+	public ResponseEntity<PojoDeleteRes> deleteUserEvent(@PathVariable final String id) {
 		final PojoDeleteRes res = courseService.deleteUserEvent(id);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("my-course")
-	private ResponseEntity<List<PojoCourseGetAllRes>> getMyCourse(@RequestParam("category") String category, @RequestParam("price") String price, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset){
+	private ResponseEntity<List<PojoCourseGetAllRes>> getMyCourse(@RequestParam("category") String category,
+			@RequestParam("price") String price, @RequestParam("limit") Integer limit,
+			@RequestParam("offset") Integer offset) {
 		final List<PojoCourseGetAllRes> res = courseService.getMyCourse(category, price, limit, offset);
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}

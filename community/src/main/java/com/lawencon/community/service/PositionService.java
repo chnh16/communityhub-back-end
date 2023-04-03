@@ -22,11 +22,7 @@ import com.lawencon.community.pojo.position.PojoPositionUpdateReq;
 public class PositionService extends ValidationService<Position> {
 
 	@Autowired
-	private final PositionDao positionDao;
-
-	public PositionService(PositionDao positionDao) {
-		this.positionDao = positionDao;
-	}
+	private PositionDao positionDao;
 
 	public Position insert(final Position data) {
 		Position positionInsert = null;
@@ -177,7 +173,7 @@ public class PositionService extends ValidationService<Position> {
 
 	@Override
 	void valIdNull(Position data) {
-		if(data.getId() == null) {
+		if (data.getId() == null) {
 			throw new RuntimeException("ID kosong");
 		}
 
@@ -185,42 +181,45 @@ public class PositionService extends ValidationService<Position> {
 
 	@Override
 	void valIdNotNull(Position data) {
-		if(data.getId() != null) {
+		if (data.getId() != null) {
 			throw new RuntimeException("ID harus kosong");
 		}
 	}
 
 	@Override
 	void valBkNull(Position data) {
-		
+
 	}
 
 	@Override
 	void valFkNull(Position data) {
-		
-		
+
 	}
 
 	@Override
 	void valMaxLength(Position data) {
-		if(data.getPositionName().length() > 30) {
+		if (data.getPositionName().length() > 30) {
 			throw new RuntimeException("Input terlalu panjang");
 		}
 	}
 
+	@Override
+	void valMinLength(Position data) {
+
+	}
 
 	@Override
 	void valIdPresent(Position data) {
 		final Optional<Position> res = getById(data.getId());
-		if(res.isPresent()) {
+		if (res.isPresent()) {
 			throw new RuntimeException("ID sudah ada di database");
 		}
-		
+
 	}
 
 	@Override
 	void valNotNullable(Position data) {
-		if(data.getPositionName() == null) {
+		if (data.getPositionName() == null) {
 			throw new RuntimeException("Tidak boleh kosong");
 		}
 	}

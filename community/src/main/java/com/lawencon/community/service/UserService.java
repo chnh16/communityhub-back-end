@@ -207,7 +207,7 @@ public class UserService implements UserDetailsService, Runnable {
 		final String generatePass = Generate.generateCode(8);
 		registerVerification.setEmail(data.getEmail());
 		registerVerification.setCodeVerifcation(generatePass);
-		registerVerification.setExpired(LocalDateTime.now().plusMinutes(60));
+		registerVerification.setExpired(LocalDateTime.now().plusMinutes(5));
 
 		ConnHandler.begin();
 		registerVerificationDao.saveNoLogin(registerVerification, () -> getUserSystem.getId());
@@ -262,7 +262,7 @@ public class UserService implements UserDetailsService, Runnable {
 
 		registerVerif.setEmail(email.getEmail());
 		registerVerif.setCodeVerifcation(generatePass);
-		registerVerif.setExpired(LocalDateTime.now().plusMinutes(60));
+		registerVerif.setExpired(LocalDateTime.now().plusMinutes(5));
 
 		RegisterVerification verificationInsert = null;
 		ConnHandler.begin();
@@ -360,6 +360,7 @@ public class UserService implements UserDetailsService, Runnable {
 		pojo.setPremiumUntil(user.getProfile().getPremiumUntil());
 		pojo.setPositionId(user.getProfile().getPosition().getPositionName());
 		pojo.setIndustryId(user.getProfile().getIndustry().getIndustryName());
+		pojo.setBalance(user.getProfile().getBalance());
 		if(user.getProfile().getFile() != null) {			
 			pojo.setFile(user.getProfile().getFile().getId());
 		}
