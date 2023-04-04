@@ -186,6 +186,7 @@ GROUP BY p.full_name, tp.type_name]]>
 			<textField>
 				<reportElement x="370" y="1" width="185" height="30" uuid="2db9d2c9-bcc8-4fb7-a538-b88de91d7222">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="053d76c5-d4fa-4557-8b4b-cb4cebe318fc"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="5">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -193,11 +194,13 @@ GROUP BY p.full_name, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{totalIncome}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="468" y="10" width="13" height="19" uuid="5121da8f-40e1-4660-a6c3-8c38dfb7d26b"/>
+				<reportElement x="459" y="10" width="13" height="19" uuid="5121da8f-40e1-4660-a6c3-8c38dfb7d26b"/>
 				<text><![CDATA[Rp.]]></text>
 			</staticText>
 		</band>

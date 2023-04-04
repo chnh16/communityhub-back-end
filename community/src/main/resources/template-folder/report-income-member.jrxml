@@ -171,6 +171,7 @@ GROUP BY te.event_name, tp.type_name]]>
 			<textField>
 				<reportElement x="372" y="0" width="185" height="30" uuid="042646ce-4c9b-4271-9b4d-8dde64f4a761">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5b4af080-f072-4d5e-967b-72ad3d91223b"/>
+					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 				</reportElement>
 				<box topPadding="2" leftPadding="5">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -178,7 +179,9 @@ GROUP BY te.event_name, tp.type_name]]>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{totalIncomes}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -193,7 +196,7 @@ GROUP BY te.event_name, tp.type_name]]>
 				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="468" y="10" width="13" height="19" uuid="a1f2fcd5-9970-4503-8656-ceae62a63d13"/>
+				<reportElement x="458" y="10" width="13" height="19" uuid="a1f2fcd5-9970-4503-8656-ceae62a63d13"/>
 				<text><![CDATA[Rp.]]></text>
 			</staticText>
 		</band>
