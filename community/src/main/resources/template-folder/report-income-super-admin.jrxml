@@ -183,7 +183,7 @@ GROUP BY p.full_name, tp.type_name]]>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{activityType}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.##;¤-#,##0.##">
+			<textField>
 				<reportElement x="370" y="1" width="185" height="30" uuid="2db9d2c9-bcc8-4fb7-a538-b88de91d7222">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="053d76c5-d4fa-4557-8b4b-cb4cebe318fc"/>
 				</reportElement>
@@ -196,6 +196,10 @@ GROUP BY p.full_name, tp.type_name]]>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{totalIncome}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="468" y="10" width="13" height="19" uuid="5121da8f-40e1-4660-a6c3-8c38dfb7d26b"/>
+				<text><![CDATA[Rp.]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>

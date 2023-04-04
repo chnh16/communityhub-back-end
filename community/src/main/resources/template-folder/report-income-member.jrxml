@@ -168,7 +168,7 @@ GROUP BY te.event_name, tp.type_name]]>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{itemName}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.##;¤-#,##0.##">
+			<textField>
 				<reportElement x="372" y="0" width="185" height="30" uuid="042646ce-4c9b-4271-9b4d-8dde64f4a761">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5b4af080-f072-4d5e-967b-72ad3d91223b"/>
 				</reportElement>
@@ -192,6 +192,10 @@ GROUP BY te.event_name, tp.type_name]]>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="468" y="10" width="13" height="19" uuid="a1f2fcd5-9970-4503-8656-ceae62a63d13"/>
+				<text><![CDATA[Rp.]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>
