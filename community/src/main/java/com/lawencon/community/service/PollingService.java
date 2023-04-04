@@ -91,9 +91,6 @@ public class PollingService{
 	}
 	
 
-
-	
-
 	private void valNotNullable(final PollingChoice data) {
 		if (data.getChoiceContent().length() == 0) {
 			throw new RuntimeException("Choice Content Kosong");

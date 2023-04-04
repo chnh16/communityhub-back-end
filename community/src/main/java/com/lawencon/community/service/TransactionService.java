@@ -47,46 +47,46 @@ import com.lawencon.community.util.Generate;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
-public class TransactionService extends ValidationService<Transaction>{
+public class TransactionService {
 	
 	@Autowired
-	private final TransactionDao transactionDao;
+	private TransactionDao transactionDao;
 	
 	@Autowired
-	private final FileDao fileDao;
+	private FileDao fileDao;
 	
 	@Autowired
-	private final VoucherDao voucherDao;
+	private VoucherDao voucherDao;
 	
 	@Autowired
-	private final ProfileDao profileDao;
+	private ProfileDao profileDao;
 	
 	@Autowired
-	private final UserEventDao userEventDao;
+	private UserEventDao userEventDao;
 	
 	@Autowired
-	private final UserCourseDao userCourseDao;
+	private UserCourseDao userCourseDao;
 	
 	@Autowired
-	private final StatusTransactionDao statusTransactionDao;
+	private StatusTransactionDao statusTransactionDao;
 	
 	@Autowired
-	private final UserService userService;
+	private UserService userService;
 	
 	@Autowired
-	private final EventService eventService;
+	private EventService eventService;
 	
 	@Autowired
-	private final MembershipService membershipService;
+	private MembershipService membershipService;
 	
 	@Autowired
-	private final CourseService courseService;
+	private CourseService courseService;
 	
 	@Autowired
-	private final PrincipalService principalService;
+	private PrincipalService principalService;
 	
 	@Autowired
-	private final VoucherService voucherService;
+	private VoucherService voucherService;
 	
 	private static final BigDecimal userShare = new BigDecimal(0.8);
 	private static final BigDecimal systemShare = new BigDecimal(0.2);
@@ -227,12 +227,12 @@ public class TransactionService extends ValidationService<Transaction>{
 
 	public PojoUpdateRes updateRes(final PojoUpdateTransactionReq data) {
 		Transaction transactionUpdate = null;
-		transactionUpdate = getByIdAndDetach(data.getId());
-		final Transaction transaction = transactionUpdate;
+//		transactionUpdate = getByIdAndDetach(data.getId());
+		final Transaction transaction = getByIdAndDetach(data.getId());
 		final PojoUpdateRes pojoUpdate = new PojoUpdateRes();
 
 		if (data.getStatusTransaction().equals(StatusTransactions.APPROVE.getStatusCode())) {
-			transaction.setIsApproved(data.getIsApproved());
+//			transaction.setIsApproved(data.getIsApproved());
 			final StatusTransaction getStatus = statusTransactionDao
 					.getByStatusCode(StatusTransactions.APPROVE.getStatusCode()).get();
 			transaction.setStatusTransaction(getStatus);
@@ -240,10 +240,10 @@ public class TransactionService extends ValidationService<Transaction>{
 			transaction.setVersion(data.getVer());
 			transactionUpdate = update(transaction);
 
-			if (transactionUpdate.getIsApproved() == true) {
+			if (data.getStatusTransaction().equals(StatusTransactions.APPROVE.getStatusCode())) {
 				if (transactionUpdate.getMembership() != null) {
 					addSystemBalance(transactionUpdate);
-					final User user = userService.getByRefId(principalService.getAuthPrincipal());
+					final User user = userService.getByRefId(transactionUpdate.getUser().getId());
 					Profile profile = profileDao.getByIdAndDetach(user.getProfile().getId());
 
 					profile.setPremiumUntil(
@@ -557,47 +557,7 @@ public class TransactionService extends ValidationService<Transaction>{
 		return transactions;
 	}
 
-	@Override
-	void valNotNullable(Transaction data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	void valIdNull(Transaction data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	void valIdNotNull(Transaction data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	void valBkNull(Transaction data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	void valFkNull(Transaction data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	void valMaxLength(Transaction data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	void valIdPresent(Transaction data) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	
 }

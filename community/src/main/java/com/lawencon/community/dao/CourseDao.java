@@ -113,15 +113,24 @@ public class CourseDao extends MasterDao<Course>{
 		return totalCourse;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public Optional<Course> getCourseById(final String id) {
-		final StringBuilder str = new StringBuilder();
-		str.append("SELECT * FROM course c ")
-			.append("WHERE c.id = :id AND c.is_active = true");
-		final List<Course> res = em().createNativeQuery(toStr(str), Course.class)
-				.setParameter("id", id)
-				.getResultList();
-		return Optional.ofNullable(res.get(0));
+		Course res = null;
+		try {
+			final StringBuilder str = new StringBuilder();
+			str.append("SELECT * FROM course c ")
+				.append("WHERE c.id = :id AND c.is_active = true");
+			final Object result = em().createNativeQuery(toStr(str), Course.class)
+					.setParameter("id", id)
+					.getSingleResult();
+			if(result != null) {
+				res = new Course();
+				res = (Course) result;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return Optional.ofNullable(res);
 	}
 
 	@Override

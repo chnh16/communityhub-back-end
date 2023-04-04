@@ -43,8 +43,8 @@ public class ArticleService extends ValidationService<Article>{
 
 		try {
 			ConnHandler.begin();
-			valNotNullable(data);
-			valMaxLength(data);
+			//valNotNullable(data);
+			//valMaxLength(data);
 			articleInsert = articleDao.insert(data);
 			ConnHandler.commit();
 		} catch (Exception e) {

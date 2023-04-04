@@ -203,10 +203,6 @@ public class PositionService extends ValidationService<Position> {
 		}
 	}
 
-	@Override
-	void valMinLength(Position data) {
-
-	}
 
 	@Override
 	void valIdPresent(Position data) {

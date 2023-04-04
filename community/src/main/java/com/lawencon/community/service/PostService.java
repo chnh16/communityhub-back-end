@@ -287,9 +287,7 @@ public class PostService {
 			List<PojoPollingAnswerGetCountRes> pollingAnswers = new ArrayList<>();
 			final PojoPostGetAllRes pojoPost = new PojoPostGetAllRes();
 			final PostType postType = postTypeDao.getRefById(listPost.get(i).getPostType().getId());
-			if (postType.getTypeCode().equals(com.lawencon.community.constant.PostType.POLLING.getTypeCode())) {
-				pollingAnswers = getAnswerByChoiceId(listPost.get(i).getId());
-			}
+
 			if (postType.getTypeCode().equals(com.lawencon.community.constant.PostType.PREMIUM.getTypeCode())) {
 				isPremium = true;
 				pollingAnswers = getAnswerByChoiceId(listPost.get(i).getId());
