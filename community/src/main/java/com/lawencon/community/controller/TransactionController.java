@@ -31,12 +31,7 @@ public class TransactionController {
 	public TransactionController(final TransactionService transactionService){
 		this.transactionService = transactionService;
 	}
-	
-//	@GetMapping("/{type}")
-//	public ResponseEntity<List<PojoTransactionGetAllRes>> getAllRes(@PathVariable("type") final String type){
-//		final List<PojoTransactionGetAllRes> res = transactionService.getAllRes(type);
-//		return new ResponseEntity<>(res, HttpStatus.OK);
-//	}
+
 	
 	@PostMapping("/add")
 	private ResponseEntity<PojoInsertRes> insert(@RequestBody final PojoInsertTransactionReq data){
@@ -63,24 +58,7 @@ public class TransactionController {
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 	
-//	@GetMapping("/event/{id}")
-//	public ResponseEntity<List<PojoTransactionGetByEventIdRes>> getByEventId(@PathVariable("id") final String id) {
-//		final List<PojoTransactionGetByEventIdRes> res = transactionService.getByEventId(id);
-//		return new ResponseEntity<>(res, HttpStatus.OK);
-//	}
-//	
-//	@GetMapping("/course/{id}")
-//	public ResponseEntity<List<PojoTransactionGetByCourseIdRes>> getByCourseId(@PathVariable("id") final String id) {
-//		final List<PojoTransactionGetByCourseIdRes> res = transactionService.getByCourseId(id);
-//		return new ResponseEntity<>(res, HttpStatus.OK);
-//	}
-//	
-//	@GetMapping("/membership/{id}")
-//	public ResponseEntity<List<PojoTransactionGetByMembershipIdRes>> getByMembershipId(@PathVariable("id") final String id) {
-//		final List<PojoTransactionGetByMembershipIdRes> res = transactionService.getByMembershipId(id);
-//		return new ResponseEntity<>(res, HttpStatus.OK);
-//	}
-	
+
 	@PatchMapping
 	private ResponseEntity<PojoUpdateRes> updateRes(@RequestBody final PojoUpdateTransactionReq data){
 		final PojoUpdateRes res = transactionService.updateRes(data);

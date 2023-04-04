@@ -317,7 +317,7 @@ public class CourseService extends ValidationService<Course>{
 
 			ConnHandler.getManager().detach(course);
 
-			pojo.setId(course.getId());
+			pojo.setId(course.getCourse().getId());
 			pojo.setUserId(course.getUser().getProfile().getFullName());
 			
 			

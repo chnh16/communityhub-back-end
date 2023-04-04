@@ -332,7 +332,7 @@ public class EventService extends ValidationService<Event>{
 
 			ConnHandler.getManager().detach(userEvent);
 			
-			pojo.setId(userEvent.getId());
+			pojo.setId(userEvent.getEvent().getId());
 			
 			pojo.setUserId(userEvent.getUser().getProfile().getFullName());
 			
